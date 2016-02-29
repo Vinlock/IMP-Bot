@@ -16,13 +16,13 @@ class Match(object):
         print("Match has been initiated.")
 
     def totalVotes(self):
-        return len(self.teamBlueVotes) + len(self.teamRedVotes)
+        return len(self.blueVotes) + len(self.redVotes)
 
     def redPercent(self):
-        return (len(self.teamRedVotes) / self.totalVotes()) * 100
+        return (len(self.redVotes) / self.totalVotes()) * 100
 
     def bluePercent(self):
-        return (len(self.teamBlueVotes) / self.totalVotes()) * 100
+        return (len(self.blueVotes) / self.totalVotes()) * 100
 
     def addVote(self, user, team, bet):
         if team == "red":
@@ -47,3 +47,11 @@ class Match(object):
                 print("Cash Out:", userid, info['bet'], "points.")
                 self.points.givepoints(info['bet'] * self.blueRatio, self.serverid, userid)
             return self.blueVotes
+
+    def betted(self, userid):
+        if userid in self.redVotes.keys():
+            return True
+        elif userid in self.blueVotes.keys():
+            return True
+        else:
+            return False

@@ -1,10 +1,7 @@
-import discord, asyncio, pymysql
-from time import sleep
+import discord, threading, asyncio
 
 # Import Local Files
-import Database, settings, Betting, PointsManager, ImpMatch
-
-from ImpMatch import Match
+import settings, PointsManager, ImpMatch
 
 class ImperialBot(object):
 
@@ -34,6 +31,7 @@ class ImperialBot(object):
                     print(channel.id, channel.name)
             
             self.startPoints()
+            self.thread(self.updateList)
                 
         self.listener()
 
@@ -83,9 +81,12 @@ class ImperialBot(object):
                             amount = int(params[1])
                             if self.matches[serverid] == None:
                                 await sendm(mentionstr + "No matches have been started as of yet")
-                            else:
-                                self.matches[serverid].addVote(author, "red", amount)
-                                await sendm(":red_circle: - " + author.mention + " you have placed a bet on **RED** for " + str(amount) + " points.")
+                            elif self.matches[serverid] != None:
+                                if not self.matches[serverid].betted(author.id):
+                                    self.matches[serverid].addVote(author, "red", amount)
+                                    await sendm(":red_circle: - " + author.mention + " you have placed a bet on **RED** for " + str(amount) + " points.")
+                                else:
+                                    await sendm(mentionstr + " you have already bet")
                     elif command == "betblue":
                         if numParams < 1:
                             await sendm(mentionstr + "You did not state your bet amount. Ex: \"!betblue 100\"")
@@ -171,8 +172,26 @@ class ImperialBot(object):
                                 deletem(log)
                     else:
                         await sendm(mentionstr + "Insufficent Permissions")
+                if command == "myid":
+                    await sendm(author.id)
 
-                    
+    def thread(self, function):
+        t1 = threading.Thread(target=function)
+        t1.daemon = True
+        t1.start()
+
+    def updateList(self):
+        list_ids = dict()
+        while True:
+            servers = self.client.servers
+            for server in servers:
+                list_ids[server.id] = []
+                members = server.members
+                for member in members:
+                    if member.status != "offline":
+                        list_ids[server.id].append(int(member.id))
+                self.points.updateList(list_ids)
+
     def checkpower(self, author):
         if settings.Roles.check(author, settings.Roles.DEVELOPER) or settings.Roles.check(author, settings.Roles.ADMIN):
             return True

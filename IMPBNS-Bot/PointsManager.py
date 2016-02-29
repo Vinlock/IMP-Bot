@@ -11,6 +11,8 @@ class PointsManager(object):
         self.pointsPer = 1
         self.secondsPerIncrement = 60
 
+        self.members = None
+
         print("Points Manage initiated.")
 
     def start(self):
@@ -23,7 +25,7 @@ class PointsManager(object):
         t1.start()
 
     def beginIncrement(self):
-        while(True):
+        while True:
             sleep(self.secondsPerIncrement)
             print("Points increment has begun.")
             self.thread(self.incrementPoints)
@@ -31,23 +33,21 @@ class PointsManager(object):
 
     def incrementPoints(self):
         # Increments all members of each server by self.pointsPer
-        list_ids = []
-        servers = self.client.servers
-        for server in servers:
-            members = server.members
-            for member in members:
-                if member.status != "offline":
-                    list_ids.append(int(member.id))
-        if self.incrementList(server.id, list_ids):
-            print("Updated Points.")
-        else:
-            print("Failed to Update Points")
+        for server, members in self.members:
+            if self.incrementList(server, members):
+                print("Updated Points.")
+            else:
+                print("Failed to Update Points")
 
     def incrementList(self, serverid, listIDs):
         db = Database.DB()
         conn = db.new()
         cursor = conn.cursor()
         format_strings = ','.join(["'"+str(duo)+"'" for duo in listIDs])
+        if "153648068040982528" in listIDs or 153648068040982528 in listIDs:
+            print("TEST THERE")
+        else:
+            print("TEST NOT THERE")
         sql = "UPDATE `points` SET `points` = `points` + 1 WHERE `server`='{0}' AND `userid` IN ({1})".format(str(serverid), format_strings)
         if len(sql) > 65000:
             return False
@@ -88,8 +88,11 @@ class PointsManager(object):
             if int(self.checkpoints(serverid, memberid)) < points:
                 return False
             elif int(self.checkpoints(serverid, memberid)) > points:
-                self.db.sql("""UPDATE points SET points=points-%s WHERE server=%s AND userid=%s", int(points), int(serverid), int(memberid))
-                print(memberid, "lost", points, "points.""")
+                self.db.sql("UPDATE points SET points=points-%s WHERE server=%s AND userid=%s", int(points), int(serverid), int(memberid))
+                print(memberid, "lost", points, "points.")
                 return True
         else:
             return False
+
+    def updateList(self, dictionary):
+        self.members = dictionary
