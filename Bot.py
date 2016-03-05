@@ -55,10 +55,10 @@ class Bot(object):
             self.increment = Increment.Increment()
             self.increment.start()
 
+            for server in self.client.servers:
+                self.client.send_message(self.channels[server.id]["testing"], "ONLINE")
 
             self.thread(self.updateList)
-
-            self.client.send_message(self.channels[server.id]["testing"], "ONLINE")
 
         @self.client.event
         async def on_member_join(member):
