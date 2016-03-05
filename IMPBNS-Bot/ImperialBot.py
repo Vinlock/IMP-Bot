@@ -1,7 +1,10 @@
-import discord, threading, asyncio
+import threading
 
+import discord
 # Import Local Files
-import settings, PointsManager, ImpMatch
+import settings
+from BettingSystem import PointsManager, ImpMatch
+
 
 class ImperialBot(object):
 
@@ -50,6 +53,9 @@ class ImperialBot(object):
             serverid = str(server.id)           # String Server ID
             message = msg.content               # Get Message Content
             mentions = msg.mentions             # Mentions in Message
+
+            info = { "client" : self.client, "channel" : msg.channel, "author" : msg.author,
+                    "server" : msg.server, "mentions" : msg.mentions }
 
             def sendm(m):
                 return self.client.send_message(channel, m)
@@ -154,7 +160,7 @@ class ImperialBot(object):
                 elif command == "masspts":
                     await deletem(msg)
                     if not self.points.incrementPoints():
-                        await sendm("Error Incrementing Points")
+                        await sendm("Error Incrementing BettingSystem")
 
 
                 # Any Channel
@@ -210,4 +216,4 @@ class ImperialBot(object):
             return str(number) + "th"
 
 
-bot = ImperialBot()
+
