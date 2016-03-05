@@ -4,17 +4,22 @@ import discord
 # Import Local Files
 import settings
 from BettingSystem import PointsManager as Points, ImpMatch as Match, AutoIncrement as Increment
-import responses
+import Database
 
 
 class Bot(object):
     def __init__(self):
+        print("Bot is starting.")
         self.client = discord.Client()
+        print("Discord Client Initiated")
 
         # Dictionary of Channel Objects
         self.channels = dict()
+        self.roles = dict()
 
         self.matches = dict()
+
+        self.tournaments = dict()
 
         self.points = None
 
@@ -27,15 +32,21 @@ class Bot(object):
             print("-----------------------------------")
             for server in self.client.servers:
                 self.matches[server.id] = None
+                self.tournaments[server.id] = None
                 self.channels[server.id] = dict()
+                self.roles[server.id] = dict()
                 print(server.name, ":")
                 print("Roles:")
                 for role in server.roles:
                     print(role.id, role.name)
+                    self.roles[server.id][role.name] = role
                 print("Channels:")
                 for channel in server.channels:
                     self.channels[server.id][channel.name] = channel
                     print(channel.id, channel.name)
+            self.updateMembers()
+
+            print("Finished creating dictionaries for Roles, Channels, and Possible Match Servers.")
 
             self.points = Points.PointsManager(self.client)
 
@@ -44,6 +55,13 @@ class Bot(object):
 
 
             self.thread(self.updateList)
+
+        @self.client.event
+        async def on_member_join(member):
+            if self.points.insertNewMember(member.id, member.server.id):
+                self.client.send_message(member, "Welcome to the Imperial Server!\nYou have started out with 50 points for betting in matches.\nCheck your points with **!points**.\nType **!help** for more information on commands!")
+            else:
+                print("Failed to add new member points.")
 
         @self.client.event
         async def on_message(message):
@@ -222,3 +240,17 @@ class Bot(object):
                     if status is not "offline":
                         list_ids[server.id].append(member.id)
                 self.increment.updateList(list_ids)
+
+    def updateMembers(self):
+        conn = Database.DB()
+        servers = self.client.servers
+        for server in servers:
+            print("Generating Missing Members for Server: " + server.name + "...")
+            members = server.members
+            for member in members:
+                with conn.cursor() as cursor:
+                    sql = "INSERT IGNORE INTO `points` SET `userid`={0}, `points`={1}, `server`={2};".format(member.id, 50, server.id)
+                    cursor.execute(sql)
+                    conn.commit()
+                    print(cursor._last_executed)
+        conn.close()

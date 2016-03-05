@@ -9,8 +9,6 @@ class Increment(object):
 
         self.members = None
 
-        print("Points Incrementation has initiated")
-
     def thread(self, function):
         t1 = threading.Thread(target=function)
         t1.daemon = True
@@ -18,6 +16,7 @@ class Increment(object):
 
     def start(self):
         self.thread(self.beginIncrement)
+        print("Points Incrementation has initiated")
 
     def beginIncrement(self):
         while True:

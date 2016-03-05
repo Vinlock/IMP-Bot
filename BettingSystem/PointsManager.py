@@ -72,3 +72,12 @@ class PointsManager(object):
                 return True
         else:
             return False
+
+    def insertNewMember(self, userid, serverid):
+        conn = Database.DB()
+        with conn.cursor() as cursor:
+            sql = "INSERT IGNORE INTO `points` SET `userid`={0}, `points`={1}, `server`={2};".format(userid, 50, serverid)
+            cursor.execute(sql)
+            conn.commit()
+            return True
+        return False
