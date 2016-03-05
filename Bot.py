@@ -95,7 +95,7 @@ class Bot(object):
 
                 # ! Commands
                 if command == "help" or command == "commands":
-                    await sender("**COMMANDS**\nIf bets are open:\n!bet <red or blue> <points> - *Bet on a team.*\n!points - *Check how many points you have.*")
+                    await sender("**COMMANDS**\nIf bets are open:\n**!bet <red or blue> <points>** - *Bet on a team.*\n**!points** - *Check how many points you have.*")
                 elif command == "purge":
                     await deleter(message)
                     if self.checkpower(message.author):
