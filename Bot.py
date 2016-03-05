@@ -44,7 +44,7 @@ class Bot(object):
                 for channel in server.channels:
                     self.channels[server.id][channel.name] = channel
                     print(channel.id, channel.name)
-            self.updateMembers()
+            # self.updateMembers()
 
             print("Finished creating dictionaries for Roles, Channels, and Possible Match Servers.")
 
@@ -238,18 +238,15 @@ class Bot(object):
     #     else:
     #         return False
 
-    # def checkpower(self, author):
-    #     if author.roles.permissions.can_manage_channels:
-    #         return True
-    #     else:
-    #         return False
-
     def checkpower(self, author):
-        for role in author.roles:
-            if role.permissions.manage_channels:
+        user = author
+        for role in user.roles:
+            check = role.permissions.manage_channels
+            if check:
                 return True
             else:
-                return False
+                continue
+        return False
 
     def thread(self, function):
             t1 = threading.Thread(target=function)
