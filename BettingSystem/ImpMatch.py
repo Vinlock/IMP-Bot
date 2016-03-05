@@ -7,8 +7,11 @@ class Match(object):
         self.redVotes = []
         self.blueVotes = []
 
-        self.blueRatio = 2
-        self.redRatio = 2
+        self.blueRatio = None
+        self.redRatio = None
+
+        self.blueName = None
+        self.redName = None
 
         self.round = 1
 
@@ -24,6 +27,24 @@ class Match(object):
     def closeBetting(self):
         self.bettingOpen = False
 
+    def getName(self, team, mention=False):
+        if team == "red":
+            if self.redName == None:
+                return "RED"
+            else:
+                if mention:
+                    return self.redName.mention
+                else:
+                    return self.redName.name
+        elif team == "blue":
+            if self.blueName == None:
+                return "BLUE"
+            else:
+                if mention:
+                    return self.blueName.mention
+                else:
+                    return self.blueName.name
+
     def totalVotes(self):
         return len(self.blueVotes) + len(self.redVotes)
 
@@ -32,6 +53,32 @@ class Match(object):
 
     def bluePercent(self):
         return (len(self.blueVotes) / self.totalVotes()) * 100
+
+    def diffRatio(self, team):
+        if self.bluePercent() > self.redPercent():
+            diff = self.bluePercent() - self.redPercent()
+            if diff > 50:
+                add = diff / 100
+                self.redRatio = 1 + add
+                self.blueRatio = 1 + ((100 - diff) / 100)
+            elif diff < 50:
+                add = diff / 100
+                self.redRatio = 1 + ((100 - diff) / 100)
+                self.blueRatio = 1 + add
+        elif self.redPercent() > self.bluePercent():
+            diff = self.redPercent() - self.bluePercent()
+            if diff > 50:
+                add = diff / 100
+                self.blueRatio = 1 + add
+                self.redRatio = 1 + ((100 - diff) / 100)
+            elif diff < 50:
+                add = diff / 100
+                self.blueRatio = 1 + ((100 - diff) / 100)
+                self.redRatio = 1 + add
+        elif self.redPercent() == self.bluePercent():
+            self.blueRatio = 1.5
+            self.redRatio = 1.5
+
 
     def addVote(self, user, team, bet):
         if self.bettingOpen:
@@ -55,6 +102,7 @@ class Match(object):
             return False
 
     def cashout(self, winner):
+        self.diffRatio()
         if winner == "red":
             for bet in self.redVotes:
                 win = int(bet.amount * self.blueRatio)

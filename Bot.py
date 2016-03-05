@@ -114,11 +114,16 @@ class Bot(object):
                             numDelete = int(params[2])
                             async for log in self.client.logs_from(message.channel, limit=numDelete*100):
                                 if log.author == message.mentions[0]:
-                                    await deleter(log)
+                                    if numDelete > 0:
+                                        await deleter(log)
+                                        numDelete = numDelete - 1
                         elif numParams > 2:
                             sender("Invalid Command Parameters")
                 elif command == "version":
                     await sender("Imperial Bot v0.1b - Created By: Vinlock")
+                elif command == "admin":
+                    if self.checkpower(message.author):
+                        await self.client.send_message(message.author, "__**COMMANDS**__\n**!purge <number of messages> <mention user ***OPTIONAL***>** - Purges X number of messages in the channel. Optionally mention a user to purge only their messages.\n**!give <mention user> <points>** - Give a user a certain number of points. (Cap: 50000)\n**!start** - Start a round of betting.\n**!set <team> <mention user>** - Give each team a name.\n**!match** - Ends bettings and announces that the match is underway.\n**!points <mention user>** - Check a users points total.")
 
                 # Betting Commands
                 test = self.channels[message.server.id]["betting"]
@@ -154,7 +159,7 @@ class Bot(object):
                                                         icon = ""
                                                     await sender(icon + " - " + message.author.mention + " you have placed a bet on **" + team.upper() + "** for " + str(amount) + " points.")
                                                 else:
-                                                    await sender(message.author.mention + " insufficient points to bet that amound. You only have " + str(self.points.checkpoints(message.server.id, message.author.id)) + " points.")
+                                                    await sender(message.author.mention + " insufficient points to bet that amount. You only have " + str(self.points.checkpoints(message.server.id, message.author.id)) + " points.")
                                             else:
                                                 await sender(message.author.mention + " you have already bet.")
                                         else:
@@ -216,7 +221,7 @@ class Bot(object):
                                     winner = "blue"
                                 results = self.matches[message.server.id].cashout(winner)
                                 # results_message = ""
-                                await sender("**" + winner.upper() + "** has won!")
+                                await sender("**" + self.matches[message.server.id].getName(winner, True) + "** has won!")
                                 for result in results:
                                     await sender(result.user.mention + " you have won " + str(result.winnings) + " points.")
                                     # results_message = results_message + result.user.mention + " you have won " + str(result.winnings) + " points.\n"
@@ -241,23 +246,26 @@ class Bot(object):
                     elif command == "percent":
                         red = self.matches[message.server.id].redPercent()
                         blue = self.matches[message.server.id].bluePercent()
-                        await sender(":large_blue_circle: **BLUE**" + str(blue) + " vs. " + str(red) + "**RED** :red_circle:")
+                        await sender(":large_blue_circle: **" + self.matches[message.server.id].getName("blue") + "** " + str(blue) + "% vs. " + str(red) + "% **" + self.matches[message.server.id].getName("red") + "** :red_circle:")
                     elif command == "test":
                         await sender("Test")
+                    elif command.startswith("set"):
+                        if self.checkpower(message.author):
+                            if numParams < 2 or numParams > 2:
+                                await sender(message.author.mention + " - Incorrect number of parameters. !set <team> <mention user>")
+                            else:
+                                team = params[1]
+                                user = message.mentions[0]
+                                if team == "red":
+                                    self.matches[message.server.id].redName = user
+                                elif team == "blue":
+                                    self.matches[message.server.id].blueName = user
+                                else:
+                                    await sender(message.author.mention + " - Invalid Team.")
+                        else:
+                            await sender(message.author.mention + " - Insufficient Permissions")
 
         self.client.run(settings.DISCORD_USERNAME, settings.DISCORD_PASSWORD)
-
-    # def checkpower(self, author):
-    #     if settings.Roles.check(author, settings.Roles.DEVELOPER) or settings.Roles.check(author, settings.Roles.ADMIN):
-    #         return True
-    #     else:
-    #         return False
-
-    # def checkpower(self, author):
-    #     if author.roles.permissions.can_manage_channels:
-    #         return True
-    #     else:
-    #         return False
 
     def checkpower(self, author):
         for role in author.roles:
