@@ -56,6 +56,8 @@ class Bot(object):
 
             self.thread(self.updateList)
 
+            self.client.send_message(self.channels[server.id]["testing"], "ONLINE")
+
         @self.client.event
         async def on_member_join(member):
             if self.points.insertNewMember(member.id, member.server.id):
@@ -70,7 +72,7 @@ class Bot(object):
                 "channel" : message.channel,
                 "author" : message.author,
                 "server" : message.server,
-                "mentions" : message.mentions 
+                "mentions" : message.mentions
                 }
             if message.content.startswith("!"):
                 msg_parts = message.content[1:]
@@ -96,11 +98,12 @@ class Bot(object):
                     await sender("**COMMANDS**\nIf bets are open:\n!bet <red or blue> <points> - *Bet on a team.*\n!points - *Check how many points you have.*")
                 elif command == "purge":
                     await deleter(message)
-                    if numParams < 1:
-                        sender("Please specify how many messages to purge.")
-                    else:
-                        async for log in self.client.logs_from(message.channel, limit=int(params[1])):
-                            await deleter(log)
+                    if self.checkpower(message.author):
+                        if numParams < 1:
+                            sender("Please specify how many messages to purge.")
+                        else:
+                            async for log in self.client.logs_from(message.channel, limit=int(params[1])):
+                                await deleter(log)
 
                 # Betting Commands
                 if message.channel == self.channels[message.server.id]["betting"]:
