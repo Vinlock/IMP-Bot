@@ -230,19 +230,31 @@ class Bot(object):
                                 await sender("Match has ended.")
                     elif command == "give":
                         await deleter(message)
-                        if self.checkpower(message.author):
-                            if numParams < 0:
-                                await sender("Give command requires parameters \"!give <mention> <points>\"")
-                            else:
+                        if numParams < 0:
+                            await sender("Give command requires parameters \"!give <mention> <points>\"")
+                        else:
+                            try:
                                 points = int(params[2])
-                                if points > 50000:
-                                    sender(message.author.mention + " - You cannot give that many points. Must be under 50000")
+                            except ValueError:
+                                await sender("Invalid points amount. Be sure to **not** use commas.")
+                            else:
+                                if points > 500000:
+                                    sender(message.author.mention + " - You cannot give that many points. Must be 500,000 or under")
                                 else:
                                     person = message.mentions[0].id
-                                    self.points.givepoints(points, message.server.id, person)
-                                    await sendToBetting(message.author.mention + " gave " + str(points) + " points to " + message.mentions[0].mention)
-                        else:
-                            await sender(message.author.mention + " - Insufficient Permissions")
+                                    if not self.checkpower(message.author):
+                                        if self.points.minusPoints(points, message.server.id, message.author.id):
+                                            if self.points.givepoints(points, message.server.id, person):
+                                                await sendToBetting(message.author.mention + " gave " + str(points) + " points to " + message.mentions[0].mention)
+                                            else:
+                                                self.points.givepoints(points, message.server.id, message.author.id)
+                                        else:
+                                            await sender(message.author.mention + " insufficient points to bet that amount. You only have " + str(self.points.checkpoints(message.server.id, message.author.id)) + " points.")
+                                    elif self.checkpower(message.author):
+                                        if self.points.givepoints(points, message.server.id, person):
+                                            await sendToBetting(message.author.mention + " gave " + str(points) + " points to " + message.mentions[0].mention)
+                                        else:
+                                            await sender("Give Failed")
                     elif command == "percent":
                         red = self.matches[message.server.id].redPercent()
                         blue = self.matches[message.server.id].bluePercent()

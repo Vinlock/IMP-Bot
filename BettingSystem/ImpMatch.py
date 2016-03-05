@@ -54,7 +54,7 @@ class Match(object):
     def bluePercent(self):
         return (len(self.blueVotes) / self.totalVotes()) * 100
 
-    def diffRatio(self, team):
+    def diffRatio(self):
         if self.bluePercent() > self.redPercent():
             diff = self.bluePercent() - self.redPercent()
             if diff > 50:
