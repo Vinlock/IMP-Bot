@@ -264,6 +264,17 @@ class Bot(object):
                                     await sender(message.author.mention + " - Invalid Team.")
                         else:
                             await sender(message.author.mention + " - Insufficient Permissions")
+                    elif command == "who":
+                        team = params[1]
+                        team = team.lower()
+                        if team == "red" or team == "blue":
+                            name = self.matches[message.server.id].getName(team)
+                            if name == "RED" or name == "BLUE":
+                                await sender(message.author.mention + " - Team name not set for " + team)
+                            else:
+                                await sender("**" + team.upper() + "** = " + name)
+                        else:
+                            await sender(message.author.mention + " - You did not input a valid team.")
 
         self.client.run(settings.DISCORD_USERNAME, settings.DISCORD_PASSWORD)
 
