@@ -74,9 +74,9 @@ class Bot(object):
                 "server" : message.server,
                 "mentions" : message.mentions
                 }
-            if "Kappa" in message.content:
-                await self.client.send_file(message.channel, "files/kappa1.png")
-            elif message.content is "!":
+            # if "Kappa" in message.content:
+            #     await self.client.send_file(message.channel, "files/kappa1.png")
+            if message.content is "!":
                 print("Nothing happened.")
             elif message.content.startswith("!"):
                 msg_parts = message.content[1:]
@@ -149,7 +149,7 @@ class Bot(object):
                                                     icon = ""
                                                 await sender(icon + " - " + message.author.mention + " you have placed a bet on **" + team.upper() + "** for " + str(amount) + " points.")
                                             else:
-                                                await sender(message.author.mention + " bets are no open at the moment.")
+                                                await sender(message.author.mention + " bets are not open at the moment.")
                                         else:
                                             await sender(message.author.mention + " you have already bet.")
                                     else:
