@@ -238,11 +238,18 @@ class Bot(object):
     #     else:
     #         return False
 
+    # def checkpower(self, author):
+    #     if author.roles.permissions.can_manage_channels:
+    #         return True
+    #     else:
+    #         return False
+
     def checkpower(self, author):
-        if author.roles.permissions.can_manage_channels:
-            return True
-        else:
-            return False
+        for role in author.roles:
+            if role.permissions.manage_channels:
+                return True
+            else:
+                return False
 
     def thread(self, function):
             t1 = threading.Thread(target=function)
