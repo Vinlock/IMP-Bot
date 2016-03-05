@@ -113,8 +113,11 @@ class Bot(object):
                             sender("Invalid Command Parameters")
                 elif command == "version":
                     await sender("Imperial Bot v0.1b - Created By: Vinlock")
+                elif command == "Kappa":
+                    await self.client.send_file(message.channel, filename="../files/kappa1.png")
 
                 # Betting Commands
+                test = self.channels[message.server.id]["betting"]
                 if message.channel == self.channels[message.server.id]["betting"]:
                     if command == "bet":
                         if numParams < 2:
