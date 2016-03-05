@@ -220,7 +220,7 @@ class Bot(object):
                             else:
                                 points = int(params[2])
                                 if points > 50000:
-                                    sender(message.author.mention + " - You cannot give that many points.")
+                                    sender(message.author.mention + " - You cannot give that many points. Must be under 50000")
                                 else:
                                     person = message.mentions[0].id
                                     self.points.givepoints(points, message.server.id, person)
