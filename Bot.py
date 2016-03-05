@@ -258,7 +258,7 @@ class Bot(object):
                     elif command == "percent":
                         red = self.matches[message.server.id].redPercent()
                         blue = self.matches[message.server.id].bluePercent()
-                        await sender(":large_blue_circle: **" + self.matches[message.server.id].getName("blue") + "** " + str(blue) + "% vs. " + str(red) + "% **" + self.matches[message.server.id].getName("red") + "** :red_circle:")
+                        await sender(":large_blue_circle: **" + self.matches[message.server.id].getName("blue") + "** " + str(round(blue, 1)) + "% vs. " + str(round(red, 1)) + "% **" + self.matches[message.server.id].getName("red") + "** :red_circle:")
                     elif command == "test":
                         await sender("Test")
                     elif command.startswith("set"):
