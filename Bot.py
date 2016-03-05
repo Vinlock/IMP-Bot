@@ -44,7 +44,7 @@ class Bot(object):
                 for channel in server.channels:
                     self.channels[server.id][channel.name] = channel
                     print(channel.id, channel.name)
-            self.updateMembers()
+            # self.updateMembers()
 
             print("Finished creating dictionaries for Roles, Channels, and Possible Match Servers.")
 
@@ -74,6 +74,8 @@ class Bot(object):
                 "server" : message.server,
                 "mentions" : message.mentions
                 }
+            if "Kappa" in message.content:
+                await self.client.send_file(message.channel, "../files/kappa1.png")
             if message.content.startswith("!"):
                 msg_parts = message.content[1:]
                 params = msg_parts.split(" ")
@@ -113,8 +115,6 @@ class Bot(object):
                             sender("Invalid Command Parameters")
                 elif command == "version":
                     await sender("Imperial Bot v0.1b - Created By: Vinlock")
-                elif command == "Kappa":
-                    await self.client.send_file(message.channel, filename="../files/kappa1.png")
 
                 # Betting Commands
                 test = self.channels[message.server.id]["betting"]
