@@ -44,7 +44,7 @@ class Bot(object):
                 for channel in server.channels:
                     self.channels[server.id][channel.name] = channel
                     print(channel.id, channel.name)
-            # self.updateMembers()
+            self.updateMembers()
 
             print("Finished creating dictionaries for Roles, Channels, and Possible Match Servers.")
 
@@ -75,8 +75,10 @@ class Bot(object):
                 "mentions" : message.mentions
                 }
             if "Kappa" in message.content:
-                await self.client.send_file(message.channel, "../files/kappa1.png")
-            if message.content.startswith("!"):
+                await self.client.send_file(message.channel, "files/kappa1.png")
+            elif message.content is "!":
+                print("Nothing happened.")
+            elif message.content.startswith("!"):
                 msg_parts = message.content[1:]
                 params = msg_parts.split(" ")
                 command = params[0]
@@ -273,6 +275,7 @@ class Bot(object):
                     if status is not "offline":
                         list_ids[server.id].append(member.id)
                 self.increment.updateList(list_ids)
+            sleep(5)
 
     def updateMembers(self):
         conn = Database.DB()
