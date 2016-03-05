@@ -150,7 +150,7 @@ class Bot(object):
                                     else:
                                         await sender(message.author.mention + " - You did not enter a valid team name. Ex: \"!bet blue 100\"")
                     elif command == "points":
-                        if numParams > 1:
+                        if numParams == 1:
                             if self.checkpower(message.author):
                                 await deleter(message)
                                 for user in message.mentions:
