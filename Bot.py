@@ -45,7 +45,8 @@ class Bot(object):
                 for channel in server.channels:
                     self.channels[server.id][channel.name] = channel
                     print(channel.id, channel.name)
-            # self.updateMembers()
+
+            self.thread(self.updateMembers)
 
             print("Finished creating dictionaries for Roles, Channels, and Possible Match Servers.")
 
