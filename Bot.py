@@ -101,9 +101,18 @@ class Bot(object):
                     if self.checkpower(message.author):
                         if numParams < 1:
                             sender("Please specify how many messages to purge.")
-                        else:
+                        elif numParams == 1:
                             async for log in self.client.logs_from(message.channel, limit=int(params[1])):
                                 await deleter(log)
+                        elif numParams == 2:
+                            numDelete = int(params[2])
+                            async for log in self.client.logs_from(message.channel, limit=numDelete*100):
+                                if log.author == message.mentions[0]:
+                                    await deleter(log)
+                        elif numParams > 2:
+                            sender("Invalid Command Parameters")
+                elif command == "version":
+                    await sender("Imperial Bot v0.1b - Created By: Vinlock")
 
                 # Betting Commands
                 if message.channel == self.channels[message.server.id]["betting"]:
@@ -141,7 +150,7 @@ class Bot(object):
                                     else:
                                         await sender(message.author.mention + " - You did not enter a valid team name. Ex: \"!bet blue 100\"")
                     elif command == "points":
-                        if numParams >= 1:
+                        if numParams > 1:
                             if self.checkpower(message.author):
                                 await deleter(message)
                                 for user in message.mentions:
@@ -155,7 +164,7 @@ class Bot(object):
                         if self.checkpower(message.author):
                             if self.matches[message.server.id] == None:
                                 self.matches[message.server.id] = Match.Match(message.server.id)
-                                await sendToBetting("@everyone\nBets are open for this round! Place your Bets with \"!bet red <amount>\" or \"!bet blue <amount>\"!!")
+                                await sendToBetting("@everyone\n\n**Bets are open for this round! Place your Bets with \"!bet red <amount>\" or \"!bet blue <amount>\"!!**\n-------------------------------------------------------------------------")
                             else:
                                 await sender(message.author.mention + " - A match is already underway.")
                         else:
@@ -210,9 +219,12 @@ class Bot(object):
                                 await sender("Give command requires parameters \"!give <mention> <points>\"")
                             else:
                                 points = int(params[2])
-                                person = message.mentions[0].id
-                                self.points.givepoints(points, message.server.id, person)
-                                await sendToBetting(str(points) + " points given to " + message.mentions[0].mention)
+                                if points > 50000:
+                                    sender(message.author.mention + " - You cannot give that many points.")
+                                else:
+                                    person = message.mentions[0].id
+                                    self.points.givepoints(points, message.server.id, person)
+                                    await sendToBetting(message.author.mention + " gave " + str(points) + " points to " + message.mentions[0].mention)
                         else:
                             await sender(message.author.mention + " - Insufficient Permissions")
                     elif command == "test":
