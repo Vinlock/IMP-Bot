@@ -164,11 +164,11 @@ class Bot(object):
                             if self.checkpower(message.author):
                                 await deleter(message)
                                 for user in message.mentions:
-                                    await sender(message.author.mention + " has " + str(self.points.checkpoints(message.server.id, user.id)) + " points.")
+                                    await sender(message.author.mention + " has **" + str(self.points.checkpoints(message.server.id, user.id)) + "** points.")
                             else:
                                 await sender(message.author.mention + " - Insufficient permissions.")
                         else:
-                            await sender(message.author.mention + " has " + str(self.points.checkpoints(message.server.id, message.author.id)) + " points.")
+                            await sender(message.author.mention + " has **" + str(self.points.checkpoints(message.server.id, message.author.id)) + "** points.")
                     elif command == "start":
                         await deleter(message)
                         if self.checkpower(message.author):
@@ -238,6 +238,10 @@ class Bot(object):
                                     await sendToBetting(message.author.mention + " gave " + str(points) + " points to " + message.mentions[0].mention)
                         else:
                             await sender(message.author.mention + " - Insufficient Permissions")
+                    elif command == "percent":
+                        red = self.matches[message.server.id].redPercent()
+                        blue = self.matches[message.server.id].bluePercent()
+                        await sender(":large_blue_circle: **BLUE**" + str(blue) + " vs. " + str(red) + "**RED** :red_circle:")
                     elif command == "test":
                         await sender("Test")
 
