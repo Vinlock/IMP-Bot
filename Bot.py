@@ -6,6 +6,7 @@ import settings
 from BettingSystem import PointsManager as Points, ImpMatch as Match, AutoIncrement as Increment
 import Database
 
+from time import sleep
 
 class Bot(object):
     def __init__(self):
@@ -44,7 +45,7 @@ class Bot(object):
                 for channel in server.channels:
                     self.channels[server.id][channel.name] = channel
                     print(channel.id, channel.name)
-            self.updateMembers()
+            # self.updateMembers()
 
             print("Finished creating dictionaries for Roles, Channels, and Possible Match Servers.")
 
@@ -213,7 +214,7 @@ class Bot(object):
                                 # results_message = ""
                                 await sender("**" + winner.upper() + "** has won!")
                                 for result in results:
-                                    sender(result.user.mention + " you have won " + str(result.winnings) + " points.")
+                                    await sender(result.user.mention + " you have won " + str(result.winnings) + " points.")
                                     # results_message = results_message + result.user.mention + " you have won " + str(result.winnings) + " points.\n"
                                 # await sender(results_message)
                                 self.matches[message.server.id] = None
