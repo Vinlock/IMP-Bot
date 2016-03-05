@@ -232,8 +232,14 @@ class Bot(object):
 
         self.client.run(settings.DISCORD_USERNAME, settings.DISCORD_PASSWORD)
 
+    # def checkpower(self, author):
+    #     if settings.Roles.check(author, settings.Roles.DEVELOPER) or settings.Roles.check(author, settings.Roles.ADMIN):
+    #         return True
+    #     else:
+    #         return False
+
     def checkpower(self, author):
-        if settings.Roles.check(author, settings.Roles.DEVELOPER) or settings.Roles.check(author, settings.Roles.ADMIN):
+        if author.roles.permissions.can_manage_channels:
             return True
         else:
             return False
