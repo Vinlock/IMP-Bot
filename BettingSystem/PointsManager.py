@@ -59,9 +59,10 @@ class PointsManager(object):
     def minusPoints(self, points, serverid, memberid):
         conn = Database.DB()
         if self.memberHasPoints(serverid, memberid):
-            if int(self.checkpoints(serverid, memberid)) < points:
+            pointsHas = int(self.checkpoints(serverid, memberid))
+            if pointsHas < points:
                 return False
-            elif int(self.checkpoints(serverid, memberid)) > points:
+            elif pointsHas > points:
                 with conn.cursor() as cursor:
                     sql = "UPDATE `points` SET `points`=points-{0} WHERE server={1} AND userid={2}".format(str(points), str(serverid), str(memberid))
                     cursor.execute(sql)

@@ -150,7 +150,7 @@ class Bot(object):
                                                     icon = ""
                                                 await sender(icon + " - " + message.author.mention + " you have placed a bet on **" + team.upper() + "** for " + str(amount) + " points.")
                                             else:
-                                                await sender(message.author.mention + " bets are not open at the moment.")
+                                                await sender(message.author.mention + " insufficient points to bet that amound. You only have " + str(self.points.checkpoints(message.server.id, message.author.id)) + " points.")
                                         else:
                                             await sender(message.author.mention + " you have already bet.")
                                     else:
