@@ -124,38 +124,41 @@ class Bot(object):
                 test = self.channels[message.server.id]["betting"]
                 if message.channel == self.channels[message.server.id]["betting"]:
                     if command == "bet":
-                        if numParams < 2:
-                            await sender(message.author.mention + " - You did not enter enough parameters. **Example:** \"!bet red 100\"")
-                        elif numParams > 2:
-                            await sender(message.author.mention + " - You have used too many parameter for this command. Ex: \"!bet red 100\"")
-                        elif numParams == 2:
-                            try:
-                                amount = int(params[2])
-                            except ValueError:
-                                await sender(message.author.mention + " - You did not enter a valid bet amount. Ex: \"!bet blue 100\"")
-                            else:
-                                team = str(params[1].lower())
-                                if any(char.isdigit() for char in team):
-                                    await sender(message.author.mention + " - You did not enter a valid team name. Ex: \"!bet blue 100\"")
-                                elif team == "blue" or team == "red":
-                                    if self.matches[message.server.id] is None:
-                                        await sender(message.author.mention + " - No matches have been started as of yet.")
-                                    elif self.matches[message.server.id] is not None:
-                                        if not self.matches[message.server.id].betted(message.author.id):
-                                            if self.matches[message.server.id].addVote(message.author, team, amount):
-                                                if team == "red":
-                                                    icon = ":red_circle:"
-                                                elif team == "blue":
-                                                    icon = ":large_blue_circle:"
-                                                else:
-                                                    icon = ""
-                                                await sender(icon + " - " + message.author.mention + " you have placed a bet on **" + team.upper() + "** for " + str(amount) + " points.")
-                                            else:
-                                                await sender(message.author.mention + " insufficient points to bet that amound. You only have " + str(self.points.checkpoints(message.server.id, message.author.id)) + " points.")
-                                        else:
-                                            await sender(message.author.mention + " you have already bet.")
-                                    else:
+                        if self.matches[message.server.id] is None:
+                            await sender(message.author.mention + " - No match has been started yet.")
+                        elif self.matches[message.server.id] is not None:
+                            if numParams < 2:
+                                await sender(message.author.mention + " - You did not enter enough parameters. **Example:** \"!bet red 100\"")
+                            elif numParams > 2:
+                                await sender(message.author.mention + " - You have used too many parameter for this command. Ex: \"!bet red 100\"")
+                            elif numParams == 2:
+                                try:
+                                    amount = int(params[2])
+                                except ValueError:
+                                    await sender(message.author.mention + " - You did not enter a valid bet amount. Ex: \"!bet blue 100\"")
+                                else:
+                                    team = str(params[1].lower())
+                                    if any(char.isdigit() for char in team):
                                         await sender(message.author.mention + " - You did not enter a valid team name. Ex: \"!bet blue 100\"")
+                                    elif team == "blue" or team == "red":
+                                        if not self.matches[message.server.id].bettingOpen:
+                                            await sender(message.author.mention + " - Betting has been closed")
+                                        elif self.matches[message.server.id].bettingOpen:
+                                            if not self.matches[message.server.id].betted(message.author.id):
+                                                if self.matches[message.server.id].addVote(message.author, team, amount):
+                                                    if team == "red":
+                                                        icon = ":red_circle:"
+                                                    elif team == "blue":
+                                                        icon = ":large_blue_circle:"
+                                                    else:
+                                                        icon = ""
+                                                    await sender(icon + " - " + message.author.mention + " you have placed a bet on **" + team.upper() + "** for " + str(amount) + " points.")
+                                                else:
+                                                    await sender(message.author.mention + " insufficient points to bet that amound. You only have " + str(self.points.checkpoints(message.server.id, message.author.id)) + " points.")
+                                            else:
+                                                await sender(message.author.mention + " you have already bet.")
+                                        else:
+                                            await sender(message.author.mention + " - You did not enter a valid team name. Ex: \"!bet blue 100\"")
                     elif command == "points":
                         if numParams == 1:
                             if self.checkpower(message.author):
