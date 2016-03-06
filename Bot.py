@@ -182,6 +182,7 @@ class Bot(object):
                                 i += 1
                             checked = checked[:-2]
                             j = 0
+                            wait = ""
                             for user in self.tournaments[message.server.id].waitinglist:
                                 wait = wait + user.name + ", "
                                 j += 1
