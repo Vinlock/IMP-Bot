@@ -230,8 +230,8 @@ class Bot(object):
                                 await sender("Match has ended.")
                     elif command == "give":
                         await deleter(message)
-                        if numParams < 0:
-                            await sender("Give command requires parameters \"!give <mention> <points>\"")
+                        if numParams < 2:
+                            await sender(message.author.mention + " - Give command requires parameters \"**Example:** !give <mention> <points>\"")
                         else:
                             try:
                                 points = int(params[2])
@@ -255,6 +255,28 @@ class Bot(object):
                                             await sendToBetting(message.author.mention + " gave " + str(points) + " points to " + message.mentions[0].mention)
                                         else:
                                             await sender("Give Failed")
+                    elif command == "take":
+                        await deleter(message)
+                        if self.checkpower(message.author):
+                            if numParams < 2 or numParams > 2:
+                                await sender(message.author.mention + " - Take command requires parameters. \"**Example:** !take <mention> <points>\"")
+                            else:
+                                try:
+                                    points = int(params[2])
+                                    who = message.mentions[0]
+                                except ValueError:
+                                    await sender("Invalid points amount. Be sure to **not** use commas.")
+                                else:
+                                    available_points = self.points.checkpoints(message.server.id, who.id)
+                                    if points > available_points:
+                                        await sender(message.author.mention + " - " + who.mention + " only has " + str(available_points) + " points, therefore not enough to take " + str(points) + " points.")
+                                    elif available_points > points:
+                                        if self.points.minusPoints(points, message.server.id, who.id):
+                                            await sender(message.author.mention + " has taken " + str(points) + " points from " + who.mention + ".")
+                                        else:
+                                            await sender(message.author.mention + " Take failed!")
+                        else:
+                            await sender(message.author.mention + " - Insufficient permissions.")
                     elif command == "!giveall":
                         await deleter(message)
                         if self.checkpower(message.author):
