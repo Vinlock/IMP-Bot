@@ -273,7 +273,8 @@ class Bot(object):
                                         status = member.status.value
                                         if status is not "offline":
                                             list_ids[server.id].append(member.id)
-                                self.points.massGive(message.server.id, list_ids, points)
+                                if self.points.massGive(message.server.id, list_ids, points):
+                                    await sender(message.author.mention + " gave " + str(points) + " points to @everyone!!\n:moneybag: :moneybag: :moneybag: :moneybag: :moneybag: :moneybag: :moneybag: :moneybag: :moneybag: :moneybag: :moneybag: :moneybag: ")
                     elif command == "percent":
                         red = self.matches[message.server.id].redPercent()
                         blue = self.matches[message.server.id].bluePercent()
