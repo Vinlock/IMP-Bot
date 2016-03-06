@@ -223,7 +223,7 @@ class Bot(object):
                                 # results_message = ""
                                 await sender("**" + self.matches[message.server.id].getName(winner, True) + "** has won!")
                                 for result in results:
-                                    await sender(result.user.mention + " you have won " + str(result.winnings) + " points.")
+                                    await sender(result.user.mention + " you have won **" + str(result.winnings) + "** points.")
                                     # results_message = results_message + result.user.mention + " you have won " + str(result.winnings) + " points.\n"
                                 # await sender(results_message)
                                 self.matches[message.server.id] = None
