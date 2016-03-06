@@ -221,7 +221,6 @@ class Bot(object):
                     else:
                         await sender(message.author.mention + " - Insufficient Permissions")
                 elif command == "join":
-                    await deleter(message)
                     if self.checkpower(message.author):
                         url = params[1]
                         invite = self.client.accept_invite(url)
