@@ -256,6 +256,7 @@ class Bot(object):
                                         else:
                                             await sender("Give Failed")
                     elif command == "!giveall":
+                        await deleter(message)
                         if self.checkpower(message.author):
                             if numParams < 1 or numParams > 1:
                                 await sender(message.author.mention + " - You must declare the number of points.")
