@@ -270,8 +270,10 @@ class Bot(object):
                                 user = message.mentions[0]
                                 if team == "red":
                                     self.matches[message.server.id].redName = user
+                                    await sender(":red_circle: - You have set **RED**'s name to " + self.matches[message.server.id].redName)
                                 elif team == "blue":
                                     self.matches[message.server.id].blueName = user
+                                    await sender(":large_blue_circle: - You have set **BLUE**'s name to " + self.matches[message.server.id].blueName)
                                 else:
                                     await sender(message.author.mention + " - Invalid Team.")
                         else:
