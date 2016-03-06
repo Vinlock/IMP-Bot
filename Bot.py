@@ -260,22 +260,20 @@ class Bot(object):
                         if self.checkpower(message.author):
                             if numParams < 1 or numParams > 1:
                                 await sender(message.author.mention + " - You must declare the number of points.")
-                            try:
-                                points = int(params[1])
-                            except ValueError:
-                                await sender(message.author.mention + " - You must declare a number for points parameter.")
                             else:
-                                list_ids = dict()
-                                servers = self.client.servers
-                                for server in servers:
-                                    list_ids[server.id] = []
-                                    members = server.members
+                                try:
+                                    points = int(params[1])
+                                except ValueError:
+                                    await sender(message.author.mention + " - You must declare a number for points parameter.")
+                                else:
+                                    list_ids = []
+                                    members = message.server.members
                                     for member in members:
                                         status = member.status.value
                                         if status is not "offline":
-                                            list_ids[server.id].append(member.id)
-                                if self.points.massGive(message.server.id, list_ids, points):
-                                    await sender(message.author.mention + " gave " + str(points) + " points to @everyone!!\n:moneybag: :moneybag: :moneybag: :moneybag: :moneybag: :moneybag: :moneybag: :moneybag: :moneybag: :moneybag: :moneybag: :moneybag: ")
+                                            list_ids.append(member.id)
+                                    if self.points.massGive(message.server.id, list_ids, points):
+                                        await sender(message.author.mention + " gave " + str(points) + " points to @everyone!!\n:moneybag: :moneybag: :moneybag: :moneybag: :moneybag: :moneybag: :moneybag: :moneybag: :moneybag: :moneybag: :moneybag: :moneybag: ")
                     elif command == "percent":
                         red = self.matches[message.server.id].redPercent()
                         blue = self.matches[message.server.id].bluePercent()
@@ -345,7 +343,7 @@ class Bot(object):
                     if status is not "offline":
                         list_ids[server.id].append(member.id)
                 self.increment.updateList(list_ids)
-            sleep(5)
+            sleep(7)
 
     def updateMembers(self):
         conn = Database.DB()
