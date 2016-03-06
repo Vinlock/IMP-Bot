@@ -146,32 +146,35 @@ class Bot(object):
                     else:
                         print("Nope")
                 elif command == "tournament":
-                    if numParams < 1 or numParams > 1:
-                        await sender(message.author.mention + " - You did not input the correct parameters."
-                                                              " **Example:** !tournament <start or end>")
-                    todo = params[1]
-                    if todo == "start":
-                        if self.tournaments[message.server.id] is None:
-                            self.tournaments[message.server.id] = T.Tournament(message.server.id, message.author)
-                            if self.tournaments[message.server.id].start():
-                                await self.client.send_message(self.channels[message.server.id]["waiting-room"],
-                                                               message.author.mention + " has started a new tournament. "
-                                                                                        "Please use **!checkin** to "
-                                                                                        "check in or **!waitlist** "
-                                                                                        "if you are waitlisted.")
+                    if self.checkpower(message.author):
+                        if numParams < 1 or numParams > 1:
+                            await sender(message.author.mention + " - You did not input the correct parameters."
+                                                                  " **Example:** !tournament <start or end>")
+                        todo = params[1]
+                        if todo == "start":
+                            if self.tournaments[message.server.id] is None:
+                                self.tournaments[message.server.id] = T.Tournament(message.server.id, message.author)
+                                if self.tournaments[message.server.id].start():
+                                    await self.client.send_message(self.channels[message.server.id]["waiting-room"],
+                                                                   message.author.mention + " has started a new tournament. "
+                                                                                            "Please use **!checkin** to "
+                                                                                            "check in or **!waitlist** "
+                                                                                            "if you are waitlisted.")
+                            else:
+                                await sender(message.author.mention + " - A tournament has already been started by " +
+                                             self.tournaments[message.server.id].starter.mention + ".")
+                        elif todo == "end":
+                            if self.tournaments[message.server.id] is None:
+                                await sender(message.author.mention + " - There is no tournament started to end.")
+                            else:
+                                self.tournaments[message.server.id] = None
+                                await sender("@everyone - The tournaments has ended. Thank you for your support and "
+                                             "cooperation. We appreciate it and hope to see you next time!")
                         else:
-                            await sender(message.author.mention + " - A tournament has already been started by " +
-                                         self.tournaments[message.server.id].starter.mention + ".")
-                    elif todo == "end":
-                        if self.tournaments[message.server.id] is None:
-                            await sender(message.author.mention + " - There is no tournament started to end.")
-                        else:
-                            self.tournaments[message.server.id] = None
-                            await sender("@everyone - The tournaments has ended. Thank you for your support and "
-                                         "cooperation. We appreciate it and hope to see you next time!")
+                            await sender(message.author.mention + " - You did not input the correct parameters."
+                                                                  " **Example:** !tournament <start or end>")
                     else:
-                        await sender(message.author.mention + " - You did not input the correct parameters."
-                                                              " **Example:** !tournament <start or end>")
+                        await sender("")
                 elif command == "checkedin":
                     if self.checkpower(message.author):
                         if self.tournaments[message.server.id] is not None:
@@ -191,6 +194,7 @@ class Bot(object):
                             await sender(str(j) + " users have checked in on the waitlist.\n" + wait)
                         else:
                             await sender(message.author.mention + " - No tournament has been started yet.")
+                elif command ==
 
                 # Betting Commands
                 if message.channel == self.channels[message.server.id]["betting"]:
@@ -383,7 +387,7 @@ class Bot(object):
                                             await sender(message.author.mention + " Take failed!")
                         else:
                             await sender(message.author.mention + " - Insufficient permissions.")
-                    elif command == "!giveall":
+                    elif command == "giveall":
                         await deleter(message)
                         if self.checkpower(message.author):
                             if numParams < 1 or numParams > 1:
