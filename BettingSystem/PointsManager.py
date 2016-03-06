@@ -25,6 +25,7 @@ class PointsManager(object):
         with conn.cursor() as cursor:
             sql = "SELECT count(*) as membercheck FROM points WHERE server={0} AND userid={1}".format(str(serverid), str(memberid))
             cursor.execute(sql)
+            exists = 0
             for row in cursor:
                 exists = row['membercheck']
                 break
