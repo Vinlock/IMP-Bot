@@ -142,12 +142,15 @@ class Bot(object):
                 # ! Commands
                 if command == "help" or command == "commands" or command == "command":
                     await sender("__**NORMAL COMMANDS**__\n\n"
-                                 "**!points** - *Check how many points you have.*\n\n\n"
+                                 "**!points** - Check how many points you have.\n\n\n"
+                                 "__**TOURNAMENT COMMANDS**__\n\n"
+                                 "**!checkin** - Check into the running tournament.\n"
+                                 "**!waitlist** - Check in if you are waitlisted.\n\n\n"
                                  "__**BETTING COMMANDS**__\n\n"
                                  "__If bets are open:__\n"
-                                 "**!bet <red or blue> <points>** - *Bet on a team.*\n"
-                                 "**!percent** - *View the team bet percentages.\n"
-                                 "**!who <red or blue>** - *See who is red and who is blue*\n\n")
+                                 "**!bet <red or blue> <points>** - Bet on a team.\n"
+                                 "**!percent** - View the team bet percentages.\n"
+                                 "**!who <red or blue>** - See who is red and who is blue\n\n\n")
                 elif command == "purge":
                     await deleter(message)
                     if self.checkpower(message.author):
