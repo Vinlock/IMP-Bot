@@ -258,37 +258,43 @@ class Bot(object):
                     elif command == "percent":
                         red = self.matches[message.server.id].redPercent()
                         blue = self.matches[message.server.id].bluePercent()
-                        await sender(":large_blue_circle: **" + self.matches[message.server.id].getName("blue") + "** " + str(round(blue, 1)) + "% vs. " + str(round(red, 1)) + "% **" + self.matches[message.server.id].getName("red") + "** :red_circle:")
+                        await sender(":large_blue_circle: **" + self.matches[message.server.id].getName("blue") + "** - " + str(round(blue, 1)) + "% vs. " + str(round(red, 1)) + "% - **" + self.matches[message.server.id].getName("red") + "** :red_circle:")
                     elif command == "test":
                         await sender("Test")
                     elif command.startswith("set"):
                         if self.checkpower(message.author):
-                            if numParams < 2 or numParams > 2:
-                                await sender(message.author.mention + " - Incorrect number of parameters. !set <team> <mention user>")
-                            else:
-                                team = params[1]
-                                user = message.mentions[0]
-                                if team == "red":
-                                    self.matches[message.server.id].redName = user
-                                    await sender(":red_circle: - You have set **RED**'s name to " + self.matches[message.server.id].redName)
-                                elif team == "blue":
-                                    self.matches[message.server.id].blueName = user
-                                    await sender(":large_blue_circle: - You have set **BLUE**'s name to " + self.matches[message.server.id].blueName)
+                            if not self.matches[message.server.id] == None:
+                                if numParams < 2 or numParams > 2:
+                                    await sender(message.author.mention + " - Incorrect number of parameters. !set <team> <mention user>")
                                 else:
-                                    await sender(message.author.mention + " - Invalid Team.")
+                                    team = params[1]
+                                    user = message.mentions[0]
+                                    if team == "red":
+                                        self.matches[message.server.id].redName = user
+                                        await sender(":red_circle: - You have set **RED**'s name to " + self.matches[message.server.id].redName)
+                                    elif team == "blue":
+                                        self.matches[message.server.id].blueName = user
+                                        await sender(":large_blue_circle: - You have set **BLUE**'s name to " + self.matches[message.server.id].blueName)
+                                    else:
+                                        await sender(message.author.mention + " - Invalid Team.")
+                            else:
+                                await sender(message.author.mention + " - A match must be started first.")
                         else:
                             await sender(message.author.mention + " - Insufficient Permissions")
                     elif command == "who":
-                        team = params[1]
-                        team = team.lower()
-                        if team == "red" or team == "blue":
-                            name = self.matches[message.server.id].getName(team)
-                            if name == "RED" or name == "BLUE":
-                                await sender(message.author.mention + " - Team name not set for " + team)
+                        if not self.matches[message.server.id] == None:
+                            team = params[1]
+                            team = team.lower()
+                            if team == "red" or team == "blue":
+                                name = self.matches[message.server.id].getName(team)
+                                if name == "RED" or name == "BLUE":
+                                    await sender(message.author.mention + " - Team name not set for " + team)
+                                else:
+                                    await sender("**" + team.upper() + "** = " + name)
                             else:
-                                await sender("**" + team.upper() + "** = " + name)
+                                await sender(message.author.mention + " - You did not input a valid team.")
                         else:
-                            await sender(message.author.mention + " - You did not input a valid team.")
+                            await sender(message.author.mention + " - No match has been started.")
 
         self.client.run(settings.DISCORD_USERNAME, settings.DISCORD_PASSWORD)
 
