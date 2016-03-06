@@ -129,6 +129,9 @@ class Bot(object):
                 def deleter(msg):
                     return self.client.delete_message(msg)
 
+                def pm(msg):
+                    return self.client.send_message(message.author, msg)
+
                 def sendToBetting(msg):
                     if "betting" in self.channels[info['server'].id]:
                         return self.client.send_message(self.channels[message.server.id]["betting"], msg)
@@ -166,18 +169,18 @@ class Bot(object):
                     await sender("Imperial Bot v0.1b - Created By: Vinlock")
                 elif command == "admin":
                     if self.checkpower(message.author):
-                        await self.client.send_message(message.author, "__**COMMANDS**__\n**!purge <number of messages>"
-                                                                       " <mention user ***OPTIONAL***>** - Purges X "
-                                                                       "number of messages in the channel. Optionally "
-                                                                       "mention a user to purge only their messages.\n"
-                                                                       "**!give <mention user> <points>** - Give a user"
-                                                                       " a certain number of points. (Cap: 50000)\n"
-                                                                       "**!start** - Start a round of betting.\n"
-                                                                       "**!set <team> <mention user>** - Give each "
-                                                                       "team a name.\n**!match** - Ends bettings "
-                                                                       "and announces that the match is underway.\n"
-                                                                       "**!points <mention user>** - Check a users "
-                                                                       "points total.")
+                        await pm("__**COMMANDS**__\n**!purge <number of messages>"
+                                   " <mention user ***OPTIONAL***>** - Purges X "
+                                   "number of messages in the channel. Optionally "
+                                   "mention a user to purge only their messages.\n"
+                                   "**!give <mention user> <points>** - Give a user"
+                                   " a certain number of points. (Cap: 50000)\n"
+                                   "**!start** - Start a round of betting.\n"
+                                   "**!set <team> <mention user>** - Give each "
+                                   "team a name.\n**!match** - Ends betting "
+                                   "and announces that the match is underway.\n"
+                                   "**!points <mention user>** - Check a users "
+                                   "points total.")
                     else:
                         print("Nope")
                 elif command == "tournament":
