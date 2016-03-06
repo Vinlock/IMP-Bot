@@ -48,7 +48,7 @@ class Bot(object):
                     self.channels[server.id][channel.name] = channel
                     print(channel.id, channel.name)
 
-            self.thread(self.updateMembers)
+            # self.thread(self.updateMembers)
 
             print("Finished creating dictionaries for Roles, Channels, and Possible Match Servers.")
 
@@ -61,6 +61,23 @@ class Bot(object):
                 self.client.send_message(self.channels[server.id]["testing"], "ONLINE")
 
             self.thread(self.updateList)
+
+        @self.client.event
+        async def on_server_join(server):
+            print("Joined", server.name)
+            self.matches[server.id] = None
+            self.tournaments[server.id] = None
+            self.channels[server.id] = dict()
+            self.roles[server.id] = dict()
+            print(server.name, ":")
+            print("Roles:")
+            for role in server.roles:
+                print(role.id, role.name)
+                self.roles[server.id][role.name] = role
+            print("Channels:")
+            for channel in server.channels:
+                self.channels[server.id][channel.name] = channel
+                print(channel.id, channel.name)
 
         @self.client.event
         async def on_member_join(member):
@@ -208,7 +225,6 @@ class Bot(object):
                     if self.checkpower(message.author):
                         url = params[1]
                         invite = self.client.accept_invite(url)
-                        await sender("I have joined " + invite.server.name)
 
                 # Betting Commands
                 if message.channel == self.channels[message.server.id]["betting"]:
