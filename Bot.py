@@ -154,9 +154,11 @@ class Bot(object):
                         if self.tournaments[message.server.id] is None:
                             self.tournaments[message.server.id] = T.Tournament(message.server.id, message.author)
                             if self.tournaments[message.server.id].start():
-                                await sender(message.author.mention + " has started a new tournament. Please use"
-                                                                      " **!checkin** to check in or **!waitlist** "
-                                                                      "if you are waitlisted.")
+                                await self.client.send_message(self.channels[message.server.id]["waiting-room"],
+                                                               message.author.mention + " has started a new tournament. "
+                                                                                        "Please use **!checkin** to "
+                                                                                        "check in or **!waitlist** "
+                                                                                        "if you are waitlisted.")
                         else:
                             await sender(message.author.mention + " - A tournament has already been started by " +
                                          self.tournaments[message.server.id].starter.mention + ".")
