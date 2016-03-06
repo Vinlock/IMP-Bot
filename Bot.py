@@ -5,6 +5,7 @@ import discord
 import settings
 from BettingSystem import PointsManager as Points, ImpMatch as Match, AutoIncrement as Increment
 import Database
+from Tournament import Tournament as T
 
 from time import sleep
 
@@ -142,9 +143,47 @@ class Bot(object):
                                                                        "and announces that the match is underway.\n"
                                                                        "**!points <mention user>** - Check a users "
                                                                        "points total.")
+                    else:
+                        print("Nope")
+                elif command == "tournament":
+                    todo = params[1]
+                    if todo == "start":
+                        if self.tournaments[message.server.id] is None:
+                            self.tournaments[message.server.id] = T.Tournament(message.server.id, message.author)
+                            if self.tournaments[message.server.id].start():
+                                await sender(message.author.mention + " has started a new tournament. Please use"
+                                                                      " **!checkin** to check in or **!waitlist** "
+                                                                      "if you are waitlisted.")
+                        else:
+                            await sender(message.author.mention + " - A tournament has already been started by " +
+                                         self.tournaments[message.server.id].starter.mention + ".")
+                    elif todo == "end":
+                        if self.tournaments[message.server.id] is None:
+                            await sender(message.author.mention + " - There is no tournament started to end.")
+                        else:
+                            self.tournaments[message.server.id] = None
+                            await sender("@everyone - The tournaments has ended. Thank you for your support and "
+                                         "cooperation. We appreciate it and hope to see you next time!")
+                elif command == "checkedin":
+                    if self.checkpower(message.author):
+                        if self.tournaments[message.server.id] is not None:
+                            i = 0
+                            checked = ""
+                            for user in self.tournaments[message.server.id].checkin:
+                                checked = checked + user.name + ", "
+                                i += 1
+                            checked = checked[:-2]
+                            j = 0
+                            for user in self.tournaments[message.server.id].waitinglist:
+                                wait = wait + user.name + ", "
+                                j += 1
+                            wait = wait[:-2]
+                            await sender(str(i) + " users have checked in.\n" + checked)
+                            await sender(str(j) + " users have checked in on the waitlist.\n" + wait)
+                        else:
+                            await sender(message.author.mention + " - No tournament has been started yet.")
 
                 # Betting Commands
-                test = self.channels[message.server.id]["betting"]
                 if message.channel == self.channels[message.server.id]["betting"]:
                     if command == "bet":
                         if self.matches[message.server.id] is None:
@@ -409,6 +448,24 @@ class Bot(object):
                                 await sender(message.author.mention + " - You did not input a valid team.")
                         else:
                             await sender(message.author.mention + " - No match has been started.")
+                elif message.channel == self.channels[message.server.id]["waiting-room"]:
+                    if command == "checkin":
+                        if self.tournaments[message.server.id] is not None:
+                            if self.tournaments[message.server.id].addCheckIn(message.author):
+                                await sender(message.author.mention + " has checked in.")
+                            else:
+                                await sender(message.author.mention + " - Failed to check in.")
+                        else:
+                            await sender(message.author.mention + " - No tournament has been started yet.")
+                    elif command == "waitlist":
+                        if self.tournaments[message.server.id] is not None:
+                            if self.tournaments[message.server.id].addWaitingList(message.author):
+                                await sender(message.author.mention + " has checked in for the waitlist.")
+                            else:
+                                await sender(message.author.mention + " - Failed to check in on waitlist")
+                        else:
+                            await sender(message.author.mention + " - No tournament has been started yet.")
+
 
         self.client.run(settings.DISCORD_USERNAME, settings.DISCORD_PASSWORD)
 

@@ -1,10 +1,12 @@
 
 class Tournament(object):
-    def __init__(self, serverid):
+    def __init__(self, serverid, starter):
         self.serverid = serverid
 
         self.checkin = []
         self.waitinglist = []
+
+        self.starter = starter
 
         self.isOn = False
 
@@ -13,10 +15,15 @@ class Tournament(object):
         return self.isOn
 
     def addCheckIn(self, member):
-        self.checkin.append(member)
-        return True
+        if self.isOn:
+            self.checkin.append(member)
+            return True
+        else:
+            return False
 
     def addWaitingList(self, member):
-        self.waitinglist.append(member)
-        return True
-
+        if self.isOn:
+            self.waitinglist.append(member)
+            return True
+        else:
+            return False
