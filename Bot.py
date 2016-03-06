@@ -63,7 +63,10 @@ class Bot(object):
         @self.client.event
         async def on_member_join(member):
             if self.points.insertNewMember(member.id, member.server.id):
-                self.client.send_message(member, "Welcome to the Imperial Server!\nYou have started out with 50 points for betting in matches.\nCheck your points with **!points**.\nType **!help** for more information on commands!")
+                self.client.send_message(member, "Welcome to the Imperial Server!\n"
+                                                 "You have started out with 50 points for betting in matches.\n"
+                                                 "Check your points with **!points**.\n"
+                                                 "Type **!help** for more information on commands!")
             else:
                 print("Failed to add new member points.")
 
@@ -71,10 +74,10 @@ class Bot(object):
         async def on_message(message):
             print(message.author.id, ":", message.content)
             info = {
-                "channel" : message.channel,
-                "author" : message.author,
-                "server" : message.server,
-                "mentions" : message.mentions
+                "channel": message.channel,
+                "author": message.author,
+                "server": message.server,
+                "mentions": message.mentions
                 }
             # if "Kappa" in message.content:
             #     await self.client.send_file(message.channel, "files/kappa1.png")
@@ -97,11 +100,15 @@ class Bot(object):
                     if "betting" in self.channels[info['server'].id]:
                         return self.client.send_message(self.channels[message.server.id]["betting"], msg)
                     else:
-                        return self.client.send_message(info['channel'], "Betting Channel does not exist on this server.")
+                        return self.client.send_message(info['channel'], "Betting Channel does not exist on this "
+                                                                         "server.")
 
                 # ! Commands
                 if command == "help" or command == "commands":
-                    await sender("**COMMANDS**\nIf bets are open:\n**!bet <red or blue> <points>** - *Bet on a team.*\n**!points** - *Check how many points you have.*")
+                    await sender("**COMMANDS**\n"
+                                 "If bets are open:\n"
+                                 "**!bet <red or blue> <points>** - *Bet on a team.*\n"
+                                 "**!points** - *Check how many points you have.*")
                 elif command == "purge":
                     await deleter(message)
                     if self.checkpower(message.author):
@@ -116,14 +123,25 @@ class Bot(object):
                                 if log.author == message.mentions[0]:
                                     if numDelete > 0:
                                         await deleter(log)
-                                        numDelete = numDelete - 1
+                                        numDelete -= 1
                         elif numParams > 2:
                             sender("Invalid Command Parameters")
                 elif command == "version":
                     await sender("Imperial Bot v0.1b - Created By: Vinlock")
                 elif command == "admin":
                     if self.checkpower(message.author):
-                        await self.client.send_message(message.author, "__**COMMANDS**__\n**!purge <number of messages> <mention user ***OPTIONAL***>** - Purges X number of messages in the channel. Optionally mention a user to purge only their messages.\n**!give <mention user> <points>** - Give a user a certain number of points. (Cap: 50000)\n**!start** - Start a round of betting.\n**!set <team> <mention user>** - Give each team a name.\n**!match** - Ends bettings and announces that the match is underway.\n**!points <mention user>** - Check a users points total.")
+                        await self.client.send_message(message.author, "__**COMMANDS**__\n**!purge <number of messages>"
+                                                                       " <mention user ***OPTIONAL***>** - Purges X "
+                                                                       "number of messages in the channel. Optionally "
+                                                                       "mention a user to purge only their messages.\n"
+                                                                       "**!give <mention user> <points>** - Give a user"
+                                                                       " a certain number of points. (Cap: 50000)\n"
+                                                                       "**!start** - Start a round of betting.\n"
+                                                                       "**!set <team> <mention user>** - Give each "
+                                                                       "team a name.\n**!match** - Ends bettings "
+                                                                       "and announces that the match is underway.\n"
+                                                                       "**!points <mention user>** - Check a users "
+                                                                       "points total.")
 
                 # Betting Commands
                 test = self.channels[message.server.id]["betting"]
@@ -133,53 +151,81 @@ class Bot(object):
                             await sender(message.author.mention + " - No match has been started yet.")
                         elif self.matches[message.server.id] is not None:
                             if numParams < 2:
-                                await sender(message.author.mention + " - You did not enter enough parameters. **Example:** \"!bet red 100\"")
+                                await sender(message.author.mention + " - You did not enter enough parameters. "
+                                                                      "**Example:** \"!bet red 100\"")
                             elif numParams > 2:
-                                await sender(message.author.mention + " - You have used too many parameter for this command. Ex: \"!bet red 100\"")
+                                await sender(message.author.mention + " - You have used too many parameter for this "
+                                                                      "command. Ex: \"!bet red 100\"")
                             elif numParams == 2:
                                 try:
                                     amount = int(params[2])
                                 except ValueError:
-                                    await sender(message.author.mention + " - You did not enter a valid bet amount. Ex: \"!bet blue 100\"")
+                                    await sender(message.author.mention + " - You did not enter a valid bet amount. "
+                                                                          "Ex: \"!bet blue 100\"")
                                 else:
                                     team = str(params[1].lower())
                                     if any(char.isdigit() for char in team):
-                                        await sender(message.author.mention + " - You did not enter a valid team name. Ex: \"!bet blue 100\"")
+                                        await sender(message.author.mention + " - You did not enter a valid team name. "
+                                                                              "Ex: \"!bet blue 100\"")
                                     elif team == "blue" or team == "red":
                                         if not self.matches[message.server.id].bettingOpen:
                                             await sender(message.author.mention + " - Betting has been closed")
                                         elif self.matches[message.server.id].bettingOpen:
                                             if not self.matches[message.server.id].betted(message.author.id):
-                                                if self.matches[message.server.id].addVote(message.author, team, amount):
+                                                if self.matches[message.server.id].addVote(message.author,
+                                                                                           team,
+                                                                                           amount):
                                                     if team == "red":
                                                         icon = ":red_circle:"
                                                     elif team == "blue":
                                                         icon = ":large_blue_circle:"
                                                     else:
                                                         icon = ""
-                                                    await sender(icon + " - " + message.author.mention + " you have placed a bet on **" + team.upper() + "** for " + str(amount) + " points.")
+                                                    await sender(icon +
+                                                                 " - " +
+                                                                 message.author.mention +
+                                                                 " you have placed a bet on **" +
+                                                                 team.upper() +
+                                                                 "** for " +
+                                                                 str(amount) +
+                                                                 " points.")
                                                 else:
-                                                    await sender(message.author.mention + " insufficient points to bet that amount. You only have " + str(self.points.checkpoints(message.server.id, message.author.id)) + " points.")
+                                                    await sender(message.author.mention + " insufficient points to bet "
+                                                                                          "that amount. You only have "
+                                                                 + str(self.points.checkpoints(message.server.id,
+                                                                                               message.author.id)) +
+                                                                 " points.")
                                             else:
                                                 await sender(message.author.mention + " you have already bet.")
                                         else:
-                                            await sender(message.author.mention + " - You did not enter a valid team name. Ex: \"!bet blue 100\"")
+                                            await sender(message.author.mention +
+                                                         " - You did not enter a valid team name. "
+                                                         "Ex: \"!bet blue 100\"")
                     elif command == "points":
                         if numParams == 1:
                             if self.checkpower(message.author):
                                 await deleter(message)
                                 for user in message.mentions:
-                                    await sender(user.mention + " has **" + str(self.points.checkpoints(message.server.id, user.id)) + "** points.")
+                                    await sender(user.mention +
+                                                 " has **" +
+                                                 str(self.points.checkpoints(message.server.id, user.id)) +
+                                                 "** points.")
                             else:
                                 await sender(message.author.mention + " - Insufficient permissions.")
                         else:
-                            await sender(message.author.mention + " has **" + str(self.points.checkpoints(message.server.id, message.author.id)) + "** points.")
+                            await sender(message.author.mention +
+                                         " has **" +
+                                         str(self.points.checkpoints(message.server.id, message.author.id)) +
+                                         "** points.")
                     elif command == "start":
                         await deleter(message)
                         if self.checkpower(message.author):
-                            if self.matches[message.server.id] == None:
+                            if self.matches[message.server.id] is None:
                                 self.matches[message.server.id] = Match.Match(message.server.id)
-                                await sendToBetting("@everyone\n\n**Bets are open for this round! Place your Bets with \"!bet red <amount>\" or \"!bet blue <amount>\"!!**\n-------------------------------------------------------------------------")
+                                await sendToBetting("@everyone\n\n**Bets are open for this round! Place your Bets with "
+                                                    "\"!bet red <amount>\" or \"!bet blue <amount>\"!!**\n"
+                                                    "------------------------------------------------------------------"
+                                                    "-------")
                             else:
                                 await sender(message.author.mention + " - A match is already underway.")
                         else:
@@ -189,11 +235,12 @@ class Bot(object):
                             try:
                                 await deleter(message)
                                 if self.checkpower(message.author):
-                                    if self.matches[message.server.id] == None:
+                                    if self.matches[message.server.id] is None:
                                         await sender(message.author.mention + " - A match has not been started yet.")
                                     else:
                                         self.matches[message.server.id].closeBetting()
-                                        await sender("@everyone - Betting has closed for this match. Match is underway!")
+                                        await sender("@everyone - Betting has closed for this match. "
+                                                     "Match is underway!")
                                 else:
                                     await sender(message.author.mention + " - Insufficient Permissions")
                             except discord.HTTPException:
@@ -202,7 +249,7 @@ class Bot(object):
                     elif command == "end":
                         await deleter(message)
                         if self.checkpower(message.author):
-                            if self.matches[message.server.id] == None:
+                            if self.matches[message.server.id] is None:
                                 await sender(message.author.mention + " - There is no match to end.")
                             else:
                                 self.matches[message.server.id] = None
@@ -212,7 +259,7 @@ class Bot(object):
                     elif command.endswith("win"):
                         await deleter(message)
                         if self.checkpower(message.author):
-                            if self.matches[message.server.id] == None:
+                            if self.matches[message.server.id] is None:
                                 await sender(message.author.mention + " - A match has not be started yet")
                             else:
                                 if command == "redwin":
@@ -221,17 +268,18 @@ class Bot(object):
                                     winner = "blue"
                                 results = self.matches[message.server.id].cashout(winner)
                                 # results_message = ""
-                                await sender("**" + self.matches[message.server.id].getName(winner, True) + "** has won!")
+                                await sender("**" + self.matches[message.server.id].getName(winner, True) +
+                                             "** has won!")
                                 for result in results:
-                                    await sender(result.user.mention + " you have won **" + str(result.winnings) + "** points.")
-                                    # results_message = results_message + result.user.mention + " you have won " + str(result.winnings) + " points.\n"
-                                # await sender(results_message)
+                                    await sender(result.user.mention + " you have won **" + str(result.winnings) +
+                                                 "** points.")
                                 self.matches[message.server.id] = None
                                 await sender("Match has ended.")
                     elif command == "give":
                         await deleter(message)
                         if numParams < 2:
-                            await sender(message.author.mention + " - Give command requires parameters \"**Example:** !give <mention> <points>\"")
+                            await sender(message.author.mention + " - Give command requires parameters "
+                                                                  "\"**Example:** !give <mention> <points>\"")
                         else:
                             try:
                                 points = int(params[2])
@@ -239,27 +287,34 @@ class Bot(object):
                                 await sender("Invalid points amount. Be sure to **not** use commas.")
                             else:
                                 if points > 500000:
-                                    sender(message.author.mention + " - You cannot give that many points. Must be 500,000 or under")
+                                    sender(message.author.mention + " - You cannot give that many points. "
+                                                                    "Must be 500,000 or under")
                                 else:
                                     person = message.mentions[0].id
                                     if not self.checkpower(message.author):
                                         if self.points.minusPoints(points, message.server.id, message.author.id):
                                             if self.points.givepoints(points, message.server.id, person):
-                                                await sendToBetting(message.author.mention + " gave " + str(points) + " points to " + message.mentions[0].mention)
+                                                await sendToBetting(message.author.mention + " gave " + str(points) +
+                                                                    " points to " + message.mentions[0].mention)
                                             else:
                                                 self.points.givepoints(points, message.server.id, message.author.id)
                                         else:
-                                            await sender(message.author.mention + " insufficient points to bet that amount. You only have " + str(self.points.checkpoints(message.server.id, message.author.id)) + " points.")
+                                            await sender(message.author.mention +
+                                                         " insufficient points to bet that amount. You only have " +
+                                                         str(self.points.checkpoints(message.server.id,
+                                                                                     message.author.id)) + " points.")
                                     elif self.checkpower(message.author):
                                         if self.points.givepoints(points, message.server.id, person):
-                                            await sendToBetting(message.author.mention + " gave " + str(points) + " points to " + message.mentions[0].mention)
+                                            await sendToBetting(message.author.mention + " gave " + str(points) +
+                                                                " points to " + message.mentions[0].mention)
                                         else:
                                             await sender("Give Failed")
                     elif command == "take":
                         await deleter(message)
                         if self.checkpower(message.author):
                             if numParams < 2 or numParams > 2:
-                                await sender(message.author.mention + " - Take command requires parameters. \"**Example:** !take <mention> <points>\"")
+                                await sender(message.author.mention + " - Take command requires parameters. "
+                                                                      "\"**Example:** !take <mention> <points>\"")
                             else:
                                 try:
                                     points = int(params[2])
@@ -269,10 +324,13 @@ class Bot(object):
                                 else:
                                     available_points = self.points.checkpoints(message.server.id, who.id)
                                     if points > available_points:
-                                        await sender(message.author.mention + " - " + who.mention + " only has " + str(available_points) + " points, therefore not enough to take " + str(points) + " points.")
+                                        await sender(message.author.mention + " - " + who.mention + " only has " +
+                                                     str(available_points) + " points, therefore not enough to take " +
+                                                     str(points) + " points.")
                                     elif available_points > points:
                                         if self.points.minusPoints(points, message.server.id, who.id):
-                                            await sender(message.author.mention + " has taken " + str(points) + " points from " + who.mention + ".")
+                                            await sender(message.author.mention + " has taken " + str(points) +
+                                                         " points from " + who.mention + ".")
                                         else:
                                             await sender(message.author.mention + " Take failed!")
                         else:
@@ -286,7 +344,8 @@ class Bot(object):
                                 try:
                                     points = int(params[1])
                                 except ValueError:
-                                    await sender(message.author.mention + " - You must declare a number for points parameter.")
+                                    await sender(message.author.mention +
+                                                 " - You must declare a number for points parameter.")
                                 else:
                                     list_ids = []
                                     members = message.server.members
@@ -295,27 +354,35 @@ class Bot(object):
                                         if status is not "offline":
                                             list_ids.append(member.id)
                                     if self.points.massGive(message.server.id, list_ids, points):
-                                        await sender(message.author.mention + " gave " + str(points) + " points to @everyone!!\n:moneybag: :moneybag: :moneybag: :moneybag: :moneybag: :moneybag: :moneybag: :moneybag: :moneybag: :moneybag: :moneybag: :moneybag: ")
+                                        await sender(message.author.mention + " gave " + str(points) +
+                                                     " points to @everyone!!\n:moneybag: :moneybag: :moneybag: "
+                                                     ":moneybag: :moneybag: :moneybag: :moneybag: :moneybag: "
+                                                     ":moneybag: :moneybag: :moneybag: :moneybag: ")
                     elif command == "percent":
                         red = self.matches[message.server.id].redPercent()
                         blue = self.matches[message.server.id].bluePercent()
-                        await sender(":large_blue_circle: **" + self.matches[message.server.id].getName("blue") + "** - " + str(round(blue, 1)) + "% vs. " + str(round(red, 1)) + "% - **" + self.matches[message.server.id].getName("red") + "** :red_circle:")
+                        await sender(":large_blue_circle: **" + self.matches[message.server.id].getName("blue") +
+                                     "** - " + str(round(blue, 1)) + "% vs. " + str(round(red, 1)) + "% - **" +
+                                     self.matches[message.server.id].getName("red") + "** :red_circle:")
                     elif command == "test":
                         await sender("Test")
                     elif command.startswith("set"):
                         if self.checkpower(message.author):
-                            if not self.matches[message.server.id] == None:
+                            if not self.matches[message.server.id] is None:
                                 if numParams < 2 or numParams > 2:
-                                    await sender(message.author.mention + " - Incorrect number of parameters. !set <team> <mention user>")
+                                    await sender(message.author.mention + " - Incorrect number of parameters. "
+                                                                          "!set <team> <mention user>")
                                 else:
                                     team = params[1]
                                     user = message.mentions[0]
                                     if team == "red":
                                         self.matches[message.server.id].redName = user
-                                        await sender(":red_circle: - You have set **RED**'s name to " + self.matches[message.server.id].getName("red"))
+                                        await sender(":red_circle: - You have set **RED**'s name to " +
+                                                     self.matches[message.server.id].getName("red"))
                                     elif team == "blue":
                                         self.matches[message.server.id].blueName = user
-                                        await sender(":large_blue_circle: - You have set **BLUE**'s name to " + self.matches[message.server.id].getName("blue"))
+                                        await sender(":large_blue_circle: - You have set **BLUE**'s name to " +
+                                                     self.matches[message.server.id].getName("blue"))
                                     else:
                                         await sender(message.author.mention + " - Invalid Team.")
                             else:
@@ -323,7 +390,7 @@ class Bot(object):
                         else:
                             await sender(message.author.mention + " - Insufficient Permissions")
                     elif command == "who":
-                        if not self.matches[message.server.id] == None:
+                        if not self.matches[message.server.id] is None:
                             team = params[1]
                             team = team.lower()
                             if team == "red" or team == "blue":
@@ -381,7 +448,9 @@ class Bot(object):
             members = server.members
             for member in members:
                 with conn.cursor() as cursor:
-                    sql = "INSERT IGNORE INTO `points` SET `userid`={0}, `points`={1}, `server`={2};".format(member.id, 50, server.id)
+                    sql = "INSERT IGNORE INTO `points` SET `userid`={0}, `points`={1}, `server`={2};".format(member.id,
+                                                                                                             50,
+                                                                                                             server.id)
                     cursor.execute(sql)
                     conn.commit()
                     print(cursor._last_executed)
