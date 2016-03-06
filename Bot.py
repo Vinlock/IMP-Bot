@@ -223,7 +223,8 @@ class Bot(object):
                 elif command == "join":
                     if self.checkpower(message.author):
                         url = params[1]
-                        invite = self.client.accept_invite(url)
+                        if self.client.accept_invite(url):
+                            await sender("Joined.")
 
                 # Betting Commands
                 if message.channel == self.channels[message.server.id]["betting"]:
