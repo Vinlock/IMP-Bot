@@ -28,6 +28,8 @@ class Bot(object):
 
         self.increment = None
 
+        self.staff = dict()
+
         @self.client.event
         async def on_ready():
             print("Logged in as", self.client.user.name)
@@ -38,15 +40,21 @@ class Bot(object):
                 self.tournaments[server.id] = None
                 self.channels[server.id] = dict()
                 self.roles[server.id] = dict()
+                self.staff[server.id] = dict()
                 print(server.name, ":")
                 print("Roles:")
                 for role in server.roles:
                     print(role.id, role.name)
-                    self.roles[server.id][role.name] = role
+                    self.roles[server.id][role.name] = dict()
+                    self.roles[server.id][role.name]['object'] = role
+                    self.roles[member.server.id][role.name]['members'] = []
                 print("Channels:")
                 for channel in server.channels:
                     self.channels[server.id][channel.name] = channel
                     print(channel.id, channel.name)
+                for member in server.members:
+                    for role in member.roles:
+                        self.roles[member.server.id][role.name]['members'].append(member)
 
             # self.thread(self.updateMembers)
 
@@ -82,10 +90,16 @@ class Bot(object):
         @self.client.event
         async def on_member_join(member):
             if self.points.insertNewMember(member.id, member.server.id):
-                self.client.send_message(member, "Welcome to the Imperial Server!\n"
-                                                 "You have started out with 50 points for betting in matches.\n"
-                                                 "Check your points with **!points**.\n"
-                                                 "Type **!help** for more information on commands!")
+                list_admins = ""
+                for admin in self.roles[member.server.id]["Imperial Admin"]['members']:
+                    list_admins += admin.name + ", "
+                list_admins = list_admins[:-2]
+                await self.client.send_message(member, "__**Welcome to the Imperial Server!**__\n\n"
+                                                 "You have started out with 50 points for betting in tournament matches.\n\n"
+                                                 "Check your points with **!points**.\n\n"
+                                                 "Type **!help** for more information on commands!\n\n"
+                                                       "If you need to speak to an admin please PM one of the following:\n"
+                                                       + list_admins)
             else:
                 print("Failed to add new member points.")
 
@@ -123,11 +137,14 @@ class Bot(object):
                                                                          "server.")
 
                 # ! Commands
-                if command == "help" or command == "commands":
-                    await sender("**COMMANDS**\n"
-                                 "If bets are open:\n"
+                if command == "help" or command == "commands" or command == "command":
+                    await sender("__**NORMAL COMMANDS**__\n\n"
+                                 "**!points** - *Check how many points you have.*\n\n\n"
+                                 "__**BETTING COMMANDS**__\n\n"
+                                 "__If bets are open:__\n"
                                  "**!bet <red or blue> <points>** - *Bet on a team.*\n"
-                                 "**!points** - *Check how many points you have.*")
+                                 "**!percent** - *View the team bet percentages.\n"
+                                 "**!who <red or blue>** - *See who is red and who is blue*\n\n")
                 elif command == "purge":
                     await deleter(message)
                     if self.checkpower(message.author):
