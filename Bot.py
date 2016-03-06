@@ -146,6 +146,9 @@ class Bot(object):
                     else:
                         print("Nope")
                 elif command == "tournament":
+                    if numParams < 1 or numParams > 1:
+                        await sender(message.author.mention + " - You did not input the correct parameters."
+                                                              " **Example:** !tournament <start or end>")
                     todo = params[1]
                     if todo == "start":
                         if self.tournaments[message.server.id] is None:
@@ -164,6 +167,9 @@ class Bot(object):
                             self.tournaments[message.server.id] = None
                             await sender("@everyone - The tournaments has ended. Thank you for your support and "
                                          "cooperation. We appreciate it and hope to see you next time!")
+                    else:
+                        await sender(message.author.mention + " - You did not input the correct parameters."
+                                                              " **Example:** !tournament <start or end>")
                 elif command == "checkedin":
                     if self.checkpower(message.author):
                         if self.tournaments[message.server.id] is not None:
