@@ -169,7 +169,7 @@ class Bot(object):
                             if self.checkpower(message.author):
                                 await deleter(message)
                                 for user in message.mentions:
-                                    await sender(message.author.mention + " has **" + str(self.points.checkpoints(message.server.id, user.id)) + "** points.")
+                                    await sender(user.mention + " has **" + str(self.points.checkpoints(message.server.id, user.id)) + "** points.")
                             else:
                                 await sender(message.author.mention + " - Insufficient permissions.")
                         else:
