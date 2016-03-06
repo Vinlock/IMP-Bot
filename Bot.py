@@ -416,7 +416,7 @@ class Bot(object):
                                             list_ids.append(member.id)
                                     if self.points.massGive(message.server.id, list_ids, points):
                                         await sender(message.author.mention + " gave " + str(points) +
-                                                     " points to @everyone!!\n:moneybag: :moneybag: :moneybag: "
+                                                     " points to @everyone!!\n\n:moneybag: :moneybag: :moneybag: "
                                                      ":moneybag: :moneybag: :moneybag: :moneybag: :moneybag: "
                                                      ":moneybag: :moneybag: :moneybag: :moneybag: ")
                     elif command == "percent":
