@@ -47,7 +47,7 @@ class Bot(object):
                     print(role.id, role.name)
                     self.roles[server.id][role.name] = dict()
                     self.roles[server.id][role.name]['object'] = role
-                    self.roles[member.server.id][role.name]['members'] = []
+                    self.roles[server.id][role.name]['members'] = []
                 print("Channels:")
                 for channel in server.channels:
                     self.channels[server.id][channel.name] = channel
@@ -56,7 +56,7 @@ class Bot(object):
                     for role in member.roles:
                         self.roles[member.server.id][role.name]['members'].append(member)
 
-            # self.thread(self.updateMembers)
+            self.thread(self.updateMembers)
 
             print("Finished creating dictionaries for Roles, Channels, and Possible Match Servers.")
 
