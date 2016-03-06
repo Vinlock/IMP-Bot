@@ -86,6 +86,7 @@ class PointsManager(object):
 
     def massGive(self, serverid, listIDs, points):
         conn = Database.DB()
+        print("MASS GIVE")
         with conn.cursor() as cursor:
             all_members = ','.join(["'"+str(member)+"'" for member in listIDs])
             sql = "UPDATE `points` SET `points` = `points` + {0} WHERE `server`='{1}' AND `userid` IN ({2})".format(points, str(serverid), all_members)

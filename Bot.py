@@ -197,13 +197,18 @@ class Bot(object):
                             await sender(message.author.mention + " - No tournament has been started yet.")
                 elif command == "game":
                     if self.checkpower(message.author):
-                        if numParams < 1 or numParams > 1:
-                            await sender(message.author.mention + " - Invalid number of parameters.")
-                        else:
-                            game = params[1]
-                            newgame = {"name": game}
-                            newgame = ObjectDict.ObjectDict(newgame)
-                            self.client.change_status(newgame)
+                        game = rest
+                        newgame = {"name": game}
+                        newgame = ObjectDict.ObjectDict(newgame)
+                        self.client.change_status(newgame)
+                    else:
+                        await sender(message.author.mention + " - Insufficient Permissions")
+                elif command == "join":
+                    await deleter(message)
+                    if self.checkpower(message.author):
+                        url = params[1]
+                        invite = self.client.accept_invite(url)
+                        await sender("I have joined " + invite.server.name)
 
                 # Betting Commands
                 if message.channel == self.channels[message.server.id]["betting"]:
