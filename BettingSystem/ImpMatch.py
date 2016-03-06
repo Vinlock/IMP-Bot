@@ -49,10 +49,20 @@ class Match(object):
         return len(self.blueVotes) + len(self.redVotes)
 
     def redPercent(self):
-        return (len(self.redVotes) / self.totalVotes()) * 100
+        try:
+            percent = (len(self.redVotes) / self.totalVotes()) * 100
+        except ZeroDivisionError:
+            return 0
+        else:
+            return percent
 
     def bluePercent(self):
-        return (len(self.blueVotes) / self.totalVotes()) * 100
+        try:
+            percent = (len(self.blueVotes) / self.totalVotes()) * 100
+        except ZeroDivisionError:
+            return 0
+        else:
+            return percent
 
     def diffRatio(self):
         if self.bluePercent() > self.redPercent():

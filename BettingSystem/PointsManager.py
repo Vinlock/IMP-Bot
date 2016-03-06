@@ -82,3 +82,19 @@ class PointsManager(object):
             conn.commit()
             return True
         return False
+
+    def massGive(self, serverid, listIDs, points):
+        conn = Database.DB()
+        with conn.cursor() as cursor:
+            all_members = ','.join(["'"+str(member)+"'" for member in listIDs])
+            sql = "UPDATE `points` SET `points` = `points` + {0} WHERE `server`='{1}' AND `userid` IN ({2})".format(points, str(serverid), all_members)
+            if len(sql) > 65000:
+                return False
+            try:
+                cursor.execute(sql)
+                conn.commit()
+                print(cursor._last_executed)
+            except:
+                return False
+        conn.close()
+        return True
