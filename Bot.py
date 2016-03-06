@@ -6,6 +6,7 @@ import settings
 from BettingSystem import PointsManager as Points, ImpMatch as Match, AutoIncrement as Increment
 import Database
 from Tournament import Tournament as T
+import ObjectDict
 
 from time import sleep
 
@@ -194,7 +195,15 @@ class Bot(object):
                             await sender(str(j) + " users have checked in on the waitlist.\n" + wait)
                         else:
                             await sender(message.author.mention + " - No tournament has been started yet.")
-                elif command ==
+                elif command == "game":
+                    if self.checkpower(message.author):
+                        if numParams < 1 or numParams > 1:
+                            await sender(message.author.mention + " - Invalid number of parameters.")
+                        else:
+                            game = params[1]
+                            newgame = {"name": game}
+                            newgame = ObjectDict.ObjectDict(newgame)
+                            self.client.change_status(newgame)
 
                 # Betting Commands
                 if message.channel == self.channels[message.server.id]["betting"]:
