@@ -188,7 +188,7 @@ class Bot(object):
                         print("Nope")
                 # TOURNAMENT STUFF
                 elif command == "tournament":
-                    if self.checkpower(message.author):
+                    if self.adminpower(message.author):
                         if numParams < 1 or numParams > 1:
                             await sender(message.author.mention + " - You did not input the correct parameters."
                                                                   " **Example:** !tournament <start or end>")
@@ -239,7 +239,7 @@ class Bot(object):
                         else:
                             await sender(message.author.mention + " - No tournament has been started yet.")
                 elif command == "game":
-                    if self.checkpower(message.author):
+                    if self.adminpower(message.author):
                         game = rest
                         newgame = {"name": game}
                         newgame = ObjectDict.ObjectDict(newgame)
@@ -252,7 +252,7 @@ class Bot(object):
                         if self.client.accept_invite(url):
                             await sender("Joined.")
                 elif command == "masspm":
-                    if self.checkpower(message.author):
+                    if self.adminpower(message.author):
                         if numParams < 1 or numParams > 1:
                             await sender(message.author.mention + " - You have used an incorrect amount of parameters. "
                                                                   "**Example:** !masspm <message>")
@@ -261,7 +261,7 @@ class Bot(object):
                             for member in message.server:
                                 await self.client.send_message(member, m)
                 elif command == "pm":
-                    if self.checkpower(message.author):
+                    if self.adminpower(message.author):
                         if numParams < 2 or numParams > 2 or len(message.mentions) > 1 or len(message.mentions) < 1:
                             await sender(message.author.mention + " - You have used an incorrect amount of parameters."
                                                                   " **Example:** !pm <mention> <message>")
@@ -332,7 +332,7 @@ class Bot(object):
                                         await sender(message.author.mention + " - You must bet more than 0.")
                     elif command == "points":
                         if numParams == 1:
-                            if self.checkpower(message.author):
+                            if self.adminpower(message.author):
                                 await deleter(message)
                                 for user in message.mentions:
                                     await sender(user.mention +
@@ -429,7 +429,7 @@ class Bot(object):
                                                                     "Must be 500,000 or under")
                                 else:
                                     person = message.mentions[0].id
-                                    if not self.checkpower(message.author):
+                                    if not self.adminpower(message.author):
                                         if self.points.minusPoints(points, message.server.id, message.author.id):
                                             if self.points.givepoints(points, message.server.id, person):
                                                 await sendToBetting(message.author.mention + " gave " + str(points) +
@@ -449,7 +449,7 @@ class Bot(object):
                                             await sender("Give Failed")
                     elif command == "take":
                         await deleter(message)
-                        if self.checkpower(message.author):
+                        if self.adminpower(message.author):
                             if numParams < 2 or numParams > 2:
                                 await sender(message.author.mention + " - Take command requires parameters. "
                                                                       "\"**Example:** !take <mention> <points>\"")
@@ -475,7 +475,7 @@ class Bot(object):
                             await sender(message.author.mention + " - Insufficient permissions.")
                     elif command == "giveall":
                         await deleter(message)
-                        if self.checkpower(message.author):
+                        if self.adminpower(message.author):
                             if numParams < 1 or numParams > 1:
                                 await sender(message.author.mention + " - You must declare the number of points.")
                             else:
@@ -593,7 +593,13 @@ class Bot(object):
 
 
     def adminpower(self, author):
-        for role in athor
+        for role in author.roles:
+            check = role.permissions.manage_server
+            if check:
+                return True
+            else:
+                continue
+        return False
 
     def thread(self, function):
             t1 = threading.Thread(target=function)
