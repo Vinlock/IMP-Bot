@@ -56,7 +56,7 @@ class Bot(object):
                     for role in member.roles:
                         self.roles[member.server.id][role.name]['members'].append(member)
 
-            self.thread(self.updateMembers)
+            # self.thread(self.updateMembers)
 
             print("Finished creating dictionaries for Roles, Channels, and Possible Match Servers.")
 
@@ -584,8 +584,8 @@ class Bot(object):
 
     def checkpower(self, author):
         for role in author.roles:
-            check = role.permissions.manage_channels
-            if check:
+            check = role.name
+            if check.startswith("@") or self.adminpower(author):
                 return True
             else:
                 continue
