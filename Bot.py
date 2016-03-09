@@ -351,7 +351,7 @@ class Bot(object):
                         if self.checkpower(message.author):
                             if numParams < 2 or numParams > 2 or len(message.mentions) < 2 or len(message.mentions) > 2:
                                 await sender(message.author.mention + " - Invalid Parameters. Must be **!start <mention"
-                                                                      " BLUE> <mention RED>")
+                                                                      " BLUE> <mention RED>**")
                             else:
                                 if self.matches[message.server.id] is None:
                                     self.matches[message.server.id] = Match.Match(message.server.id)
