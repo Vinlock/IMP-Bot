@@ -28,4 +28,7 @@ class Tournament(object):
     def isCheckedIn(self, member):
         for check in checkin:
             if check.member == member:
-                return
+                return check.list
+            else:
+                continue
+        return None

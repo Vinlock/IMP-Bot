@@ -222,16 +222,17 @@ class Bot(object):
                     if self.checkpower(message.author):
                         if self.tournaments[message.server.id] is not None:
                             i = 0
-                            checked = ""
-                            for user in self.tournaments[message.server.id].checkin:
-                                checked = checked + user.name + ", "
-                                i += 1
-                            checked = checked[:-2]
                             j = 0
+                            checked = ""
                             wait = ""
-                            for user in self.tournaments[message.server.id].waitinglist:
-                                wait = wait + user.name + ", "
-                                j += 1
+                            for user in self.tournaments[message.server.id].checkin:
+                                if user.list == "checkin":
+                                    checked = checked + user.member.name + ", "
+                                    i += 1
+                                elif user.list == "waitlist":
+                                    wait = wait + user.member.name + ", "
+                                    j += 1
+                            checked = checked[:-2]
                             wait = wait[:-2]
                             await sender(str(i) + " users have checked in.\n" + checked)
                             await sender(str(j) + " users have checked in on the waitlist.\n" + wait)
@@ -269,7 +270,6 @@ class Bot(object):
                             who = message.mentions[0]
                             await sender(who, m)
 
-
                 # Betting Commands
                 if message.channel == self.channels[message.server.id]["betting"]:
                     if command == "bet":
@@ -289,44 +289,47 @@ class Bot(object):
                                     await sender(message.author.mention + " - You did not enter a valid bet amount. "
                                                                           "Ex: \"!bet blue 100\"")
                                 else:
-                                    team = str(params[1].lower())
-                                    if any(char.isdigit() for char in team):
-                                        await sender(message.author.mention + " - You did not enter a valid team name. "
-                                                                              "Ex: \"!bet blue 100\"")
-                                    elif team == "blue" or team == "red":
-                                        if not self.matches[message.server.id].bettingOpen:
-                                            await sender(message.author.mention + " - Betting has been closed")
-                                        elif self.matches[message.server.id].bettingOpen:
-                                            if not self.matches[message.server.id].betted(message.author.id):
-                                                if self.matches[message.server.id].addVote(message.author,
-                                                                                           team,
-                                                                                           amount):
-                                                    if team == "red":
-                                                        icon = ":red_circle:"
-                                                    elif team == "blue":
-                                                        icon = ":large_blue_circle:"
+                                    if amount > 0:
+                                        team = str(params[1].lower())
+                                        if any(char.isdigit() for char in team):
+                                            await sender(message.author.mention + " - You did not enter a valid team name. "
+                                                                                  "Ex: \"!bet blue 100\"")
+                                        elif team == "blue" or team == "red":
+                                            if not self.matches[message.server.id].bettingOpen:
+                                                await sender(message.author.mention + " - Betting has been closed")
+                                            elif self.matches[message.server.id].bettingOpen:
+                                                if not self.matches[message.server.id].betted(message.author.id):
+                                                    if self.matches[message.server.id].addVote(message.author,
+                                                                                               team,
+                                                                                               amount):
+                                                        if team == "red":
+                                                            icon = ":red_circle:"
+                                                        elif team == "blue":
+                                                            icon = ":large_blue_circle:"
+                                                        else:
+                                                            icon = ""
+                                                        await sender(icon +
+                                                                     " - " +
+                                                                     message.author.mention +
+                                                                     " you have placed a bet on **" +
+                                                                     self.matches[message.server.id].getName(team.lower()) +
+                                                                     "** for " +
+                                                                     str(amount) +
+                                                                     " points.")
                                                     else:
-                                                        icon = ""
-                                                    await sender(icon +
-                                                                 " - " +
-                                                                 message.author.mention +
-                                                                 " you have placed a bet on **" +
-                                                                 self.matches[message.server.id].getName(team.lower()) +
-                                                                 "** for " +
-                                                                 str(amount) +
-                                                                 " points.")
+                                                        await sender(message.author.mention + " insufficient points to bet "
+                                                                                              "that amount. You only have "
+                                                                     + str(self.points.checkpoints(message.server.id,
+                                                                                                   message.author.id)) +
+                                                                     " points.")
                                                 else:
-                                                    await sender(message.author.mention + " insufficient points to bet "
-                                                                                          "that amount. You only have "
-                                                                 + str(self.points.checkpoints(message.server.id,
-                                                                                               message.author.id)) +
-                                                                 " points.")
+                                                    await sender(message.author.mention + " you have already bet.")
                                             else:
-                                                await sender(message.author.mention + " you have already bet.")
-                                        else:
-                                            await sender(message.author.mention +
-                                                         " - You did not enter a valid team name. "
-                                                         "Ex: \"!bet blue 100\"")
+                                                await sender(message.author.mention +
+                                                             " - You did not enter a valid team name. "
+                                                             "Ex: \"!bet blue 100\"")
+                                    else:
+                                        await sender(message.author.mention + " - You must bet more than 0.")
                     elif command == "points":
                         if numParams == 1:
                             if self.checkpower(message.author):
@@ -538,20 +541,34 @@ class Bot(object):
                 elif message.channel == self.channels[message.server.id]["waiting-room"]:
                     if command == "checkin":
                         if self.tournaments[message.server.id] is not None:
-                            if self.tournaments[message.server.id].addCheckIn(message.author):
+                            if self.tournaments[message.server.id].addCheckIn(message.author, "checkin"):
                                 await sender(message.author.mention + " has checked in.")
                             else:
                                 await sender(message.author.mention + " - Failed to check in.")
                         else:
-                            await sender(message.author.mention + " - No tournament has been started yet.")
-                    elif command == "waitlist":
-                        if self.tournaments[message.server.id] is not None:
-                            if self.tournaments[message.server.id].addWaitingList(message.author):
-                                await sender(message.author.mention + " has checked in for the waitlist.")
-                            else:
-                                await sender(message.author.mention + " - Failed to check in on waitlist")
+                            await sender(message.author.mention + " - No tournament has been started yet."
+                                                                  " Please check in once a tournament has"
+                                                                  " been started.")
+                    elif command == "waitlist" or command == "checkin":
+                        if command == "waitlist":
+                            thelist = "Waitlist"
+                        elif command == "checkin":
+                            thelist = "Check In List"
                         else:
-                            await sender(message.author.mention + " - No tournament has been started yet.")
+                            thelist == None
+                        if self.tournaments[message.server.id] is not None:
+                            if self.tournaments[message.server.id].isCheckedIn(message.author) == None:
+                                if self.tournaments[message.server.id].addWaitingList(message.author, command):
+                                    await sender(message.author.mention + " has checked in on the " + thelist + ".")
+                                else:
+                                    await sender(message.author.mention + " - Failed to check in on " + thelist + ".")
+                            else:
+                                await sender(message.author.mention + " - You have already checked in! If you have"
+                                                                      " wrongly checked in, please alert an admin.")
+                        else:
+                            await sender(message.author.mention + " - No tournament has been started yet."
+                                                                  " Please check in once a tournament has"
+                                                                  " been started.")
 
 
         self.client.run(settings.DISCORD_USERNAME, settings.DISCORD_PASSWORD)
