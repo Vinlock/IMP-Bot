@@ -349,14 +349,23 @@ class Bot(object):
                     elif command == "start":
                         await deleter(message)
                         if self.checkpower(message.author):
-                            if self.matches[message.server.id] is None:
-                                self.matches[message.server.id] = Match.Match(message.server.id)
-                                await sendToBetting("@everyone\n\n**Bets are open for this round! Place your Bets with "
-                                                    "\"!bet red <amount>\" or \"!bet blue <amount>\"!!**\n"
-                                                    "------------------------------------------------------------------"
-                                                    "-------")
+                            if numParams < 2 or numParams > 2 or len(message.mentions) < 2 or len(message.mentions) > 2:
+                                await sender(message.author.mention + " - Invalid Parameters. Must be **!start <mention"
+                                                                      " BLUE> <mention RED>")
                             else:
-                                await sender(message.author.mention + " - A match is already underway.")
+                                if self.matches[message.server.id] is None:
+                                    self.matches[message.server.id] = Match.Match(message.server.id)
+                                    for m in message.mentions:
+                                        if m.mention == params[1]:
+                                            self.matches[message.server.id].blueName = m
+                                        elif m.mention == params[2]
+                                            self.matches[message.server.id].redName = m
+                                    await sendToBetting("@everyone\n\n**Bets are open for this round! Place your Bets "
+                                                        "with "
+                                                        "\"!bet red <amount>\" or \"!bet blue <amount>\"!!**\n"
+                                                        "--------------------------------")
+                                else:
+                                    await sender(message.author.mention + " - A match is already underway.")
                         else:
                             await sender(message.author.mention + " - Insufficient Permissions")
                     elif command == "match":
