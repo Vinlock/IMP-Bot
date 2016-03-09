@@ -22,8 +22,7 @@ class Tournament(object):
             return False
 
     def checkIn(self, member, list):
-        for check in checkin:
-            if check.member == member:
+        self.checkin.append(CheckIn.CheckIn(member, list))
 
     def isCheckedIn(self, member):
         for check in checkin:
