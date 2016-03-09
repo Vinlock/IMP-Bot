@@ -358,7 +358,7 @@ class Bot(object):
                                     for m in message.mentions:
                                         if m.mention == params[1]:
                                             self.matches[message.server.id].blueName = m
-                                        elif m.mention == params[2]
+                                        elif m.mention == params[2]:
                                             self.matches[message.server.id].redName = m
                                     await sendToBetting("@everyone\n\n**Bets are open for this round! Place your Bets "
                                                         "with "
@@ -590,6 +590,10 @@ class Bot(object):
             else:
                 continue
         return False
+
+
+    def adminpower(self, author):
+        for role in athor
 
     def thread(self, function):
             t1 = threading.Thread(target=function)
