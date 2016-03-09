@@ -186,6 +186,7 @@ class Bot(object):
                                    "points total.")
                     else:
                         print("Nope")
+                # TOURNAMENT STUFF
                 elif command == "tournament":
                     if self.checkpower(message.author):
                         if numParams < 1 or numParams > 1:
@@ -197,8 +198,9 @@ class Bot(object):
                                 self.tournaments[message.server.id] = T.Tournament(message.server.id, message.author)
                                 if self.tournaments[message.server.id].start():
                                     await self.client.send_message(self.channels[message.server.id]["waiting-room"],
-                                                                   message.author.mention + " has started a new tournament. "
-                                                                                            "Please use **!checkin** to "
+                                                                   message.author.mention + " has started a new "
+                                                                                            "tournament. Please use "
+                                                                                            "**!checkin** to "
                                                                                             "check in or **!waitlist** "
                                                                                             "if you are waitlisted.")
                             else:
@@ -248,6 +250,25 @@ class Bot(object):
                         url = params[1]
                         if self.client.accept_invite(url):
                             await sender("Joined.")
+                elif command == "masspm":
+                    if self.checkpower(message.author):
+                        if numParams < 1 or numParams > 1:
+                            await sender(message.author.mention + " - You have used an incorrect amount of parameters. "
+                                                                  "**Example:** !masspm <message>")
+                        else:
+                            m = params[1]
+                            for member in message.server:
+                                await self.client.send_message(member, m)
+                elif command == "pm":
+                    if self.checkpower(message.author):
+                        if numParams < 2 or numParams > 2 or len(message.mentions) > 1 or len(message.mentions) < 1:
+                            await sender(message.author.mention + " - You have used an incorrect amount of parameters."
+                                                                  " **Example:** !pm <mention> <message>")
+                        else:
+                            m = params[2]
+                            who = message.mentions[0]
+                            await sender(who, m)
+
 
                 # Betting Commands
                 if message.channel == self.channels[message.server.id]["betting"]:
@@ -290,7 +311,7 @@ class Bot(object):
                                                                  " - " +
                                                                  message.author.mention +
                                                                  " you have placed a bet on **" +
-                                                                 team.upper() +
+                                                                 self.matches[message.server.id].getName(team.lower()) +
                                                                  "** for " +
                                                                  str(amount) +
                                                                  " points.")
