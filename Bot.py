@@ -438,7 +438,7 @@ class Bot(object):
                                                 self.points.givepoints(points, message.server.id, message.author.id)
                                         else:
                                             await sender(message.author.mention +
-                                                         " insufficient points to bet that amount. You only have " +
+                                                         " insufficient points to give that amount. You only have " +
                                                          str(self.points.checkpoints(message.server.id,
                                                                                      message.author.id)) + " points.")
                                     elif self.checkpower(message.author):
