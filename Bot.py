@@ -190,6 +190,7 @@ class Bot(object):
                 elif command == "exit":
                     await deleter(message)
                     if self.adminpower(message.author):
+                        await sender("Exiting...")
                         try:
                             sys.exit(0)
                         except SystemExit:
