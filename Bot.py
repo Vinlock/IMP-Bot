@@ -570,7 +570,7 @@ class Bot(object):
                         elif command == "checkin":
                             thelist = "Check In List"
                         else:
-                            thelist == None
+                            thelist = None
                         if self.tournaments[message.server.id] is not None:
                             if self.tournaments[message.server.id].isCheckedIn(message.author) == None:
                                 if self.tournaments[message.server.id].addWaitingList(message.author, command):
