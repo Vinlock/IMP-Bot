@@ -585,7 +585,7 @@ class Bot(object):
     def checkpower(self, author):
         for role in author.roles:
             check = role.name
-            if check.startswith("*") or self.adminpower(author):
+            if check.endswith("*") or self.adminpower(author):
                 return True
             else:
                 continue
