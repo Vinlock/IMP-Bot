@@ -1,4 +1,5 @@
 import threading
+import sys
 
 import discord
 # Import Local Files
@@ -186,6 +187,13 @@ class Bot(object):
                                    "points total.")
                     else:
                         print("Nope")
+                elif command == "exit":
+                    await deleter(message)
+                    if self.adminpower(message.author):
+                        try:
+                            sys.exit(0)
+                        except SystemExit:
+                            pass
                 # TOURNAMENT STUFF
                 elif command == "tournament":
                     if self.adminpower(message.author):
