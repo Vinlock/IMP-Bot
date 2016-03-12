@@ -153,6 +153,7 @@ class Bot(object):
                                  "__**BETTING COMMANDS**__\n\n"
                                  "__If bets are open:__\n"
                                  "**!bet <red or blue> <points>** - Bet on a team.\n"
+                                 "**!retract** - Retract your bet.\n"
                                  "**!percent** - View the team bet percentages.\n"
                                  "**!who <red or blue>** - See who is red and who is blue\n\n\n")
                 elif command == "purge":
@@ -593,7 +594,7 @@ class Bot(object):
                                 await sender(message.author.mention + " - Insufficient Permissions")
                         if numParams > 1:
                             await sender(message.author.mention + " - Invalid amount of parameters. **Example:** "
-                                                                  "\"!retract\"\nNo spaces too!)
+                                                                  "\"!retract\"\nNo spaces too!")
                 elif message.channel == self.channels[message.server.id]["waiting-room"]:
                     if command == "checkin":
                         if self.tournaments[message.server.id] is not None:
