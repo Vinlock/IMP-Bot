@@ -346,7 +346,7 @@ class Bot(object):
                                                              "Ex: \"!bet blue 100\"")
                                     else:
                                         await sender(message.author.mention + " - You must bet more than 0.")
-                    elif command == "points":
+                    elif command == "points" or command == "pts":
                         if numParams == 1:
                             if self.adminpower(message.author):
                                 await deleter(message)
