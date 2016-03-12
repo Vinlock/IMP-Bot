@@ -6,7 +6,7 @@ import discord
 import settings
 from BettingSystem import PointsManager as Points, ImpMatch as Match, AutoIncrement as Increment
 import Database
-from Tournament import Tournament as T
+from Tournament import Tournament as tourney
 import ObjectDict
 
 from time import sleep
@@ -201,7 +201,7 @@ class Bot(object):
                         todo = params[1]
                         if todo == "start":
                             if self.tournaments[message.server.id] is None:
-                                self.tournaments[message.server.id] = T.Tournament(message.server.id, message.author)
+                                self.tournaments[message.server.id] = tourney.Tournament(message.server.id, message.author)
                                 if self.tournaments[message.server.id].start():
                                     await self.client.send_message(self.channels[message.server.id]["waiting-room"],
                                                                    message.author.mention + " has started a new "
@@ -255,7 +255,13 @@ class Bot(object):
                 elif command == "join":
                     if self.checkpower(message.author):
                         url = params[1]
-                        if self.client.accept_invite(url):
+                        try:
+                            self.client.accept_invite(url)
+                        except discord.HTTPException:
+                            await sender("Request Failed")
+                        except discord.InvalidArgument:
+                            await sender("Invalid Invite URL.")
+                        else:
                             await sender("Joined.")
                 elif command == "masspm":
                     if self.adminpower(message.author):
