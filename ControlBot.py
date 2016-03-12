@@ -24,15 +24,15 @@ class ControlBot(object):
                 args = splitmsg[1:]
                 if self.bot.adminpower(message.author):
                     if command == "start":
-                        self.client.delete_message(message)
+                        await self.client.delete_message(message)
                         self.bot.client.run(settings.DISCORD_USERNAME, settings.DISCORD_PASSWORD)
                     if command == "restart":
-                        self.client.delete_message(message)
+                        await self.client.delete_message(message)
                         self.bot.client.logout()
                         self.bot = None
                         self.bot = Bot.Bot()
                     if command == "stop":
-                        self.client.delete_message(message)
+                        await self.client.delete_message(message)
                         self.bot.client.logout()
 
         self.client.run(settings.DISCORD_USERNAME, settings.DISCORD_PASSWORD)
