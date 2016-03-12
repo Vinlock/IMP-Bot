@@ -583,7 +583,7 @@ class Bot(object):
                                 await sender(message.author.mention + " - You have not voted.")
                         if numParams == 1:
                             if self.checkpower(message.author):
-                                if self.matches[message.server.id].removeVote(message.mentions[0])
+                                if self.matches[message.server.id].removeVote(message.mentions[0]):
                                     await sender(message.author.mention + " has removed " + message.mentions[0].mention +
                                                  "'s bet.")
                                 else:
