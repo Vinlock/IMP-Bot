@@ -27,7 +27,7 @@ class ControlBot(object):
                         await self.client.delete_message(message)
                         if self.bot is None:
                             self.bot = Bot.Bot()
-                            await self.bot.client.stop()
+                            await self.bot.client.loop.stop()
                             self.bot.startbot()
                         else:
                             await self.client.send_message(message.channel, "Bot already started")
@@ -35,8 +35,8 @@ class ControlBot(object):
                         await self.client.delete_message(message)
                         if self.bot is not None:
                             await self.bot.client.logout()
-                            await self.bot.client.stop()
-                            await self.bot.client.close()
+                            await self.bot.client.loop.stop()
+                            await self.bot.client.loop.close()
                             self.bot = None
                             self.bot = Bot.Bot()
                             self.bot.startbot()
@@ -44,8 +44,8 @@ class ControlBot(object):
                         await self.client.delete_message(message)
                         if self.bot is not None:
                             await self.bot.client.logout()
-                            await self.bot.client.stop()
-                            await self.bot.client.close()
+                            await self.bot.client.loop.stop()
+                            await self.bot.client.loop.close()
                             self.bot.client.close()
                             self.bot = None
 
