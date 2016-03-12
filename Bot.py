@@ -1,15 +1,14 @@
 import threading
 import sys
-
 import discord
+from time import sleep
 # Import Local Files
-import settings
+# import settings
 from BettingSystem import PointsManager as Points, ImpMatch as Match, AutoIncrement as Increment
 import Database
 from Tournament import Tournament as tourney
 import ObjectDict
 
-from time import sleep
 
 class Bot(object):
     def __init__(self):
@@ -592,8 +591,8 @@ class Bot(object):
                                                                   " Please check in once a tournament has"
                                                                   " been started.")
 
-    def run(self):
-        self.client.run(settings.DISCORD_USERNAME, settings.DISCORD_PASSWORD)
+    # def run(self):
+    #     self.client.run(settings.DISCORD_USERNAME, settings.DISCORD_PASSWORD)
 
     def checkpower(self, author):
         for role in author.roles:
