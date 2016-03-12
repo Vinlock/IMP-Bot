@@ -6,7 +6,7 @@ class ControlBot(object):
     def __init__(self):
         client = discord.Client()
 
-        bot = Bot.Bot()
+        self.bot = Bot.Bot()
 
         @client.event
         async def on_ready():
