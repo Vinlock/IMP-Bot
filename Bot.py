@@ -380,7 +380,10 @@ class Bot(object):
                                                         "with "
                                                         "\"!bet red <amount>\" or \"!bet blue <amount>\"!!**\n"
                                                         "--------------------------------")
-                                    await sendToBetting("")
+                                    await sendToBetting(":large_blue_circle: **" +
+                                                        self.matches[message.server.id].getName("blue") + "** vs. **" +
+                                                        self.matches[message.server.id].getName("red") + "** "
+                                                                                                         ":red_circle:")
                                 else:
                                     await sender(message.author.mention + " - A match is already underway.")
                         else:
