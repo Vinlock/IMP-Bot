@@ -593,7 +593,7 @@ class Bot(object):
                                                                   " been started.")
 
     def startbot(self):
-        yield self.client.run(settings.DISCORD_USERNAME, settings.DISCORD_PASSWORD)
+        self.client.run(settings.DISCORD_USERNAME, settings.DISCORD_PASSWORD)
 
     def checkpower(self, author):
         for role in author.roles:
