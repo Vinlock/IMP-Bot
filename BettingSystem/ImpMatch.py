@@ -115,14 +115,14 @@ class Match(object):
         self.diffRatio()
         if winner == "red":
             for bet in self.redVotes:
-                win = int(round(int(bet.amount) * int(self.redRatio)))
+                win = int(round(int(bet.amount) * self.redRatio))
                 self.points.givepoints(win, bet.user.server.id, bet.user.id)
                 bet.winnings = win
                 print("Cash Out:", bet.user.id, bet.amount, "points.")
             return self.redVotes
         elif winner == "blue":
             for bet in self.blueVotes:
-                win = int(round(bet.amount * self.blueRatio))
+                win = int(round(int(bet.amount) * self.blueRatio))
                 self.points.givepoints(win, bet.user.server.id, bet.user.id)
                 bet.winnings = win
                 print("Cash Out:", bet.user.id, bet.amount, "points.")
