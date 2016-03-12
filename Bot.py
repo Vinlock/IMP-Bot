@@ -591,8 +591,8 @@ class Bot(object):
                                                                   " Please check in once a tournament has"
                                                                   " been started.")
 
-    # def run(self):
-    #     self.client.run(settings.DISCORD_USERNAME, settings.DISCORD_PASSWORD)
+    def startbot(self):
+        yield self.client.run(settings.DISCORD_USERNAME, settings.DISCORD_PASSWORD)
 
     def checkpower(self, author):
         for role in author.roles:
