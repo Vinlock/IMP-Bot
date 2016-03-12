@@ -591,8 +591,6 @@ class Bot(object):
                             await sender(message.author.mention + " - No tournament has been started yet."
                                                                   " Please check in once a tournament has"
                                                                   " been started.")
-
-    def startbot(self):
         self.client.run(settings.DISCORD_USERNAME, settings.DISCORD_PASSWORD)
 
     def checkpower(self, author):
