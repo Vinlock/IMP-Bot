@@ -253,6 +253,7 @@ class Bot(object):
                     else:
                         await sender(message.author.mention + " - Insufficient Permissions")
                 elif command == "join":
+                    await deleter(message)
                     if self.checkpower(message.author):
                         url = params[1]
                         try:
@@ -591,7 +592,7 @@ class Bot(object):
                                                                   " Please check in once a tournament has"
                                                                   " been started.")
 
-
+    def run(self):
         self.client.run(settings.DISCORD_USERNAME, settings.DISCORD_PASSWORD)
 
     def checkpower(self, author):
