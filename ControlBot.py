@@ -11,8 +11,8 @@ class ControlBot(object):
         @self.client.event
         async def on_ready():
             print('Control Bot Logged in as')
-            print(client.user.name)
-            print(client.user.id)
+            print(self.client.user.name)
+            print(self.client.user.id)
             print('------')
 
         @self.client.event
