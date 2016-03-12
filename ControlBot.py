@@ -6,7 +6,7 @@ class ControlBot(object):
     def __init__(self):
         self.client = discord.Client()
 
-        self.bot = Bot.Bot()
+        self.bot = None
 
         @self.client.event
         async def on_ready():
@@ -22,23 +22,39 @@ class ControlBot(object):
                 splitmsg = msg.split(" ")
                 command = splitmsg[0][1:]
                 args = splitmsg[1:]
-                if self.bot.adminpower(message.author):
+                if self.adminpower(message.author):
                     if command == "start":
-                        self.bot.client.loop.close()
-                        self.bot = None
-                        self.bot = Bot.Bot()
                         await self.client.delete_message(message)
-                        self.bot.startbot()
+                        if self.bot is None:
+                            self.bot = Bot.Bot()
+                            self.bot.startbot()
+                        else:
+                            await self.client.send_message(message.channel, "Bot already started")
                     if command == "restart":
                         await self.client.delete_message(message)
-                        await self.bot.client.logout()
-                        self.bot = None
-                        self.bot = Bot.Bot()
-                        self.bot.startbot()
+                        if self.bot is not None:
+                            await self.bot.client.logout()
+                            await self.bot.client.stop()
+                            await self.bot.client.close()
+                            self.bot = None
+                            self.bot = Bot.Bot()
+                            self.bot.startbot()
                     if command == "stop":
                         await self.client.delete_message(message)
-                        await self.bot.client.logout()
-                        self.bot.client.close()
-                        self.bot = None
+                        if self.bot is not None:
+                            await self.bot.client.logout()
+                            await self.bot.client.stop()
+                            await self.bot.client.close()
+                            self.bot.client.close()
+                            self.bot = None
 
         self.client.run(settings.DISCORD_USERNAME, settings.DISCORD_PASSWORD)
+
+    def adminpower(self, author):
+        for role in author.roles:
+            check = role.permissions.manage_server
+            if check:
+                return True
+            else:
+                continue
+        return False
