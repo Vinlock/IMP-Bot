@@ -51,7 +51,7 @@ class PointsManager(object):
                 sql = "INSERT INTO `points` (`userid`, `points`, `server`) VALUES ({0}, {1}, {2})".format(str(memberid), str(points), str(serverid))
                 cursor.execute(sql)
                 conn.commit()
-                print(cursor._last_executed)
+                print("\033[94m" + cursor._last_executed + "\033[0m")
             conn.close()
             print(memberid, "given", points, "points.")
             return True
@@ -68,7 +68,7 @@ class PointsManager(object):
                     sql = "UPDATE `points` SET `points`=points-{0} WHERE server={1} AND userid={2}".format(str(points), str(serverid), str(memberid))
                     cursor.execute(sql)
                     conn.commit()
-                    print(cursor._last_executed)
+                    print("\033[94m" + cursor._last_executed + "\033[0m")
                 conn.close()
                 print(memberid, "lost", points, "points.")
                 return True
@@ -95,7 +95,7 @@ class PointsManager(object):
             try:
                 cursor.execute(sql)
                 conn.commit()
-                print(cursor._last_executed)
+                print("\033[94m" + cursor._last_executed + "\033[0m")
             except:
                 return False
         conn.close()
