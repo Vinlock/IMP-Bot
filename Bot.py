@@ -151,7 +151,6 @@ class Bot(object):
                                  "**!checkin** - Check into the running tournament.\n"
                                  "**!waitlist** - Check in if you are waitlisted.\n\n\n"
                                  "__**BETTING COMMANDS**__\n\n"
-                                 "__If bets are open:__\n"
                                  "**!bet <red or blue> <points>** - Bet on a team.\n"
                                  "**!cancel** - Retract your bet.\n"
                                  "**!percent** - View the team bet percentages.\n"
