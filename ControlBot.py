@@ -24,8 +24,9 @@ class ControlBot(object):
                 args = splitmsg[1:]
                 if self.bot.adminpower(message.author):
                     if command == "start":
-                        if self.bot is None:
-                            self.bot = Bot.Bot()
+                        self.bot.client.loop.close()
+                        self.bot = None
+                        self.bot = Bot.Bot()
                         await self.client.delete_message(message)
                         self.bot.startbot()
                     if command == "restart":
