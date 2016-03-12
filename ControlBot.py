@@ -4,7 +4,7 @@ import settings
 
 class ControlBot(object):
     def __init__(self):
-        client = discord.Client()
+        self.client = discord.Client()
 
         self.bot = Bot.Bot()
 
@@ -24,12 +24,15 @@ class ControlBot(object):
                 args = splitmsg[1:]
                 if self.bot.adminpower(message.author):
                     if command == "start":
+                        self.client.delete_message(message)
                         self.bot.run()
                     if command == "restart":
+                        self.client.delete_message(message)
                         self.bot.client.logout()
                         self.bot = None
                         self.bot = Bot.Bot()
                     if command == "stop":
+                        self.client.delete_message(message)
                         self.bot.client.logout()
 
-        client.run(settings.DISCORD_USERNAME, settings.DISCORD_PASSWORD)
+        self.client.run(settings.DISCORD_USERNAME, settings.DISCORD_PASSWORD)
