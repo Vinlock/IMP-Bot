@@ -57,7 +57,7 @@ class Bot(object):
                     for role in member.roles:
                         self.roles[member.server.id][role.name]['members'].append(member)
 
-            # self.thread(self.updateMembers)
+            self.thread(self.updateMembers)
 
             print("Finished creating dictionaries for Roles, Channels, and Possible Match Servers.")
 
@@ -67,7 +67,10 @@ class Bot(object):
             self.increment.start()
 
             for server in self.client.servers:
-                self.client.send_message(self.channels[server.id]["testing"], "ONLINE")
+                try:
+                    self.client.send_message(self.channels[server.id]["testing"], "ONLINE")
+                except KeyError:
+                    continue
 
             self.thread(self.updateList)
 
