@@ -25,7 +25,7 @@ class ControlBot(object):
                 if self.bot.adminpower(message.author):
                     if command == "start":
                         self.client.delete_message(message)
-                        self.bot.run()
+                        self.bot.client.run(settings.DISCORD_USERNAME, settings.DISCORD_PASSWORD)
                     if command == "restart":
                         self.client.delete_message(message)
                         self.bot.client.logout()
