@@ -8,6 +8,7 @@ from BettingSystem import PointsManager as Points, ImpMatch as Match, AutoIncrem
 import Database
 from Tournament import Tournament as tourney
 import ObjectDict
+import settings
 
 
 class Bot(object):
