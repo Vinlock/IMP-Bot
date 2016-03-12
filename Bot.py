@@ -521,6 +521,14 @@ class Bot(object):
                                      self.matches[message.server.id].getName("red") + "** :red_circle:")
                     elif command == "test":
                         await sender("Test")
+                    elif command == "redratio":
+                        await deleter(message)
+                        if self.adminpower(message.author):
+                            await sender(str(self.matches[message.server.id].redRatio()))
+                    elif command == "blueratio":
+                        await deleter(message)
+                        if self.adminpower(message.author):
+                            await sender(str(self.matches[message.server.id].blueRatio()))
                     elif command.startswith("set"):
                         if self.checkpower(message.author):
                             if not self.matches[message.server.id] is None:

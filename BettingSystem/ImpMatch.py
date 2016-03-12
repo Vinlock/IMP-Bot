@@ -65,7 +65,7 @@ class Match(object):
             return percent
 
     def diffRatio(self):
-        if self.bluePercent() > self.redPercent():
+        if self.redPercent() < self.bluePercent():
             diff = self.bluePercent() - self.redPercent()
             if diff > 50:
                 add = diff / 100
@@ -115,7 +115,10 @@ class Match(object):
         self.diffRatio()
         if winner == "red":
             for bet in self.redVotes:
-                win = int(round(int(bet.amount) * self.redRatio))
+                try:
+                    win = int(round(bet.amount * self.redRatio))
+                except TypeError:
+
                 self.points.givepoints(win, bet.user.server.id, bet.user.id)
                 bet.winnings = win
                 print("Cash Out:", bet.user.id, bet.amount, "points.")
