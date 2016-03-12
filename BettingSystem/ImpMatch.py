@@ -96,6 +96,7 @@ class Match(object):
                 if self.points.minusPoints(int(bet), self.serverid, user.id):
                     self.redVotes.append(Bet.Bet(user, bet, team))
                     print(user.id, "bet on", team, "with", bet, "points.")
+                    self.diffRatio()
                     return True
                 else:
                     print("Failed to place bet.")
@@ -104,6 +105,7 @@ class Match(object):
                 if self.points.minusPoints(int(bet), self.serverid, user.id):
                     self.blueVotes.append(Bet.Bet(user, bet, team))
                     print(user.id, "bet on", team, "with", bet, "points.")
+                    self.diffRatio()
                     return True
                 else:
                     print("Failed to place bet.")
@@ -112,7 +114,6 @@ class Match(object):
             return False
 
     def cashout(self, winner):
-        self.diffRatio()
         if winner == "red":
             for bet in self.redVotes:
                 win = int(round(bet.amount * self.redRatio))
