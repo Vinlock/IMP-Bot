@@ -24,6 +24,8 @@ class ControlBot(object):
                 args = splitmsg[1:]
                 if self.bot.adminpower(message.author):
                     if command == "start":
+                        if self.bot is None:
+                            self.bot = Bot.Bot()
                         await self.client.delete_message(message)
                         await self.bot.client.run(settings.DISCORD_USERNAME, settings.DISCORD_PASSWORD)
                     if command == "restart":
@@ -31,8 +33,10 @@ class ControlBot(object):
                         await self.bot.client.logout()
                         self.bot = None
                         self.bot = Bot.Bot()
+                        await self.bot.client.run(settings.DISCORD_USERNAME, settings.DISCORD_PASSWORD)
                     if command == "stop":
                         await self.client.delete_message(message)
                         await self.bot.client.logout()
+                        self.bot = None
 
         self.client.run(settings.DISCORD_USERNAME, settings.DISCORD_PASSWORD)
