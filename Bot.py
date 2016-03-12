@@ -575,6 +575,25 @@ class Bot(object):
                                 await sender(message.author.mention + " - You did not input a valid team.")
                         else:
                             await sender(message.author.mention + " - No match has been started.")
+                    elif command == "retract":
+                        if numParams < 1:
+                            if self.matches[message.server.id].removeVote(message.author):
+                                await sender(message.author.mention + " - Your vote has been removed.")
+                            else:
+                                await sender(message.author.mention + " - You have not voted.")
+                        if numParams == 1:
+                            if self.checkpower(message.author):
+                                if self.matches[message.server.id].removeVote(message.mentions[0])
+                                    await sender(message.author.mention + " has removed " + message.mentions[0].mention +
+                                                 "'s bet.")
+                                else:
+                                    await sender(message.author.mention + " - " + message.mentions[0].mention +
+                                                 " has not bet.")
+                            else:
+                                await sender(message.author.mention + " - Insufficient Permissions")
+                        if numParams > 1:
+                            await sender(message.author.mention + " - Invalid amount of parameters. **Example:** "
+                                                                  "\"!retract\"\nNo spaces too!)
                 elif message.channel == self.channels[message.server.id]["waiting-room"]:
                     if command == "checkin":
                         if self.tournaments[message.server.id] is not None:

@@ -113,6 +113,22 @@ class Match(object):
         else:
             return False
 
+    def removeVote(self, user):
+        bet = self.findbet(user)
+        if bet is not None:
+            try:
+                self.redVotes.remove(bet)
+            except ValueError:
+                try:
+                    self.blueVotes.remove(bet)
+                except ValueError:
+                    return False
+                else:
+                    return True
+            else:
+                return True
+        return False
+
     def cashout(self, winner):
         if winner == "red":
             for bet in self.redVotes:
@@ -141,3 +157,16 @@ class Match(object):
             else:
                 continue
         return False
+
+    def findbet(self, user):
+        for bet in self.redVotes:
+            if bet.user.id == user.id:
+                return bet
+            else:
+                continue
+        for bet in self.blueVotes:
+            if bet.user.id == user.id:
+                return bet
+            else:
+                continue
+        return None
