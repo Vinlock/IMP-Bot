@@ -153,7 +153,7 @@ class Bot(object):
                                  "__**BETTING COMMANDS**__\n\n"
                                  "__If bets are open:__\n"
                                  "**!bet <red or blue> <points>** - Bet on a team.\n"
-                                 "**!retract** - Retract your bet.\n"
+                                 "**!cancel** - Retract your bet.\n"
                                  "**!percent** - View the team bet percentages.\n"
                                  "**!who <red or blue>** - See who is red and who is blue\n\n\n")
                 elif command == "purge":
@@ -576,7 +576,7 @@ class Bot(object):
                                 await sender(message.author.mention + " - You did not input a valid team.")
                         else:
                             await sender(message.author.mention + " - No match has been started.")
-                    elif command == "retract":
+                    elif command == "cancel":
                         if numParams < 1:
                             if self.matches[message.server.id].removeVote(message.author):
                                 await sender(message.author.mention + " - Your vote has been removed.")
