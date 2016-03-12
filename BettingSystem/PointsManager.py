@@ -51,7 +51,7 @@ class PointsManager(object):
                 sql = "INSERT INTO `points` (`userid`, `points`, `server`) VALUES ({0}, {1}, {2})".format(str(memberid), str(points), str(serverid))
                 cursor.execute(sql)
                 conn.commit()
-                print("\033[94m" + cursor._last_executed + "\033[0m")
+                print("\033[94m" + cursor._last_executed + "\033[0m")sd
             conn.close()
             print(memberid, "given", points, "points.")
             return True

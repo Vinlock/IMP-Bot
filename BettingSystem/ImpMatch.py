@@ -124,9 +124,9 @@ class Match(object):
                 except ValueError:
                     return False
                 else:
-                    return True
+                    return bet.amount
             else:
-                return True
+                return bet.amount
         return False
 
     def cashout(self, winner):
