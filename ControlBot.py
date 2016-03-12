@@ -27,6 +27,7 @@ class ControlBot(object):
                         await self.client.delete_message(message)
                         if self.bot is None:
                             self.bot = Bot.Bot()
+                            await self.bot.client.stop()
                             self.bot.startbot()
                         else:
                             await self.client.send_message(message.channel, "Bot already started")
