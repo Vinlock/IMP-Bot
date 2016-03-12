@@ -380,6 +380,7 @@ class Bot(object):
                                                         "with "
                                                         "\"!bet red <amount>\" or \"!bet blue <amount>\"!!**\n"
                                                         "--------------------------------")
+                                    await sendToBetting("")
                                 else:
                                     await sender(message.author.mention + " - A match is already underway.")
                         else:
