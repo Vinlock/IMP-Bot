@@ -578,9 +578,9 @@ class Bot(object):
                     elif command == "cancel":
                         if numParams < 1:
                             if self.matches[message.server.id].removeVote(message.author):
-                                await sender(message.author.mention + " - Your vote has been removed.")
+                                await sender(message.author.mention + " - Your bet has been removed.")
                             else:
-                                await sender(message.author.mention + " - You have not voted.")
+                                await sender(message.author.mention + " - You have not bet.")
                         if numParams == 1:
                             if self.checkpower(message.author):
                                 if self.matches[message.server.id].removeVote(message.mentions[0]):
