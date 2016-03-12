@@ -644,5 +644,5 @@ class Bot(object):
                                                                                                              server.id)
                     cursor.execute(sql)
                     conn.commit()
-                    print(cursor._last_executed)
+                    print("\033[94m" + cursor._last_executed + "\033[0m")
         conn.close()
