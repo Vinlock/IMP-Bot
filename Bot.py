@@ -566,22 +566,28 @@ class Bot(object):
                             await sender(message.author.mention + " - Insufficient Permissions")
                     elif command == "who":
                         if not self.matches[message.server.id] is None:
-                            team = params[1]
-                            team = team.lower()
-                            if team == "red" or team == "blue":
-                                name = self.matches[message.server.id].getName(team)
-                                if team == "red":
-                                    icon = ":red_circle:"
-                                elif team == "blue":
-                                    icon = ":large_blue_circle:"
+                            if numParams == 1:
+                                team = params[1]
+                                team = team.lower()
+                                if team == "red" or team == "blue":
+                                    name = self.matches[message.server.id].getName(team)
+                                    if team == "red":
+                                        icon = ":red_circle:"
+                                    elif team == "blue":
+                                        icon = ":large_blue_circle:"
+                                    else:
+                                        icon = ""
+                                    if name == "RED" or name == "BLUE":
+                                        await sender(message.author.mention + " - Team name not set for " + team)
+                                    else:
+                                        await sender(icon + " **" + team.upper() + "** = " + name)
                                 else:
-                                    icon = ""
-                                if name == "RED" or name == "BLUE":
-                                    await sender(message.author.mention + " - Team name not set for " + team)
-                                else:
-                                    await sender(icon + " **" + team.upper() + "** = " + name)
-                            else:
-                                await sender(message.author.mention + " - You did not input a valid team.")
+                                    await sender(message.author.mention + " - You did not input a valid team.")
+                            elif numParams == 0:
+                                await sendToBetting(":large_blue_circle: **" +
+                                                        self.matches[message.server.id].getName("blue") + "** vs. **" +
+                                                        self.matches[message.server.id].getName("red") + "** "
+                                                                                                         ":red_circle:")
                         else:
                             await sender(message.author.mention + " - No match has been started.")
                     elif command == "cancel":
