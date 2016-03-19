@@ -45,17 +45,17 @@ class Bot(object):
                 print(server.name, ":")
                 print("Roles:")
                 for role in server.roles:
-                    print(role.id, role.name)
-                    self.roles[server.id][role.name] = dict()
-                    self.roles[server.id][role.name]['object'] = role
-                    self.roles[server.id][role.name]['members'] = []
+                    print(role.id, role.name.lower())
+                    self.roles[server.id][role.name.lower()] = dict()
+                    self.roles[server.id][role.name.lower()]['object'] = role
+                    self.roles[server.id][role.name.lower()]['members'] = []
                 print("Channels:")
                 for channel in server.channels:
                     self.channels[server.id][channel.name] = channel
                     print(channel.id, channel.name)
                 for member in server.members:
                     for role in member.roles:
-                        self.roles[member.server.id][role.name]['members'].append(member)
+                        self.roles[member.server.id][role.name.lower()]['members'].append(member)
 
             self.thread(self.updateMembers)
 
@@ -84,8 +84,8 @@ class Bot(object):
             print(server.name, ":")
             print("Roles:")
             for role in server.roles:
-                print(role.id, role.name)
-                self.roles[server.id][role.name] = role
+                print(role.id, role.name.lower())
+                self.roles[server.id][role.name.lower()] = role
             print("Channels:")
             for channel in server.channels:
                 self.channels[server.id][channel.name] = channel
@@ -287,6 +287,14 @@ class Bot(object):
                             m = params[2]
                             who = message.mentions[0]
                             await sender(who, m)
+                elif command == "na":
+                    await self.client.delete_role(message.server, self.roles[message.server.id]["na"])
+                    await self.client.delete_role(message.server, self.roles[message.server.id]["eu"])
+                    await self.client.add_roles(message.author, self.roles[message.server.id]["na"])
+                elif command == "eu":
+                    await self.client.delete_role(message.server, self.roles[message.server.id]["na"])
+                    await self.client.delete_role(message.server, self.roles[message.server.id]["eu"])
+                    await self.client.add_roles(message.author, self.roles[message.server.id]["eu"])
 
                 # Betting Commands
                 if message.channel == self.channels[message.server.id]["betting"]:
@@ -652,7 +660,7 @@ class Bot(object):
 
     def checkpower(self, author):
         for role in author.roles:
-            check = role.name
+            check = role.name.lower()
             if check.endswith("*") or self.adminpower(author):
                 return True
             else:
