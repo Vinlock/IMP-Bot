@@ -519,7 +519,7 @@ class Bot(object):
                                                      ":moneybag: :moneybag: :moneybag: :moneybag: :moneybag: "
                                                      ":moneybag: :moneybag: :moneybag: :moneybag: ")
                     elif command == "percent":
-                        if self.matches[message.server.id] is not Note:
+                        if self.matches[message.server.id] is not None:
                             red = self.matches[message.server.id].redPercent()
                             blue = self.matches[message.server.id].bluePercent()
                             await sender(":large_blue_circle: **" + self.matches[message.server.id].getName("blue") +
