@@ -519,14 +519,18 @@ class Bot(object):
                                                      ":moneybag: :moneybag: :moneybag: :moneybag: :moneybag: "
                                                      ":moneybag: :moneybag: :moneybag: :moneybag: ")
                     elif command == "percent":
-                        if self.matches[message.server.id] is not None:
-                            red = self.matches[message.server.id].redPercent()
-                            blue = self.matches[message.server.id].bluePercent()
-                            await sender(":large_blue_circle: **" + self.matches[message.server.id].getName("blue") +
-                                         "** - " + str(round(blue, 1)) + "% vs. " + str(round(red, 1)) + "% - **" +
-                                         self.matches[message.server.id].getName("red") + "** :red_circle:")
+                        if not self.matches[message.server.id].bettingOpen:
+                            if self.matches[message.server.id] is not None:
+                                red = self.matches[message.server.id].redPercent()
+                                blue = self.matches[message.server.id].bluePercent()
+                                await sender(":large_blue_circle: **" + self.matches[message.server.id].getName("blue") +
+                                             "** - " + str(round(blue, 1)) + "% vs. " + str(round(red, 1)) + "% - **" +
+                                             self.matches[message.server.id].getName("red") + "** :red_circle:")
+                            else:
+                                await sender(message.author.mention + " - No match has been started.")
                         else:
-                            await sender(message.author.mention + " - No match has been started.")
+                            await sender(message.author.mention + " - You must wait until betting is over to check"
+                                                                  " percents.")
                     elif command == "test":
                         await sender("Test")
                     elif command == "redratio":
