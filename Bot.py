@@ -582,12 +582,15 @@ class Bot(object):
                             await sender(message.author.mention + " - No match has been started.")
                     elif command == "cancel":
                         if numParams < 1:
-                            amt = self.matches[message.server.id].removeVote(message.author)
-                            if amt is not False:
-                                if self.points.givepoints(amt, message.server.id, message.author.id):
-                                    await sender(message.author.mention + " - Your bet has been removed.")
+                            if self.matches[message.server.id].bettingOpen:
+                                amt = self.matches[message.server.id].removeVote(message.author)
+                                if amt is not False:
+                                    if self.points.givepoints(amt, message.server.id, message.author.id):
+                                        await sender(message.author.mention + " - Your bet has been removed.")
+                                else:
+                                    await sender(message.author.mention + " - You have not bet.")
                             else:
-                                await sender(message.author.mention + " - You have not bet.")
+                                await sender(message.author.mention + " - Betting is closed for this match.")
                         if numParams == 1:
                             if self.checkpower(message.author):
                                 amt = self.matches[message.server.id].removeVote(message.mentions[0])
