@@ -297,7 +297,7 @@ class Bot(object):
                         except discord.HTTPException:
                             await reply("Message Failed")
                         finally:
-                            await reply("Message Sent.\n" + m)
+                            await pm(message.author, "Message Sent to " + who.name + ".\n" + m)
                 elif command == "na":
                     await deleter(message)
                     await self.client.remove_roles(message.author, self.roles[message.server.id]["na"]["object"])
