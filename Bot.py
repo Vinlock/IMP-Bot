@@ -288,10 +288,12 @@ class Bot(object):
                             who = message.mentions[0]
                             await sender(who, m)
                 elif command == "na":
+                    await deleter(message)
                     await self.client.remove_roles(message.author, self.roles[message.server.id]["na"])
                     await self.client.remove_roles(message.author, self.roles[message.server.id]["eu"])
                     await self.client.add_roles(message.author, self.roles[message.server.id]["na"])
                 elif command == "eu":
+                    await deleter(message)
                     await self.client.remove_roles(message.author, self.roles[message.server.id]["na"])
                     await self.client.remove_roles(message.author, self.roles[message.server.id]["eu"])
                     await self.client.add_roles(message.author, self.roles[message.server.id]["eu"])
