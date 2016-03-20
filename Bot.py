@@ -273,6 +273,7 @@ class Bot(object):
                         finally:
                             await sender("Joined.")
                 elif command == "masspm":
+                    print("Mass PM initiated")
                     await deleter(message)
                     if self.adminpower(message.author):
                         m = " ".join(params[2:])
@@ -285,6 +286,7 @@ class Bot(object):
                             await reply("Message Failed")
                         finally:
                             await reply("Message Sent.\n" + m)
+                    print("Mass PM completed.")
                 elif command == "pm":
                     await deleter(message)
                     if self.adminpower(message.author):
@@ -298,6 +300,7 @@ class Bot(object):
                             await reply("Message Failed")
                         finally:
                             await pm(message.author, "Message Sent to " + who.name + ".\n" + m)
+                        print(message.author.mention + " pmed " + who.mention)
                 elif command == "na":
                     await deleter(message)
                     await self.client.remove_roles(message.author, self.roles[message.server.id]["na"]["object"])
