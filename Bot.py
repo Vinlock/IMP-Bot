@@ -138,8 +138,8 @@ class Bot(object):
                 def deleter(msg):
                     return self.client.delete_message(msg)
 
-                def pm(msg):
-                    return self.client.send_message(message.author, msg)
+                def pm(who, msg):
+                    return self.client.send_message(who, msg)
 
                 def sendToBetting(msg):
                     if "betting" in self.channels[info['server'].id]:
@@ -181,7 +181,7 @@ class Bot(object):
                     await sender("Imperial Bot v0.1b - Created By: Vinlock")
                 elif command == "admin":
                     if self.checkpower(message.author):
-                        await pm("__**COMMANDS**__\n**!purge <number of messages>"
+                        await pm(message.author, "__**COMMANDS**__\n**!purge <number of messages>"
                                    " <mention user ***OPTIONAL***>** - Purges X "
                                    "number of messages in the channel. Optionally "
                                    "mention a user to purge only their messages.\n"
