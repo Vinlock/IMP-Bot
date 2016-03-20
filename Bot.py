@@ -132,6 +132,9 @@ class Bot(object):
                 def sender(msg):
                     return self.client.send_message(info['channel'], msg)
 
+                def reply(msg):
+                    return self.client.send_message(message.channel, message.author + " - " + msg)
+
                 def deleter(msg):
                     return self.client.delete_message(msg)
 
@@ -276,9 +279,17 @@ class Bot(object):
                                                                   "**Example:** !masspm <message>")
                         else:
                             m = params[1]
-                            for member in message.server:
-                                await self.client.send_message(member, m)
+                            try:
+                                for member in message.server:
+                                        await self.client.send_message(member, m)
+                            except discord.InvalidArgument:
+                                await reply("Invalid Parameters")
+                            except discord.HTTPException:
+                                await reply("Message Failed")
+                            else:
+                                await reply("Message Sent")
                 elif command == "pm":
+                    await deleter(message)
                     if self.adminpower(message.author):
                         if numParams < 2 or numParams > 2 or len(message.mentions) > 1 or len(message.mentions) < 1:
                             await sender(message.author.mention + " - You have used an incorrect amount of parameters."
@@ -286,7 +297,14 @@ class Bot(object):
                         else:
                             m = params[2]
                             who = message.mentions[0]
-                            await sender(who, m)
+                            try:
+                                await sender(who, m)
+                            except discord.InvalidArgument:
+                                await reply("Invalid Parameters")
+                            except discord.HTTPException:
+                                await reply("Message Failed")
+                            else:
+                                await reply("Message Sent.")
                 elif command == "na":
                     await deleter(message)
                     await self.client.remove_roles(message.author, self.roles[message.server.id]["na"]["object"])
