@@ -274,37 +274,29 @@ class Bot(object):
                             await sender("Joined.")
                 elif command == "masspm":
                     if self.adminpower(message.author):
-                        if numParams < 1 or numParams > 1:
-                            await sender(message.author.mention + " - You have used an incorrect amount of parameters. "
-                                                                  "**Example:** !masspm <message>")
-                        else:
-                            m = params[1]
-                            try:
-                                for member in message.server:
-                                        await pm(member, m)
-                            except discord.InvalidArgument:
-                                await reply("Invalid Parameters")
-                            except discord.HTTPException:
-                                await reply("Message Failed")
-                            finally:
-                                await reply("Message Sent")
+                        m = params[1:]
+                        try:
+                            for member in message.server:
+                                    await pm(member, m)
+                        except discord.InvalidArgument:
+                            await reply("Invalid Parameters")
+                        except discord.HTTPException:
+                            await reply("Message Failed")
+                        finally:
+                            await reply("Message Sent")
                 elif command == "pm":
                     await deleter(message)
                     if self.adminpower(message.author):
-                        if numParams < 2 or numParams > 2 or len(message.mentions) > 1 or len(message.mentions) < 1:
-                            await sender(message.author.mention + " - You have used an incorrect amount of parameters."
-                                                                  " **Example:** !pm <mention> <message>")
-                        else:
-                            m = params[2]
-                            who = message.mentions[0]
-                            try:
-                                await pm(who, m)
-                            except discord.InvalidArgument:
-                                await reply("Invalid Parameters")
-                            except discord.HTTPException:
-                                await reply("Message Failed")
-                            finally:
-                                await reply("Message Sent.")
+                        m = params[2:]
+                        who = message.mentions[0]
+                        try:
+                            await pm(who, m)
+                        except discord.InvalidArgument:
+                            await reply("Invalid Parameters")
+                        except discord.HTTPException:
+                            await reply("Message Failed")
+                        finally:
+                            await reply("Message Sent.")
                 elif command == "na":
                     await deleter(message)
                     await self.client.remove_roles(message.author, self.roles[message.server.id]["na"]["object"])
