@@ -133,7 +133,7 @@ class Bot(object):
                     return self.client.send_message(info['channel'], msg)
 
                 def reply(msg):
-                    return self.client.send_message(message.channel, message.author + " - " + msg)
+                    return self.client.send_message(message.channel, message.author.mention + " - " + msg)
 
                 def deleter(msg):
                     return self.client.delete_message(msg)
