@@ -289,14 +289,14 @@ class Bot(object):
                             await sender(who, m)
                 elif command == "na":
                     await deleter(message)
-                    await self.client.remove_roles(message.author, self.roles[message.server.id]["na"])
-                    await self.client.remove_roles(message.author, self.roles[message.server.id]["eu"])
-                    await self.client.add_roles(message.author, self.roles[message.server.id]["na"])
+                    await self.client.remove_roles(message.author, self.roles[message.server.id]["na"]["object"])
+                    await self.client.remove_roles(message.author, self.roles[message.server.id]["eu"]["object"])
+                    await self.client.add_roles(message.author, self.roles[message.server.id]["na"]["object"])
                 elif command == "eu":
                     await deleter(message)
-                    await self.client.remove_roles(message.author, self.roles[message.server.id]["na"])
-                    await self.client.remove_roles(message.author, self.roles[message.server.id]["eu"])
-                    await self.client.add_roles(message.author, self.roles[message.server.id]["eu"])
+                    await self.client.remove_roles(message.author, self.roles[message.server.id]["na"]["object"])
+                    await self.client.remove_roles(message.author, self.roles[message.server.id]["eu"]["object"])
+                    await self.client.add_roles(message.author, self.roles[message.server.id]["eu"]["object"])
 
                 # Betting Commands
                 if message.channel == self.channels[message.server.id]["betting"]:
