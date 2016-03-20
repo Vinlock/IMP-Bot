@@ -281,7 +281,7 @@ class Bot(object):
                             m = params[1]
                             try:
                                 for member in message.server:
-                                        await self.client.send_message(member, m)
+                                        await pm(member, m)
                             except discord.InvalidArgument:
                                 await reply("Invalid Parameters")
                             except discord.HTTPException:
@@ -298,7 +298,7 @@ class Bot(object):
                             m = params[2]
                             who = message.mentions[0]
                             try:
-                                await sender(who, m)
+                                await pm(who, m)
                             except discord.InvalidArgument:
                                 await reply("Invalid Parameters")
                             except discord.HTTPException:
