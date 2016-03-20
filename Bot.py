@@ -275,7 +275,7 @@ class Bot(object):
                 elif command == "masspm":
                     await deleter(message)
                     if self.adminpower(message.author):
-                        m = params[1:]
+                        m = " ".join(params[2:])
                         try:
                             for member in message.server.members:
                                     await pm(member, m)
@@ -288,7 +288,7 @@ class Bot(object):
                 elif command == "pm":
                     await deleter(message)
                     if self.adminpower(message.author):
-                        m = params[2:]
+                        m = " ".join(params[2:])
                         who = message.mentions[0]
                         try:
                             await pm(who, m)
