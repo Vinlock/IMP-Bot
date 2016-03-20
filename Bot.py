@@ -273,6 +273,7 @@ class Bot(object):
                         finally:
                             await sender("Joined.")
                 elif command == "masspm":
+                    await deleter(message)
                     if self.adminpower(message.author):
                         m = params[1:]
                         try:
@@ -283,7 +284,7 @@ class Bot(object):
                         except discord.HTTPException:
                             await reply("Message Failed")
                         finally:
-                            await reply("Message Sent")
+                            await reply("Message Sent.\n" + m)
                 elif command == "pm":
                     await deleter(message)
                     if self.adminpower(message.author):
@@ -296,7 +297,7 @@ class Bot(object):
                         except discord.HTTPException:
                             await reply("Message Failed")
                         finally:
-                            await reply("Message Sent.")
+                            await reply("Message Sent.\n" + m)
                 elif command == "na":
                     await deleter(message)
                     await self.client.remove_roles(message.author, self.roles[message.server.id]["na"]["object"])
