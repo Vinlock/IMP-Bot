@@ -276,7 +276,7 @@ class Bot(object):
                     if self.adminpower(message.author):
                         m = params[1:]
                         try:
-                            for member in message.server:
+                            for member in message.server.members:
                                     await pm(member, m)
                         except discord.InvalidArgument:
                             await reply("Invalid Parameters")
