@@ -270,7 +270,7 @@ class Bot(object):
                             await sender("Request Failed")
                         except discord.InvalidArgument:
                             await sender("Invalid Invite URL.")
-                        else:
+                        finally:
                             await sender("Joined.")
                 elif command == "masspm":
                     if self.adminpower(message.author):
@@ -286,7 +286,7 @@ class Bot(object):
                                 await reply("Invalid Parameters")
                             except discord.HTTPException:
                                 await reply("Message Failed")
-                            else:
+                            finally:
                                 await reply("Message Sent")
                 elif command == "pm":
                     await deleter(message)
@@ -303,7 +303,7 @@ class Bot(object):
                                 await reply("Invalid Parameters")
                             except discord.HTTPException:
                                 await reply("Message Failed")
-                            else:
+                            finally:
                                 await reply("Message Sent.")
                 elif command == "na":
                     await deleter(message)
