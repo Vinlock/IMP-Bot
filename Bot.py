@@ -279,7 +279,8 @@ class Bot(object):
                         m = " ".join(params[2:])
                         try:
                             for member in message.server.members:
-                                    await pm(member, m)
+                                if await pm(member, m):
+                                    print("PM sent to " + member.mention + " successfully.")
                         except discord.InvalidArgument:
                             await reply("Invalid Parameters")
                         except discord.HTTPException:
