@@ -315,6 +315,16 @@ class Bot(object):
                     await self.client.remove_roles(message.author, self.roles[message.server.id]["na"]["object"])
                     await self.client.remove_roles(message.author, self.roles[message.server.id]["eu"]["object"])
                     await self.client.add_roles(message.author, self.roles[message.server.id]["eu"]["object"])
+                elif command == "cerulean":
+                    await deleter(message)
+                    await self.client.remove_roles(message.author, self.roles[message.server.id]["cerulean"]["object"])
+                    await self.client.remove_roles(message.author, self.roles[message.server.id]["crimson"]["object"])
+                    await self.client.add_roles(message.author, self.roles[message.server.id]["cerulean"]["object"])
+                elif command == "crimson":
+                    await deleter(message)
+                    await self.client.remove_roles(message.author, self.roles[message.server.id]["cerulean"]["object"])
+                    await self.client.remove_roles(message.author, self.roles[message.server.id]["crimson"]["object"])
+                    await self.client.add_roles(message.author, self.roles[message.server.id]["crimson"]["object"])
 
                 # Betting Commands
                 if message.channel == self.channels[message.server.id]["betting"]:
@@ -512,7 +522,7 @@ class Bot(object):
                                 else:
                                     available_points = self.points.checkpoints(message.server.id, who.id)
                                     if points > available_points:
-                                        await sender(message.author.mention + " - " + who.mention + " only has " +
+                                        await reply(who.mention + " only has " +
                                                      str(available_points) + " points, therefore not enough to take " +
                                                      str(points) + " points.")
                                     elif available_points > points:
