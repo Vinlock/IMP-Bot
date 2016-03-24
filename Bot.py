@@ -683,6 +683,9 @@ class Bot(object):
                             await sender(message.author.mention + " - No tournament has been started yet."
                                                                   " Please check in once a tournament has"
                                                                   " been started.")
+                elif message.channel == self.channels[message.server.id]["salty-spitton"]:
+                    if not message.content.isupper():
+                        deleter(message)
         self.client.run(settings.DISCORD_USERNAME, settings.DISCORD_PASSWORD)
 
     def checkpower(self, author):
