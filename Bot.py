@@ -762,5 +762,6 @@ class Bot(object):
                                                                                                              server.id)
                     cursor.execute(sql)
                     conn.commit()
-                    print("\033[94m" + cursor._last_executed + "\033[0m")
+                    # print("\033[94m" + cursor._last_executed + "\033[0m")
+        print("Done updating members.")
         conn.close()
