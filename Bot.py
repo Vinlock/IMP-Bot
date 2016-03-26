@@ -197,6 +197,8 @@ class Bot(object):
                                         if int(r.content) == n:
                                             points = int(number) * len(number)
                                             points = int(points)
+                                            if points < 1:
+                                                points = 1
                                             self.points.givepoints(points, message.server.id, message.author.id)
                                             await reply("You have won " + str(points))
                                         elif int(r.content) >= int(start) or int(r.content) <= int(ending):
@@ -205,6 +207,8 @@ class Bot(object):
                                                 percent = needle / rng
                                                 points = (int(number) * len(number)) * percent
                                                 points = int(points)
+                                                if points < 1:
+                                                    points = 1
                                                 self.points.givepoints(points, message.server.id, message.author.id)
                                                 await reply("Close! The number was **" + str(n) + "**. You have won **" + str(points) + "** as pity points :P.")
                                             elif int(r.content) > n:
@@ -212,6 +216,8 @@ class Bot(object):
                                                 percent = needle / rng
                                                 points = (int(number) * len(number)) * percent
                                                 points = int(points)
+                                                if points < 1:
+                                                    points = 1
                                                 self.points.givepoints(points, message.server.id, message.author.id)
                                                 await reply("Close! The number was **" + str(n) + "**. You have won **" + str(points) + "** as pity points :P.")
                                         else:
