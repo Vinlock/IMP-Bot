@@ -180,6 +180,7 @@ class Bot(object):
                             await reply("You have not entered an integer.")
                         else:
                             n = randint(0, number)
+                            print(n)
                             if r == n:
                                 points = number * 2
                                 self.points.givepoints(points, message.server.id, message.author.id)
