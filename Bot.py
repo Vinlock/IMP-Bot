@@ -166,27 +166,30 @@ class Bot(object):
                                  "**!who <red or blue>** - See who is red and who is blue\n\n\n")
                 elif command == "guess":
                     number = params[1]
-                    try:
-                        int(number)
-                    except ValueError:
-                        await reply("You did not enter a valid number parameter.")
+                    if int(number) < 10:
+                        await reply("You must choose a number parameter that is 10 or greater.")
                     else:
-                        n = randint(0, int(number))
-                        print(n)
-                        await reply("Guess a number from 1-" + str(number) + ". You have 30 seconds.")
-                        r = await wait(30)
-                        print(r)
                         try:
-                            int(r.content)
+                            int(number)
                         except ValueError:
-                            await reply("You have not entered an integer.")
+                            await reply("You did not enter a valid number parameter.")
                         else:
-                            if int(r.content) == n:
-                                points = int(number) * len(number)
-                                self.points.givepoints(points, message.server.id, message.author.id)
-                                await reply("You have won " + str(points))
+                            n = randint(0, int(number))
+                            print(n)
+                            await reply("Guess a number from 1-" + str(number) + ". You have 30 seconds.")
+                            r = await wait(30)
+                            print(r)
+                            try:
+                                int(r.content)
+                            except ValueError:
+                                await reply("You have not entered an integer.")
                             else:
-                                await reply("Nope. Try !guess again later!")
+                                if int(r.content) == n:
+                                    points = int(number) * len(number)
+                                    self.points.givepoints(points, message.server.id, message.author.id)
+                                    await reply("You have won " + str(points))
+                                else:
+                                    await reply("Nope. Try !guess again later!")
                 elif command == "purge":
                     await deleter(message)
                     if self.checkpower(message.author):
