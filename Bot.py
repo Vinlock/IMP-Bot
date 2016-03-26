@@ -178,7 +178,7 @@ class Bot(object):
                                 await reply("You did not enter a valid number parameter. **!guess <number greater than 10>**")
                             else:
                                 n = randint(1, int(number))
-                                print(n)
+                                print("CHEAT SHEET - The number is:", n)
                                 await reply("Guess a number from 1-" + str(number) + ". You have 30 seconds.")
                                 r = await wait(30)
                                 if int(r.content) > int(number) or int(r.content) < 1:
