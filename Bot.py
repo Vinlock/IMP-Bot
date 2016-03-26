@@ -179,7 +179,7 @@ class Bot(object):
                         except ValueError:
                             await reply("You have not entered an integer.")
                         else:
-                            n = randint(0, number)
+                            n = randint(0, int(number))
                             print(n)
                             if r.content == n:
                                 points = number * 2
