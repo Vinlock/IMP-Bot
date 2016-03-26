@@ -174,7 +174,7 @@ class Bot(object):
                         except ValueError:
                             await reply("You did not enter a valid number parameter.")
                         else:
-                            n = randint(0, int(number))
+                            n = randint(1, int(number))
                             print(n)
                             await reply("Guess a number from 1-" + str(number) + ". You have 30 seconds.")
                             r = await wait(30)
@@ -189,7 +189,7 @@ class Bot(object):
                                     self.points.givepoints(points, message.server.id, message.author.id)
                                     await reply("You have won " + str(points))
                                 else:
-                                    await reply("Nope. Try !guess again later!")
+                                    await reply("Nope. The number was " + str(n) + ". Try !guess again later!")
                 elif command == "purge":
                     await deleter(message)
                     if self.checkpower(message.author):
