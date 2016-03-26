@@ -165,6 +165,7 @@ class Bot(object):
                                  "**!percent** - View the team bet percentages.\n"
                                  "**!who <red or blue>** - See who is red and who is blue\n\n\n")
                 elif command == "guess":
+                    if numParams
                     number = params[1]
                     if int(number) < 10:
                         await reply("You must choose a number parameter that is 10 or greater.")
@@ -187,6 +188,8 @@ class Bot(object):
                                     await reply("You have not entered an integer. Please try !guess <number greater than 10> again!")
                                 else:
                                     rng = int(int(number) * 0.05)
+                                    if rng < 1:
+                                        rng = 1
                                     start = n - rng
                                     ending = n + rng
                                     if int(r.content) == n:
