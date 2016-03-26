@@ -178,7 +178,7 @@ class Bot(object):
                             print(n)
                             await reply("Guess a number from 1-" + str(number) + ". You have 30 seconds.")
                             r = await wait(30)
-                            if r > int(number) or r < 1:
+                            if int(r.content) > int(number) or int(r.content) < 1:
                                 await reply("You chose a number out of range. Please try !guess again!")
                             else:
                                 try:
