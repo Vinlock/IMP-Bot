@@ -182,7 +182,7 @@ class Bot(object):
                             try:
                                 int(r.content)
                             except ValueError:
-                                await reply("You have not entered an integer.")
+                                await reply("You have not entered an integer. Please try !guess <number greater than 10> again!")
                             else:
                                 if int(r.content) == n:
                                     points = int(number) * len(number)
