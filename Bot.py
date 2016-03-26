@@ -183,6 +183,8 @@ class Bot(object):
                                 points = number * 2
                                 self.points.givepoints(points, message.server.id, message.author.id)
                                 await reply("You have won " + str(points))
+                            else:
+                                await reply("Nope. Try !guess again later!")
                 elif command == "purge":
                     await deleter(message)
                     if self.checkpower(message.author):
