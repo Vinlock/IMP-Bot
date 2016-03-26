@@ -9,6 +9,7 @@ import Database
 from Tournament import Tournament as tourney
 import ObjectDict
 import settings
+from random import randint
 
 
 class Bot(object):
@@ -141,6 +142,9 @@ class Bot(object):
                 def pm(who, msg):
                     return self.client.send_message(who, msg)
 
+                def wait(time):
+                    return self.client.wait_for_message(timeout=time, author=message.author)
+
                 def sendToBetting(msg):
                     if "betting" in self.channels[info['server'].id]:
                         return self.client.send_message(self.channels[message.server.id]["betting"], msg)
@@ -160,6 +164,25 @@ class Bot(object):
                                  "**!cancel** - Retract your bet.\n"
                                  "**!percent** - View the team bet percentages.\n"
                                  "**!who <red or blue>** - See who is red and who is blue\n\n\n")
+                elif command == "guess":
+                    number = params[1]
+                    try:
+                        int(number)
+                    except ValueError:
+                        await reply("You did not enter a valid number parameter.")
+                    else:
+                        await reply("Guess a number from 1-" + str(number) + ". You have 30 seconds.")
+                        r = await wait(30)
+                        try:
+                            int(r)
+                        except ValueError:
+                            await reply("You have not entered an integer.")
+                        else:
+                            n = randint(0, number)
+                            if r == n:
+                                points = number * 2
+                                self.points.givepoints(points, message.server.id, message.author.id)
+                                await reply("You have won " + str(points))
                 elif command == "purge":
                     await deleter(message)
                     if self.checkpower(message.author):
@@ -275,6 +298,7 @@ class Bot(object):
                 elif command == "masspm":
                     print("Mass PM initiated")
                     await deleter(message)
+                    fails = []
                     if self.adminpower(message.author):
                         m = " ".join(params[2:])
                         try:
