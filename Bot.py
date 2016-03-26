@@ -173,6 +173,7 @@ class Bot(object):
                     else:
                         await reply("Guess a number from 1-" + str(number) + ". You have 30 seconds.")
                         r = await wait(30)
+                        print(r)
                         try:
                             int(r)
                         except ValueError:
