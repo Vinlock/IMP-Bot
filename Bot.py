@@ -199,13 +199,13 @@ class Bot(object):
                                             percent = needle / rng
                                             points = (int(number) * len(number)) * percent
                                             self.points.givepoints(points, message.server.id, message.author.id)
-                                            await reply("Close! The number was **" + str(n) + ". You have won " + str(points) + " as pity points :P.")
+                                            await reply("Close! The number was **" + str(n) + "**. You have won **" + str(points) + "** as pity points :P.")
                                         elif int(r.content) > n:
                                             needle = ending - int(r.content)
                                             percent = needle / rng
                                             points = (int(number) * len(number)) * percent
                                             self.points.givepoints(points, message.server.id, message.author.id)
-                                            await reply("Close! The number was **" + str(n) + ". You have won " + str(points) + " as pity points :P.")
+                                            await reply("Close! The number was **" + str(n) + "**. You have won **" + str(points) + "** as pity points :P.")
                                     else:
                                         await reply("Nope. The number was **" + str(n) + "**. Try !guess again later!")
                 elif command == "purge":
