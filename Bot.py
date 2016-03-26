@@ -172,7 +172,7 @@ class Bot(object):
                         try:
                             int(number)
                         except ValueError:
-                            await reply("You did not enter a valid number parameter.")
+                            await reply("You did not enter a valid number parameter. **!guess <number greater than 10>**")
                         else:
                             n = randint(1, int(number))
                             print(n)
