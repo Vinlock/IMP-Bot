@@ -171,9 +171,9 @@ class Bot(object):
                     except ValueError:
                         await reply("You did not enter a valid number parameter.")
                     else:
-                        await reply("Guess a number from 1-" + str(number) + ". You have 30 seconds.")
                         n = randint(0, int(number))
                         print(n)
+                        await reply("Guess a number from 1-" + str(number) + ". You have 30 seconds.")
                         r = await wait(30)
                         print(r)
                         try:
