@@ -175,13 +175,13 @@ class Bot(object):
                         r = await wait(30)
                         print(r)
                         try:
-                            int(r)
+                            int(r.content)
                         except ValueError:
                             await reply("You have not entered an integer.")
                         else:
                             n = randint(0, number)
                             print(n)
-                            if r == n:
+                            if r.content == n:
                                 points = number * 2
                                 self.points.givepoints(points, message.server.id, message.author.id)
                                 await reply("You have won " + str(points))
