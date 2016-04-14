@@ -38,10 +38,10 @@ class Increment(object):
         conn = Database.DB()
         with conn.cursor() as cursor:
             all_members = ','.join(["'"+str(member)+"'" for member in listIDs])
-            if "153648068040982528" in listIDs:
-                # print("TEST THERE")
-            else:
-                # print("TEST NOT THERE")
+            # if "153648068040982528" in listIDs:
+            #     # print("TEST THERE")
+            # else:
+            #     # print("TEST NOT THERE")
             sql = "UPDATE `points` SET `points` = `points` + 1 WHERE `server`='{0}' AND `userid` IN ({1})".format(str(serverid), all_members)
             if len(sql) > 65000:
                 return False
