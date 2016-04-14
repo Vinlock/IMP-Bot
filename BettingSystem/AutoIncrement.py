@@ -30,7 +30,7 @@ class Increment(object):
         allmembers = self.members
         for server, members in allmembers.items():
             if self.incrementList(server, members):
-                print(server.name + ": Incremented Member's Points")
+                print("Incremented Member's Points")
             else:
                 print("Failed to increment.")
 
