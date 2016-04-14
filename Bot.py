@@ -92,23 +92,23 @@ class Bot(object):
                 self.channels[server.id][channel.name] = channel
                 print(channel.id, channel.name)
 
-        @self.client.event
-        async def on_member_join(member):
-            if self.points.insertNewMember(member.id, member.server.id):
-                list_admins = ""
-                for admin in self.roles[member.server.id]["Imperial Admin"]['members']:
-                    list_admins += admin.name + ", "
-                list_admins = list_admins[:-2]
-                await self.client.send_message(member, "__**Welcome to the Imperial Server!**__\n\n"
-                                                 "You have started out with 50 points for betting in tournament matches.\n\n"
-                                                 "Check your points with **!points**.\n\n"
-                                                 "Type **!help** for more information on commands!\n\n"
-                                                       "If you need to speak to an admin please PM one of the following:\n"
-                                                       + list_admins)
-            else:
-                print("Failed to add new member points.")
-            # for channel in member.server.channels:
-            #     await self.client.send_message(channel, "Welcome " + member.mention + "!!")
+        # @self.client.event
+        # async def on_member_join(member):
+        #     if self.points.insertNewMember(member.id, member.server.id):
+        #         list_admins = ""
+        #         for admin in self.roles[member.server.id]["Imperial Admin"]['members']:
+        #             list_admins += admin.name + ", "
+        #         list_admins = list_admins[:-2]
+        #         await self.client.send_message(member, "__**Welcome to the Imperial Server!**__\n\n"
+        #                                          "You have started out with 50 points for betting in tournament matches.\n\n"
+        #                                          "Check your points with **!points**.\n\n"
+        #                                          "Type **!help** for more information on commands!\n\n"
+        #                                                "If you need to speak to an admin please PM one of the following:\n"
+        #                                                + list_admins)
+        #     else:
+        #         print("Failed to add new member points.")
+        #     # for channel in member.server.channels:
+        #     #     await self.client.send_message(channel, "Welcome " + member.mention + "!!")
 
         @self.client.event
         async def on_message(message):
@@ -240,7 +240,7 @@ class Bot(object):
                         elif numParams > 2:
                             sender("Invalid Command Parameters")
                 elif command == "version":
-                    await sender("Imperial Bot v0.1b - Created By: Vinlock")
+                    await sender("Imperial Bot v0.8b - Created By: Vinlock")
                 elif command == "admin":
                     if self.checkpower(message.author):
                         await pm(message.author, "__**COMMANDS**__\n**!purge <number of messages>"
