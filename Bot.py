@@ -10,6 +10,7 @@ from Tournament import Tournament as tourney
 import ObjectDict
 import settings
 from random import randint
+import copy
 
 
 class Bot(object):
@@ -774,7 +775,8 @@ class Bot(object):
         servers = self.client.servers
         for server in servers:
             print("Generating Missing Members for Server: " + server.name + "...")
-            members = server.members.copy()
+            # members = server.members.copy()
+            members = copy.deepcopy(server.members)
             for member in members:
                 with conn.cursor() as cursor:
                     sql = "INSERT IGNORE INTO `points` SET `userid`={0}, `points`={1}, `server`={2};".format(member.id,
