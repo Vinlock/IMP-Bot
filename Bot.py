@@ -772,8 +772,8 @@ class Bot(object):
 
     def updateMembers(self):
         conn = Database.DB()
-        # servers = self.client.servers
-        servers = copy.deepcopy(self.client.servers)
+        servers = self.client.servers
+        # servers = copy.deepcopy(self.client.servers)
         for server in servers:
             print("Generating Missing Members for Server: " + server.name + "...")
             # members = server.members.copy()
