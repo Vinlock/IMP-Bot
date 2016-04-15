@@ -776,7 +776,7 @@ class Bot(object):
         # servers = copy.deepcopy(self.client.servers)
         for server in servers:
             print("Generating Missing Members for Server: " + server.name + "...")
-            members = server.members.copy()
+            members = server.members
             for member in members:
                 with conn.cursor() as cursor:
                     sql = "INSERT IGNORE INTO `points` SET `userid`={0}, `points`={1}, `server`={2};".format(member.id,
