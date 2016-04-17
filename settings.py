@@ -4,8 +4,11 @@ config = configparser.RawConfigParser()
 config.read('config.ini')
 
 # Discord Account Information
-DISCORD_USERNAME = config.get("DISCORD", "DISCORD_USERNAME")
-DISCORD_PASSWORD = config.get("DISCORD", "DISCORD_PASSWORD")
+DISCORD_USERNAME = config.get("DISCORD", "BOT_USERNAME")
+DISCORD_PASSWORD = config.get("DISCORD", "BOT_PASSWORD")
+DISCORD_OWNER_USERNAME = config.get("DISCORD", "OWNER_USERNAME")
+DISCORD_OWNER_PASSWORD = config.get("DISCORD", "OWNER_PASSWORD")
+DISCORD_TOKEN = config.get("DISCORD", "TOKEN")
 
 # MySQL Database Information
 DBHOST = config.get("DATABASE", "DBHOST")
