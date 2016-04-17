@@ -518,6 +518,7 @@ class Bot(object):
                     await sender(send)
                 # Player-vs-Dice
                 if message.channel == self.channels[message.server.id]["player-vs-dice"]:
+                    message.content.rstrip()
                     if command == "pvd":
                         # !rollvs <bet> <max> <mention>
                         if self.adminpower(message.author) and params[1].lower() == "on":
