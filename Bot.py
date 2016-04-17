@@ -513,7 +513,8 @@ class Bot(object):
                     for person in leaderboard:
                         if count is not 1:
                             send += "\n"
-                        send += str("**"+str(count)+":** <@"+str(person['id'])+"> - "+str(person['points']))
+                        member = find(lambda m: m.id == str(person['id']), message.channel.server.members)
+                        send += str("__**"+str(count)+":**__ **"+member.name+"** - "+str(person['points']))
                         count += 1
                     await sender(send)
                 # Player-vs-Dice
@@ -523,10 +524,10 @@ class Bot(object):
                         # !rollvs <bet> <max> <mention>
                         if self.adminpower(message.author) and params[1].lower() == "on":
                             self.rollvs = True
-                            await reply("The !rollvs command has been turned ON!")
+                            await reply("The !pvd command has been turned ON!")
                         elif self.adminpower(message.author) and params[1].lower() == "off":
                             self.rollvs = False
-                            await reply("The !rollvs command has been turned OFF!")
+                            await reply("The !pvd command has been turned OFF!")
                         elif self.rollvs:
                             if numParams < 3 or numParams > 3:
                                 await reply("Insufficient number of parameters.\n**\"!rollvs <bet amount> <max roll> <mention>\"**")
