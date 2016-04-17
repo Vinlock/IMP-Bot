@@ -116,5 +116,5 @@ class PointsManager(object):
                 person['id'] = row['userid']
                 person['points'] = row['points']
                 top.append(person)
-            conn.close()
+        conn.close()
         return top

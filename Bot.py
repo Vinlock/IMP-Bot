@@ -633,7 +633,7 @@ class Bot(object):
                                 send += "\n"
                             send += str("**"+str(count)+":** <@"+str(person['id'])+"> - "+str(person['points']))
                             count += 1
-                        sender(send)
+                        await sender(send)
                     elif command == "test":
                         await sender("Test")
                     elif command == "redratio":
