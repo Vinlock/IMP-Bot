@@ -423,39 +423,39 @@ class Bot(object):
                     await self.client.remove_roles(message.author, self.roles[message.server.id]["crimson"]["object"])
                     await self.client.add_roles(message.author, self.roles[message.server.id]["crimson"]["object"])
                 elif command == "points" or command == "pts":
-                        if numParams == 1:
-                            if self.adminpower(message.author):
-                                await deleter(message)
-                                for user in message.mentions:
-                                    await sender(user.mention +
-                                                 " has **" +
-                                                 str(self.points.checkpoints(message.server.id, user.id)) +
-                                                 "** points.")
-                            else:
-                                await sender(message.author.mention + " - Insufficient permissions.")
+                    if numParams == 1:
+                        if self.adminpower(message.author):
+                            await deleter(message)
+                            for user in message.mentions:
+                                await sender(user.mention +
+                                             " has **" +
+                                             str(self.points.checkpoints(message.server.id, user.id)) +
+                                             "** points.")
                         else:
-                            await sender(message.author.mention +
-                                         " has **" +
-                                         str(self.points.checkpoints(message.server.id, message.author.id)) +
-                                         "** points.")
+                            await sender(message.author.mention + " - Insufficient permissions.")
+                    else:
+                        await sender(message.author.mention +
+                                     " has **" +
+                                     str(self.points.checkpoints(message.server.id, message.author.id)) +
+                                     "** points.")
                 elif command == "give":
-                        await deleter(message)
-                        if self.checkpower(message.author) or self.adminpower(message.author):
-                            if numParams < 2:
-                                await sender(message.author.mention + " - Give command requires parameters "
-                                                                      "\"**Example:** !give <mention> <points>\"")
+                    await deleter(message)
+                    if self.checkpower(message.author) or self.adminpower(message.author):
+                        if numParams < 2:
+                            await sender(message.author.mention + " - Give command requires parameters "
+                                                                  "\"**Example:** !give <mention> <points>\"")
+                        else:
+                            person = message.mentions[0]
+                            try:
+                                points = int(params[2])
+                            except ValueError:
+                                await sender("Invalid points amount. Be sure to **not** use commas.")
                             else:
-                                person = message.mentions[0]
-                                try:
-                                    points = int(params[2])
-                                except ValueError:
-                                    await sender("Invalid points amount. Be sure to **not** use commas.")
+                                if self.points.givepoints(points, message.server.id, person.id):
+                                    await sendToBetting(message.author.mention + " gave " + str(points) +
+                                                        " points to " + message.mentions[0].mention)
                                 else:
-                                    if self.points.givepoints(points, message.server.id, person.id):
-                                        await sendToBetting(message.author.mention + " gave " + str(points) +
-                                                            " points to " + message.mentions[0].mention)
-                                    else:
-                                        await sender("Give Failed")
+                                    await sender("Give Failed")
                 elif command == "take":
                     await deleter(message)
                     if self.adminpower(message.author):
