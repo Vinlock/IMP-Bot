@@ -250,7 +250,7 @@ class Bot(object):
                         elif numParams > 2:
                             sender("Invalid Command Parameters")
                 elif command == "version":
-                    await sender("Imperial Bot v0.8b - Created By: Vinlock")
+                    await sender("Imperial Bot v0.9.1b - Created By: Vinlock")
                 elif command == "admin":
                     if self.checkpower(message.author):
                         await pm(message.author, "__**COMMANDS**__\n**!purge <number of messages>"
@@ -499,21 +499,51 @@ class Bot(object):
                         else:
                             await sender(message.author.mention + " - Insufficient Permissions")
                     elif command == "match":
-                        while True:
-                            try:
-                                await deleter(message)
-                                if self.checkpower(message.author):
-                                    if self.matches[message.server.id] is None:
-                                        await sender(message.author.mention + " - A match has not been started yet.")
+                        if numParams == 0:
+                            while True:
+                                try:
+                                    await deleter(message)
+                                    if self.checkpower(message.author):
+                                        if self.matches[message.server.id] is None:
+                                            await sender(message.author.mention + " - A match has not been started yet.")
+                                        else:
+                                            self.matches[message.server.id].closeBetting()
+                                            await sender("@everyone - Betting has closed for this match. "
+                                                         "Match is underway!")
                                     else:
-                                        self.matches[message.server.id].closeBetting()
+                                        await sender(message.author.mention + " - Insufficient Permissions")
+                                except discord.HTTPException:
+                                    continue
+                                break
+                        else:
+                            await deleter(message)
+                            if self.checkpower(message.author):
+                                if self.matches[message.server.id] is None:
+                                   await sender(message.author.mention + " - A match has not been started yet.")
+                                else:
+                                    seconds = int(params[0])
+
+                                    def end(seconds):
+                                        seconds = int(seconds)
+                                        sender("@everyone: Betting Closes in " + str(seconds) + ".")
+                                        sleep(seconds/2)
+                                        seconds -= seconds/2
+                                        for second in range(0, seconds):
+                                            sender("@everyone: " + str(seconds))
+                                            seconds -= 1
+                                            sleep(1)
+                                        while True:
+                                            try:
+                                                self.matches[message.server.id].closeBetting()
+                                            except discord.HTTPException:
+                                                continue
+                                            break
                                         await sender("@everyone - Betting has closed for this match. "
                                                      "Match is underway!")
-                                else:
-                                    await sender(message.author.mention + " - Insufficient Permissions")
-                            except discord.HTTPException:
-                                continue
-                            break
+
+                                    self.thread(end, seconds)
+                            else:
+                                await sender(message.author.mention + " - Insufficient Permissions")
                     elif command == "end":
                         await deleter(message)
                         if self.checkpower(message.author):
@@ -772,8 +802,8 @@ class Bot(object):
                 continue
         return False
 
-    def thread(self, function):
-        t1 = threading.Thread(target=function)
+    def thread(self, function, *args):
+        t1 = threading.Thread(target=function, args=args)
         t1.daemon = True
         t1.start()
 
