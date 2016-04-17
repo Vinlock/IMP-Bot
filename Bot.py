@@ -519,7 +519,8 @@ class Bot(object):
                         count += 1
                     await sender(send)
                 # Player-vs-Dice
-                if message.channel == self.channels[message.server.id]["player-versus-dice"]:
+                # if message.channel == self.channels[message.server.id]["player-versus-dice"]:
+                if message.channel == discord.utils.get(message.server.channels, name="player-versus-dice"):
                     message.content.rstrip()
                     if command == "pvd":
                         # !rollvs <bet> <max> <mention>
