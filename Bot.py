@@ -597,7 +597,8 @@ class Bot(object):
                         else:
                             await reply("Sorry that command is currently disabled.")
                 # Betting Commands
-                if message.channel == self.channels[message.server.id]["tournament-betting"]:
+                # if message.channel == self.channels[message.server.id]["tournament-betting"]:
+                if message.channel == discord.utils.get(message.server.channels, name="tournament-betting"):
                     if command == "bet":
                         if self.matches[message.server.id] is None:
                             await sender(message.author.mention + " - No match has been started yet.")
@@ -827,7 +828,8 @@ class Bot(object):
                         if numParams > 1:
                             await sender(message.author.mention + " - Invalid amount of parameters. **Example:** "
                                                                   "\"!retract\"\nNo spaces too!")
-                elif message.channel == self.channels[message.server.id]["waiting-room"]:
+                # if message.channel == self.channels[message.server.id]["waiting-room"]:
+                if message.channel == discord.utils.get(message.server.channels, name="waiting-room"):
                     if command == "checkin":
                         if self.tournaments[message.server.id] is not None:
                             if self.tournaments[message.server.id].addCheckIn(message.author, "checkin"):
