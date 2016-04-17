@@ -183,9 +183,11 @@ class Bot(object):
                     else:
                         if self.checkpower(message.author) and params[1] == "on":
                             self.guess = True
+                            reply("The !guess command has been turned on!")
                         elif self.checkpower(message.author) and params[1] == "off":
                             self.guess = False
-                        else:
+                            reply("The !guess command has been turned OFF!")
+                        elif self.guess:
                             number = params[1]
                             try:
                                 int(number)
@@ -247,6 +249,8 @@ class Bot(object):
                                             await reply("Sorry the bet failed. Ask Vinlock to check out why.")
                                     else:
                                         await reply("Insufficient Points. It will cost " + str(number) + " points to play.")
+                        else:
+                            reply("Sorry the command is currently disabled.")
                 elif command == "purge":
                     await deleter(message)
                     if self.checkpower(message.author):
