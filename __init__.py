@@ -1,5 +1,12 @@
 # import ControlBot
 import Bot, threading
+import logging
+import time
+
+logging.basicConfig(level=logging.INFO, format='%(message)s')
+logger = logging.getLogger()
+logger.addHandler(logging.FileHandler(time.strftime("%H:%M:%S")+'.log', 'a'))
+print = logger.info
 
 def thread(self, function):
     t1 = threading.Thread(target=function)
