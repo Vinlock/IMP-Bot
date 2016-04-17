@@ -591,8 +591,8 @@ class Bot(object):
                                         except AttributeError:
                                                 await reply("It looks like " + who.mention + " doesn't want to play or is AFK!")
                                                 self.points.givepoints(bet, message.server.id, message.author.id)
-                    else:
-                        await reply("Sorry that command is currently disabled.")
+                        else:
+                            await reply("Sorry that command is currently disabled.")
                 # Betting Commands
                 if message.channel == self.channels[message.server.id]["tournament-betting"]:
                     if command == "bet":
