@@ -179,7 +179,7 @@ class Bot(object):
                                  "**!percent** - View the team bet percentages.\n"
                                  "**!who <red or blue>** - See who is red and who is blue\n\n\n"
                                  "__**FUN COMMANDS**__\n\n"
-                                 + ("" if self.rollvs else "**DISABLED:** ") + "**!rollvs <bet amount> <max roll> <mention>** - Roll versus an opponent if they accept the bet/challenge.\n"
+                                 + ("" if self.rollvs else "**DISABLED:** ") + "**!pvd <bet amount> <max roll> <mention>** - Roll versus an opponent if they accept the bet/challenge.\n"
                                  + ("" if self.guess else "**DISABLED:** ") + "**!guess <number 10 or greater>** - The bot will think of a number, if you can guess it you win the jackpot, if you get close you win some points. You bet points equal to the number you choose.\n\n\n")
                 elif command == "guess":
                     if numParams < 1 or numParams > 1:
