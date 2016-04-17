@@ -176,7 +176,8 @@ class Bot(object):
                                  "**!who <red or blue>** - See who is red and who is blue\n\n\n")
                 elif command == "guess":
                     if numParams < 1 or numParams > 1:
-                        await reply("Invalid amount of parameters. **!guess <number greater than 10>**")
+                        await reply("Invalid amount of parameters. **!guess <number greater than 10>**.\n"
+                                    "**YOU WILL BET THE AMOUNT YOU SET AS YOUR MAX GUESS!!!!**")
                     else:
                         number = params[1]
                         try:
