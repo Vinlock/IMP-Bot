@@ -809,12 +809,13 @@ class Bot(object):
         servers = self.client.servers
         # servers = copy.deepcopy(self.client.servers)
         for server in servers:
-            print("Generating Missing Members for Server: " + server.name + "...")
+            print("Generation of missing members for Server: " + server.name + " has begun...")
             members = server.members
             member_id_list = []
             for member in members:
                 member_id_list.append(member.id)
-            print("Created " + server.name + " List.")
+            print("Created " + server.name + " List. Updating Members...")
+            i = 0
             for memberid in member_id_list:
                 with conn.cursor() as cursor:
                     sql = "INSERT IGNORE INTO `points` SET `userid`={0}, `points`={1}, `server`={2};".format(int(memberid),
@@ -823,6 +824,7 @@ class Bot(object):
                     cursor.execute(sql)
                     conn.commit()
                     # print("\033[94m" + cursor._last_executed + "\033[0m")
-            print("Done updating members for " + server.name + ".")
+                i += 1
+            print("Successfully finished updating " + str(i) + " members for " + server.name + ".")
         print("Done updating ALL members.")
         conn.close()
