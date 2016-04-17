@@ -631,7 +631,7 @@ class Bot(object):
                         for person in leaderboard:
                             if count is not 1:
                                 send += "\n"
-                            send += str("**"+count+":** <@"+person['id']+"> - "+person['points'])
+                            send += str("**"+str(count)+":** <@"+str(person['id'])+"> - "+str(person['points']))
                             count += 1
                         sender(send)
                     elif command == "test":
