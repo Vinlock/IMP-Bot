@@ -184,22 +184,43 @@ class Bot(object):
                     bet = int(params[1])
                     max = int(params[2])
                     who = message.mentions[0]
-                    await sender(who.mention + " - You have been challenged by " + message.author.mention + " in a roll off out of " + str(max) + ".\nReply \"yes\" to accept. You have 30 seconds.")
-                    answer = await waitfor(5, who)
-                    if answer is "yes":
-                        await sender(who.mention + " has accepted " + message.author.mention + "'s challenge")
-                        await sender(message.author.mention + " - you may roll now. You have 30 seconds.")
-                        firstroll = await wait(5)
-                        if firstroll is "!roll":
-                            roll1 = randint(1, max)
+                    if int(self.points.checkpoints(message.server.id, message.author.id)) < bet:
+                        reply("Sorry you do not have a sufficient points balance to bet that amount.")
+                    elif int(self.points.checkpoints(message.server.id, who.id)) < bet:
+                        reply(who.mention + " does not have sufficient points to bet that amount versus you.")
                     else:
-                        await sender("Too Late.")
-                elif command == "testroll":
-                    a = await wait(5)
-                    if a is "yo":
-                        await reply("good")
-                    else:
-                        await reply("nope")
+                        self.points.minusPoints(bet, message.server.id, message.author.id)
+                        await sender(who.mention + " - You have been challenged by " + message.author.mention + " in a roll off out of **" + str(max) + "** for **" + str(bet) + "** points.\nReply \"yes\" to accept. You have 30 seconds.")
+                        answer = await waitfor(30, who)
+                        if answer is "yes":
+                            self.points.minusPoints(bet, message.server.id, who.id)
+                            await sender(who.mention + " has accepted " + message.author.mention + "'s challenge.")
+                            await sender(message.author.mention + " - you may roll now with \"!roll\". You have 30 seconds.")
+                            firstroll = await wait(30)
+                            if firstroll is "!roll":
+                                roll1 = randint(1, max)
+                                await reply("You have rolled **" + str(roll1) + "**. Good Luck!")
+                                await sender(who.mention + " -  you may roll now with \"!roll\". You have 30 seconds.")
+                                secondroll = await waitfor(30, who)
+                                if secondroll is "!roll":
+                                    roll2 = randint(1, max)
+                                    while roll1 == roll2:
+                                        roll2 = randint(1, max)
+                                    await sender(who.mention + " - You have rolled **" + str(roll2) + "**!")
+                                    if roll1 > roll2:
+                                        await sender(message.author.mention + " WINS **" + str(bet*2) + "** points!!!!")
+                                        self.points.givepoints(bet*2, message.server.id, message.author.id)
+                                    elif roll1 < roll2:
+                                        await sender(who.mention + " WINS **" + str(bet*2) + "** points!!!!")
+                                        self.points.givepoints(bet*2, message.server.id, who.id)
+                                else:
+                                    await sender(who.mention + " - You took too long. " + message.author.mention + " wins **" + str(bet*2) + "** points!")
+                            else:
+                                await reply("You took too long. " + who.mention + " wins **" + str(bet*2) + "** points!")
+                                self.points.givepoints(bet*2, message.server.id, who.id)
+                        else:
+                            await reply("It looks like " + who.mention + " doesn't want to play or is AFK!")
+                            self.points.givepoints(bet, message.server.id, message.author.id)
                 elif command == "guess":
                     if numParams < 1 or numParams > 1:
                         await reply("Invalid amount of parameters. **!guess <number greater than 10>**.\n"
