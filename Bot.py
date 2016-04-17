@@ -14,7 +14,6 @@ from random import randint
 
 class Bot(object):
     def __init__(self):
-        init()
         print("== Bot is starting.")
         self.client = discord.Client()
         print("== Discord Client Initiated")
