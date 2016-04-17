@@ -229,6 +229,7 @@ class Bot(object):
                                                 self.points.givepoints(bet, message.server.id, message.author.id)
                                         else:
                                             await sender(who.mention + " - You took too long. " + message.author.mention + " wins **" + str(bet*2) + "** points!")
+                                            self.points.givepoints(bet*2, message.server.id, message.author.id)
                                     else:
                                         await reply("You took too long. " + who.mention + " wins **" + str(bet*2) + "** points!")
                                         self.points.givepoints(bet*2, message.server.id, who.id)
