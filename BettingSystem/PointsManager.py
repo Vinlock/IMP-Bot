@@ -4,7 +4,7 @@ class PointsManager(object):
     def __init__(self, client=None):
         self.client = client
 
-        print("Points Manager initiated.")
+        print("== Points Manager initiated.")
 
     def thread(self, function):
         t1 = threading.Thread(target=function)
@@ -44,7 +44,7 @@ class PointsManager(object):
                 conn.commit()
                 print(cursor._last_executed)
             conn.close()
-            print(memberid, "given", points, "points.")
+            print("== " + memberid, "given", points, "points.")
             return True
         elif not self.memberHasPoints(serverid, memberid):
             with conn.cursor() as cursor:
@@ -53,7 +53,7 @@ class PointsManager(object):
                 conn.commit()
                 print("\033[94m" + cursor._last_executed + "\033[0m")
             conn.close()
-            print(memberid, "given", points, "points.")
+            print("== " + memberid, "given", points, "points.")
             return True
         return False
 
@@ -70,7 +70,7 @@ class PointsManager(object):
                     conn.commit()
                     print("\033[94m" + cursor._last_executed + "\033[0m")
                 conn.close()
-                print(memberid, "lost", points, "points.")
+                print("== " + memberid, "lost", points, "points.")
                 return True
         else:
             return False
@@ -103,7 +103,7 @@ class PointsManager(object):
 
     def topTen(self, serverid):
         conn = Database.DB()
-        print("TOP 10")
+        print("== TOP 10 QUERIED")
         top = []
         with conn.cursor() as cursor:
             sql = "SELECT * FROM `points` WHERE `server`={0} ORDER BY `points` DESC LIMIT 10".format(serverid)

@@ -19,7 +19,7 @@ class Match(object):
 
         self.points = PointsManager.PointsManager()
 
-        print("Match has been initiated.")
+        print("== Match has been initiated.")
 
     def openBetting(self):
         self.bettingOpen = True
@@ -99,7 +99,7 @@ class Match(object):
                     self.diffRatio()
                     return True
                 else:
-                    print("Failed to place bet.")
+                    print("== Failed to place bet.")
                     return False
             elif team == "blue":
                 if self.points.minusPoints(int(bet), self.serverid, user.id):
@@ -108,7 +108,7 @@ class Match(object):
                     self.diffRatio()
                     return True
                 else:
-                    print("Failed to place bet.")
+                    print("== Failed to place bet.")
                     return False
         else:
             return False
@@ -135,14 +135,14 @@ class Match(object):
                 win = int(round(bet.amount * self.redRatio))
                 self.points.givepoints(win, bet.user.server.id, bet.user.id)
                 bet.winnings = win
-                print("Cash Out:", bet.user.id, bet.amount, "points.")
+                print("== Cash Out:", bet.user.id, bet.amount, "points.")
             return self.redVotes
         elif winner == "blue":
             for bet in self.blueVotes:
                 win = int(round(int(bet.amount) * self.blueRatio))
                 self.points.givepoints(win, bet.user.server.id, bet.user.id)
                 bet.winnings = win
-                print("Cash Out:", bet.user.id, bet.amount, "points.")
+                print("== Cash Out:", bet.user.id, bet.amount, "points.")
             return self.blueVotes
 
     def betted(self, userid):

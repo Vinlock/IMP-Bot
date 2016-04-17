@@ -16,12 +16,12 @@ class Increment(object):
 
     def start(self):
         self.thread(self.beginIncrement)
-        print("Points Incrementation has initiated")
+        print("== Points Incrementation has initiated")
 
     def beginIncrement(self):
         while True:
             sleep(self.secondsPerIncrement)
-            print("Incrementing Online Member's Points by", self.pointsPer)
+            print("== Incrementing Online Member's Points by", self.pointsPer)
             self.thread(self.incrementPoints)
             # sleep(self.secondsPerIncrement)
 
@@ -30,9 +30,9 @@ class Increment(object):
         allmembers = self.members
         for server, members in allmembers.items():
             if self.incrementList(server, members):
-                print("Incremented Member's Points")
+                print("== Incremented Member's Points")
             else:
-                print("Failed to increment.")
+                print("== Failed to increment.")
 
     def incrementList(self, serverid, listIDs):
         conn = Database.DB()
@@ -44,7 +44,7 @@ class Increment(object):
             #     # print("TEST NOT THERE")
             sql = "UPDATE `points` SET `points` = `points` + 1 WHERE `server`='{0}' AND `userid` IN ({1})".format(str(serverid), all_members)
             if len(sql) > 65000:
-                print("WE HAVE HIT OUR MARK BOIS - " + str(serverid))
+                print("== WE HAVE HIT OUR MARK BOIS - " + str(serverid))
                 return False
             try:
                 cursor.execute(sql)
