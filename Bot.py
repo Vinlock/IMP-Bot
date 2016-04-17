@@ -54,10 +54,6 @@ class Bot(object):
                     self.roles[server.id][role.name.lower()] = dict()
                     self.roles[server.id][role.name.lower()]['object'] = role
                     self.roles[server.id][role.name.lower()]['members'] = []
-                print("== Channels:")
-                for channel in server.channels:
-                    self.channels[server.id][channel.name] = channel
-                    print(channel.id, channel.name)
                 for member in server.members:
                     for role in member.roles:
                         self.roles[member.server.id][role.name.lower()]['members'].append(member)
