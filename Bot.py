@@ -10,14 +10,6 @@ from Tournament import Tournament as tourney
 import ObjectDict
 import settings
 from random import randint
-import logging
-import time
-
-logging.basicConfig(level=logging.INFO, format='%(message)s')
-logger = logging.getLogger()
-logger.addHandler(logging.FileHandler(time.strftime("log/%d-%m-%Y")+'.log', 'a'))
-print = logger.info
-
 
 
 class Bot(object):
