@@ -129,6 +129,8 @@ class Bot(object):
                 }
             # if "Kappa" in message.content:
             #     await self.client.send_file(message.channel, "files/kappa1.png")
+            if "fuck" in message.content and "bot" in message.content:
+                await self.client.send_message(message.channel, message.author.mention + " - hey... :(")
             if message.content is "!":
                 print("== Nothing happened.")
             elif message.content.startswith("!"):
