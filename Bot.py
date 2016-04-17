@@ -212,7 +212,7 @@ class Bot(object):
                                                 except ValueError:
                                                     await reply("You have not entered an integer. Please try !guess <number greater than 10> again!")
                                                 else:
-                                                    if int(number) < 50:
+                                                    if int(number) <= 95:
                                                         rng = int(int(number) * 0.20)
                                                     else:
                                                         rng = int(int(number) * 0.05)
