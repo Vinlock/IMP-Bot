@@ -164,7 +164,7 @@ class Bot(object):
                     return self.client.wait_for_message(timeout=time, author=author, channel=message.channel)
 
                 def sendToBetting(msg):
-                    if "betting" in self.channels[info['server'].id]:
+                    if "tournament-betting" in self.channels[info['server'].id]:
                         return self.client.send_message(self.channels[message.server.id]["tournament-betting"], msg)
                     else:
                         return self.client.send_message(info['channel'], "Betting Channel does not exist on this "
