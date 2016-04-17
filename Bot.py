@@ -180,7 +180,7 @@ class Bot(object):
                                  "**!who <red or blue>** - See who is red and who is blue\n\n\n"
                                  "__**FUN COMMANDS**__\n\n"
                                  + "" if self.rollvs else "--" + "**!rollvs <bet amount> <max roll> <mention>** - Roll versus an opponent if they accept the bet/challenge."+ "" if self.rollvs else "--" +"\n"
-                                 "**!guess <number 10 or greater>** - The bot will think of a number, if you can guess it you win the jackpot, if you get close you win some points. You bet points equal to the number you choose.\n\n\n")
+                                 + "" if self.guess else "--" + "**!guess <number 10 or greater>** - The bot will think of a number, if you can guess it you win the jackpot, if you get close you win some points. You bet points equal to the number you choose." + "" if self.guess else "--" + "\n\n\n")
                 elif command == "rollvs":
                     # !rollvs <bet> <max> <mention>
                     if self.adminpower(message.author) and params[1].lower() == "on":
