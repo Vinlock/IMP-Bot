@@ -203,7 +203,7 @@ class Bot(object):
                                             except ValueError:
                                                 await reply("You have not entered an integer. Please try !guess <number greater than 10> again!")
                                             else:
-                                                rng = int(int(number) * 0.05)
+                                                rng = int(int(number) * 0.2)
                                                 if rng < 1:
                                                     rng = 1
                                                 start = n - rng
@@ -216,26 +216,24 @@ class Bot(object):
                                                     self.points.givepoints(points, message.server.id, message.author.id)
                                                     await reply("You have won " + str(points))
                                                 elif int(start) <= int(r.content) <= int(ending):
-                                                    self.points.givepoints(int(number), message.server.id, message.author.id)
-                                                    await reply("Close! The number was **" + str(n) + "**. You have won back your" + str(number) + " points.")
-                                                elif int(r.content) < start:
-                                                    needle = int(r.content)
-                                                    percent = needle / start
-                                                    points = (int(number) * len(number)) * percent
-                                                    points = int(points)
-                                                    if points < 1:
-                                                        points = 1
-                                                    self.points.givepoints(points, message.server.id, message.author.id)
-                                                    await reply("Close! The number was **" + str(n) + "**. You have won back **" + str(points) + "** as pity points :P.")
-                                                elif int(r.content) > n:
-                                                    needle = int(r.content)
-                                                    percent = needle / number
-                                                    points = number * (1 - percent)
-                                                    points = int(points)
-                                                    if points < 1:
-                                                        points = 1
-                                                    self.points.givepoints(points, message.server.id, message.author.id)
-                                                    await reply("Close! The number was **" + str(n) + "**. You have won back **" + str(points) + "** as pity points :P.")
+                                                    if int(r.content) < n:
+                                                        needle = int(r.content) - start
+                                                        percent = needle / rng
+                                                        points = (int(number) * len(number)) * percent
+                                                        points = int(points)
+                                                        if points < 1:
+                                                            points = 1
+                                                        self.points.givepoints(points, message.server.id, message.author.id)
+                                                        await reply("Close! The number was **" + str(n) + "**. You have won back **" + str(points) + "** as pity points :P.")
+                                                    elif int(r.content) > n:
+                                                        needle = ending - int(r.content)
+                                                        percent = needle / rng
+                                                        points = (int(number) * len(number)) * percent
+                                                        points = int(points)
+                                                        if points < 1:
+                                                            points = 1
+                                                        self.points.givepoints(points, message.server.id, message.author.id)
+                                                        await reply("Close! The number was **" + str(n) + "**. You have won back **" + str(points) + "** as pity points :P.")
                                                 else:
                                                     await reply("Nope. The number was **" + str(n) + "**. Try !guess again later!")
                                     else:
