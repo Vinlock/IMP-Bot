@@ -456,68 +456,68 @@ class Bot(object):
                                                             " points to " + message.mentions[0].mention)
                                     else:
                                         await sender("Give Failed")
-                    elif command == "take":
-                        await deleter(message)
-                        if self.adminpower(message.author):
-                            if numParams < 2 or numParams > 2:
-                                await sender(message.author.mention + " - Take command requires parameters. "
-                                                                      "\"**Example:** !take <mention> <points>\"")
-                            else:
-                                try:
-                                    points = int(params[2])
-                                    who = message.mentions[0]
-                                except ValueError:
-                                    await sender("Invalid points amount. Be sure to **not** use commas.")
-                                else:
-                                    available_points = self.points.checkpoints(message.server.id, who.id)
-                                    if points > available_points:
-                                        await reply(who.mention + " only has " +
-                                                     str(available_points) + " points, therefore not enough to take " +
-                                                     str(points) + " points.")
-                                    elif available_points > points:
-                                        if self.points.minusPoints(points, message.server.id, who.id):
-                                            await sender(message.author.mention + " has taken " + str(points) +
-                                                         " points from " + who.mention + ".")
-                                        else:
-                                            await sender(message.author.mention + " Take failed!")
+                elif command == "take":
+                    await deleter(message)
+                    if self.adminpower(message.author):
+                        if numParams < 2 or numParams > 2:
+                            await sender(message.author.mention + " - Take command requires parameters. "
+                                                                  "\"**Example:** !take <mention> <points>\"")
                         else:
-                            await sender(message.author.mention + " - Insufficient permissions.")
-                    elif command == "giveall":
-                        await deleter(message)
-                        if self.adminpower(message.author):
-                            if numParams < 1 or numParams > 1:
-                                await sender(message.author.mention + " - You must declare the number of points.")
+                            try:
+                                points = int(params[2])
+                                who = message.mentions[0]
+                            except ValueError:
+                                await sender("Invalid points amount. Be sure to **not** use commas.")
                             else:
-                                try:
-                                    points = int(params[1])
-                                except ValueError:
-                                    await sender(message.author.mention +
-                                                 " - You must declare a number for points parameter.")
-                                else:
-                                    list_ids = []
-                                    members = message.server.members
-                                    for member in members:
-                                        status = member.status.value
-                                        if status is not "offline":
-                                            list_ids.append(member.id)
-                                    if self.points.massGive(message.server.id, list_ids, points):
-                                        await sender(message.author.mention + " gave " + str(points) +
-                                                     " points to @everyone!!\n\n:moneybag: :moneybag: :moneybag: "
-                                                     ":moneybag: :moneybag: :moneybag: :moneybag: :moneybag: "
-                                                     ":moneybag: :moneybag: :moneybag: :moneybag: ")
-                    elif command == "leaderboard":
-                        leaderboard = self.points.topTen(message.server.id)
-                        count = 1
-                        send = ""
-                        send += "__**Top 10 Points Leaderboard**__\n"
-                        for person in leaderboard:
-                            if count is not 1:
-                                send += "\n"
-                            send += str("**"+str(count)+":** <@"+str(person['id'])+"> - "+str(person['points']))
-                            count += 1
-                        await sender(send)
+                                available_points = self.points.checkpoints(message.server.id, who.id)
+                                if points > available_points:
+                                    await reply(who.mention + " only has " +
+                                                 str(available_points) + " points, therefore not enough to take " +
+                                                 str(points) + " points.")
+                                elif available_points > points:
+                                    if self.points.minusPoints(points, message.server.id, who.id):
+                                        await sender(message.author.mention + " has taken " + str(points) +
+                                                     " points from " + who.mention + ".")
+                                    else:
+                                        await sender(message.author.mention + " Take failed!")
+                    else:
+                        await sender(message.author.mention + " - Insufficient permissions.")
+                elif command == "giveall":
+                    await deleter(message)
+                    if self.adminpower(message.author):
+                        if numParams < 1 or numParams > 1:
+                            await sender(message.author.mention + " - You must declare the number of points.")
+                        else:
+                            try:
+                                points = int(params[1])
+                            except ValueError:
+                                await sender(message.author.mention +
+                                             " - You must declare a number for points parameter.")
+                            else:
+                                list_ids = []
+                                members = message.server.members
+                                for member in members:
+                                    status = member.status.value
+                                    if status is not "offline":
+                                        list_ids.append(member.id)
+                                if self.points.massGive(message.server.id, list_ids, points):
+                                    await sender(message.author.mention + " gave " + str(points) +
+                                                 " points to @everyone!!\n\n:moneybag: :moneybag: :moneybag: "
+                                                 ":moneybag: :moneybag: :moneybag: :moneybag: :moneybag: "
+                                                 ":moneybag: :moneybag: :moneybag: :moneybag: ")
+                elif command == "leaderboard":
+                    leaderboard = self.points.topTen(message.server.id)
+                    count = 1
+                    send = ""
+                    send += "__**Top 10 Points Leaderboard**__\n"
+                    for person in leaderboard:
+                        if count is not 1:
+                            send += "\n"
+                        send += str("**"+str(count)+":** <@"+str(person['id'])+"> - "+str(person['points']))
+                        count += 1
+                    await sender(send)
                 # Player-vs-Dice
-                elif message.channel == self.channels[message.server.id]["player-vs-dice"]:
+                if message.channel == self.channels[message.server.id]["player-vs-dice"]:
                     if command == "rollvs":
                         # !rollvs <bet> <max> <mention>
                         if self.adminpower(message.author) and params[1].lower() == "on":
