@@ -10,10 +10,15 @@ from Tournament import Tournament as tourney
 import ObjectDict
 import settings
 from random import randint
+from colorama import init, Fore, Style
 
+def print(*args):
+    print(Fore.RED, args)
+    print(Style.RESET_ALL)
 
 class Bot(object):
     def __init__(self):
+        init()
         print("== Bot is starting.")
         self.client = discord.Client()
         print("== Discord Client Initiated")
