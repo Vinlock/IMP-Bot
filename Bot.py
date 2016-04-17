@@ -547,7 +547,7 @@ class Bot(object):
                                 except ValueError:
                                     await sender("Invalid points amount. Be sure to **not** use commas.")
                                 else:
-                                    if self.points.givepoints(points, message.server.id, person):
+                                    if self.points.givepoints(points, message.server.id, person.id):
                                         await sendToBetting(message.author.mention + " gave " + str(points) +
                                                             " points to " + message.mentions[0].mention)
                                     else:
@@ -781,6 +781,7 @@ class Bot(object):
             member_id_list = []
             for member in members:
                 member_id_list.append(member.id)
+            print("Created List.")
             for memberid in member_id_list:
                 with conn.cursor() as cursor:
                     sql = "INSERT IGNORE INTO `points` SET `userid`={0}, `points`={1}, `server`={2};".format(memberid,
@@ -788,6 +789,6 @@ class Bot(object):
                                                                                                              server.id)
                     cursor.execute(sql)
                     conn.commit()
-                    # print("\033[94m" + cursor._last_executed + "\033[0m")
+                    print("\033[94m" + cursor._last_executed + "\033[0m")
         print("Done updating members for " + server.name + ".")
         conn.close()
