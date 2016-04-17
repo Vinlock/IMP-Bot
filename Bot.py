@@ -236,7 +236,7 @@ class Bot(object):
                                     await reply("It looks like " + who.mention + " doesn't want to play or is AFK!")
                                     self.points.givepoints(bet, message.server.id, message.author.id)
                     else:
-                        reply("Sorry that command is currently disabled.")
+                        await reply("Sorry that command is currently disabled.")
                 elif command == "guess":
                     if numParams < 1 or numParams > 1:
                         await reply("Invalid amount of parameters. **!guess <number greater than 10>**.\n"
