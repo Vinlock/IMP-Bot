@@ -9,7 +9,7 @@ def thread(function):
 
 def start():
     print("Starting Bot...")
-    bot = Bot.Bot()
+    Bot.Bot()
 
 thread(start)
 
