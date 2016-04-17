@@ -116,7 +116,12 @@ class Bot(object):
 
         @self.client.event
         async def on_message(message):
-            print(message.author.id, ":", message.content)
+            # print(message.author.id, ":", message.content)
+            print("--------------------------------------")
+            print("Author ID: " + message.author.id)
+            print("Server ID: " + message.server.id)
+            print("Message: " + message.content)
+            print("--------------------------------------")
             info = {
                 "channel": message.channel,
                 "author": message.author,
