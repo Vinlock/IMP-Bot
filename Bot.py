@@ -233,7 +233,7 @@ class Bot(object):
                                                             if points < 1:
                                                                 points = 1
                                                             self.points.givepoints(points, message.server.id, message.author.id)
-                                                            await reply("Close! The number was **" + str(n) + "**. You have won back **" + str(points) + "** as pity points :P.")
+                                                            await reply("Close! The number was **" + str(n) + "**. You have won **" + str(points) + "** points :P.")
                                                         elif int(r.content) > n:
                                                             needle = ending - int(r.content)
                                                             percent = needle / rng
@@ -242,7 +242,7 @@ class Bot(object):
                                                             if points < 1:
                                                                 points = 1
                                                             self.points.givepoints(points, message.server.id, message.author.id)
-                                                            await reply("Close! The number was **" + str(n) + "**. You have won back **" + str(points) + "** as pity points :P.")
+                                                            await reply("Close! The number was **" + str(n) + "**. You have won **" + str(points) + "** points :P.")
                                                     else:
                                                         await reply("Nope. The number was **" + str(n) + "**. Try !guess again later!")
                                         else:
