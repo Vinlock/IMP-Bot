@@ -217,6 +217,7 @@ class Bot(object):
                                                     await reply("You have won " + str(points))
                                                 elif int(start) <= int(r.content) <= int(ending):
                                                     self.points.givepoints(int(number), message.server.id, message.author.id)
+                                                    await reply("Close! The number was **" + str(n) + "**. You have won back your" + str(number) + " points.")
                                                 elif int(r.content) < start:
                                                     needle = int(r.content)
                                                     percent = needle / start
