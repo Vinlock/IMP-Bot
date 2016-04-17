@@ -100,3 +100,21 @@ class PointsManager(object):
                 return False
         conn.close()
         return True
+
+    def topTen(self, serverid):
+        conn = Database.DB()
+        print("TOP 10")
+        top = []
+        with conn.cursor() as cursor:
+            sql = "SELECT * FROM `points` WHERE `server`={0} ORDER BY `points` DESC LIMIT 10".format(serverid)
+            try:
+                cursor.execute(sql)
+            except:
+                return False
+            for row in cursor:
+                person = dict()
+                person['id'] = row['userid']
+                person['points'] = row['points']
+                top.append(person)
+            conn.close()
+        return top

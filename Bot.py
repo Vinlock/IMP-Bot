@@ -93,6 +93,9 @@ class Bot(object):
                 self.channels[server.id][channel.name] = channel
                 print(channel.id, channel.name)
 
+        @self.client.event
+        async def on_member_join(member):
+            self.points.insertNewMember(member.id, member.server.id)
         # @self.client.event
         # async def on_member_join(member):
         #     if self.points.insertNewMember(member.id, member.server.id):
@@ -614,6 +617,16 @@ class Bot(object):
                         else:
                             await sender(message.author.mention + " - You must wait until betting is over to check"
                                                                   " percents.")
+                    elif command == "leaderboard":
+                        leaderboard = self.points.topTen(message.server.id)
+                        count = 1
+                        send = ""
+                        for person in leaderboard:
+                            if count is not 1:
+                                send += "\n"
+                            send += str(count+": <@"+person['id']+"> - "+person['points'])
+                            count += 1
+                        sender(send)
                     elif command == "test":
                         await sender("Test")
                     elif command == "redratio":
@@ -781,14 +794,14 @@ class Bot(object):
             member_id_list = []
             for member in members:
                 member_id_list.append(member.id)
-            print("Created List.")
+            print("Created " + server.name + " List.")
             for memberid in member_id_list:
                 with conn.cursor() as cursor:
-                    sql = "INSERT IGNORE INTO `points` SET `userid`={0}, `points`={1}, `server`={2};".format(memberid,
+                    sql = "INSERT IGNORE INTO `points` SET `userid`={0}, `points`={1}, `server`={2};".format(int(memberid),
                                                                                                              50,
-                                                                                                             server.id)
+                                                                                                             int(server.id))
                     cursor.execute(sql)
                     conn.commit()
-                    print("\033[94m" + cursor._last_executed + "\033[0m")
+                    # print("\033[94m" + cursor._last_executed + "\033[0m")
         print("Done updating members for " + server.name + ".")
         conn.close()
