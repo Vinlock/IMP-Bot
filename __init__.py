@@ -2,11 +2,20 @@
 import Bot, threading
 
 
-def thread(self, function):
+def thread(function):
     t1 = threading.Thread(target=function)
     t1.daemon = True
     t1.start()
 
-print("Starting Bot...")
-bot = Bot.Bot()
+def start():
+    print("Starting Bot...")
+    bot = Bot.Bot()
+
+thread(start)
+
+while True:
+    input(">> ")
+
+# print("Starting Bot...")
+# bot = Bot.Bot()
 # control = ControlBot.ControlBot()
