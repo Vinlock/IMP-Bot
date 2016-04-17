@@ -216,24 +216,25 @@ class Bot(object):
                                                     self.points.givepoints(points, message.server.id, message.author.id)
                                                     await reply("You have won " + str(points))
                                                 elif int(start) <= int(r.content) <= int(ending):
-                                                    if int(r.content) < n:
-                                                        needle = int(r.content) - start
-                                                        percent = needle / rng
-                                                        points = (int(number) * len(number)) * percent
-                                                        points = int(points)
-                                                        if points < 1:
-                                                            points = 1
-                                                        self.points.givepoints(points, message.server.id, message.author.id)
-                                                        await reply("Close! The number was **" + str(n) + "**. You have won back **" + str(points) + "** as pity points :P.")
-                                                    elif int(r.content) > n:
-                                                        needle = ending - int(r.content)
-                                                        percent = needle / rng
-                                                        points = (int(number) * len(number)) * percent
-                                                        points = int(points)
-                                                        if points < 1:
-                                                            points = 1
-                                                        self.points.givepoints(points, message.server.id, message.author.id)
-                                                        await reply("Close! The number was **" + str(n) + "**. You have won back **" + str(points) + "** as pity points :P.")
+                                                    self.points.givepoints(int(number), message.server.id, message.author.id)
+                                                elif int(r.content) < start:
+                                                    needle = int(r.content)
+                                                    percent = needle / start
+                                                    points = (int(number) * len(number)) * percent
+                                                    points = int(points)
+                                                    if points < 1:
+                                                        points = 1
+                                                    self.points.givepoints(points, message.server.id, message.author.id)
+                                                    await reply("Close! The number was **" + str(n) + "**. You have won back **" + str(points) + "** as pity points :P.")
+                                                elif int(r.content) > n:
+                                                    needle = int(r.content)
+                                                    percent = needle / number
+                                                    points = number * (1 - percent)
+                                                    points = int(points)
+                                                    if points < 1:
+                                                        points = 1
+                                                    self.points.givepoints(points, message.server.id, message.author.id)
+                                                    await reply("Close! The number was **" + str(n) + "**. You have won back **" + str(points) + "** as pity points :P.")
                                                 else:
                                                     await reply("Nope. The number was **" + str(n) + "**. Try !guess again later!")
                                     else:
