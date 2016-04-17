@@ -760,7 +760,7 @@ class Bot(object):
                             await sender(message.author.mention + " - No tournament has been started yet."
                                                                   " Please check in once a tournament has"
                                                                   " been started.")
-        self.client.run(settings.DISCORD_USERNAME, settings.DISCORD_PASSWORD)
+        self.client.run(settings.DISCORD_TOKEN)
 
     def checkpower(self, author):
         for role in author.roles:
