@@ -182,7 +182,7 @@ class Bot(object):
                 elif command == "rollvs":
                     # !rollvs <bet> <max> <mention>
                     if numParams < 3 or numParams > 3:
-                        await reply("Insufficient number of parameters.\n\"!rollvs <bet amount> <max roll> <mention>\"")
+                        await reply("Insufficient number of parameters.\n**\"!rollvs <bet amount> <max roll> <mention>\"**")
                     else:
                         bet = int(params[1])
                         max = int(params[2])
