@@ -181,80 +181,6 @@ class Bot(object):
                                  "__**FUN COMMANDS**__\n\n"
                                  + ("" if self.rollvs else "**DISABLED:** ") + "**!rollvs <bet amount> <max roll> <mention>** - Roll versus an opponent if they accept the bet/challenge.\n"
                                  + ("" if self.guess else "**DISABLED:** ") + "**!guess <number 10 or greater>** - The bot will think of a number, if you can guess it you win the jackpot, if you get close you win some points. You bet points equal to the number you choose.\n\n\n")
-                elif command == "rollvs":
-                    # !rollvs <bet> <max> <mention>
-                    if self.adminpower(message.author) and params[1].lower() == "on":
-                        self.rollvs = True
-                        await reply("The !rollvs command has been turned ON!")
-                    elif self.adminpower(message.author) and params[1].lower() == "off":
-                        self.rollvs = False
-                        await reply("The !rollvs command has been turned OFF!")
-                    elif self.rollvs:
-                        if numParams < 3 or numParams > 3:
-                            await reply("Insufficient number of parameters.\n**\"!rollvs <bet amount> <max roll> <mention>\"**")
-                        else:
-                            bet = int(params[1])
-                            max = int(params[2])
-                            if bet <= 0:
-                                reply("Your bet must be greater than 0")
-                            elif max < 10:
-                                reply("The max roll must be 10 or greater.")
-                            else:
-                                who = message.mentions[0]
-                                if int(self.points.checkpoints(message.server.id, message.author.id)) < bet:
-                                    await reply("Sorry you do not have a sufficient points balance to bet that amount.")
-                                elif int(self.points.checkpoints(message.server.id, who.id)) < bet:
-                                    await reply(who.mention + " does not have sufficient points to bet that amount versus you.")
-                                else:
-                                    self.points.minusPoints(bet, message.server.id, message.author.id)
-                                    await sender(who.mention + " - You have been challenged by " + message.author.mention + " in a roll off out of **" + str(max) + "** for **" + str(bet) + "** points.\nReply \"yes\" to accept. You have 30 seconds.")
-                                    answer = await waitfor(30, who)
-                                    try:
-                                        if "yes" in answer.content.lower():
-                                            self.points.minusPoints(bet, message.server.id, who.id)
-                                            await sender(who.mention + " has accepted " + message.author.mention + "'s challenge.")
-                                            await sender(message.author.mention + " - you may roll now with \"!roll\". You have 30 seconds.")
-                                            firstroll = await wait(30)
-                                            try:
-                                                if "!roll" in firstroll.content.lower():
-                                                    roll1 = randint(1, max)
-                                                    await reply("You have rolled **" + str(roll1) + "**. Good Luck!")
-                                                    await sender(who.mention + " -  you may roll now with \"!roll\". You have 30 seconds.")
-                                                    secondroll = await waitfor(30, who)
-                                                    try:
-                                                        if "!roll" in secondroll.content.lower():
-                                                            roll2 = randint(1, max)
-                                                            await sender(who.mention + " - You have rolled **" + str(roll2) + "**!")
-                                                            if roll1 > roll2:
-                                                                await sender(message.author.mention + " WINS **" + str(bet*2) + "** points!!!!")
-                                                                self.points.givepoints(bet*2, message.server.id, message.author.id)
-                                                            elif roll1 < roll2:
-                                                                await sender(who.mention + " WINS **" + str(bet*2) + "** points!!!!")
-                                                                self.points.givepoints(bet*2, message.server.id, who.id)
-                                                            elif roll1 == roll2:
-                                                                await sender("IT IS A TIE! Both " + who.mention + " and " + message.author.mention + " get their points back!")
-                                                                self.points.givepoints(bet, message.server.id, who.id)
-                                                                self.points.givepoints(bet, message.server.id, message.author.id)
-                                                        else:
-                                                            await sender(who.mention + " - You took too long. " + message.author.mention + " wins **" + str(bet*2) + "** points!")
-                                                            self.points.givepoints(bet*2, message.server.id, message.author.id)
-                                                    except AttributeError:
-                                                        await sender(who.mention + " - You took too long. " + message.author.mention + " wins **" + str(bet*2) + "** points!")
-                                                        self.points.givepoints(bet*2, message.server.id, message.author.id)
-                                                else:
-                                                    await reply("You took too long. " + who.mention + " wins **" + str(bet*2) + "** points!")
-                                                    self.points.givepoints(bet*2, message.server.id, who.id)
-                                            except AttributeError:
-                                                await reply("You took too long. " + who.mention + " wins **" + str(bet*2) + "** points!")
-                                                self.points.givepoints(bet*2, message.server.id, who.id)
-                                        else:
-                                            await reply("It looks like " + who.mention + " doesn't want to play or is AFK!")
-                                            self.points.givepoints(bet, message.server.id, message.author.id)
-                                    except AttributeError:
-                                            await reply("It looks like " + who.mention + " doesn't want to play or is AFK!")
-                                            self.points.givepoints(bet, message.server.id, message.author.id)
-                    else:
-                        await reply("Sorry that command is currently disabled.")
                 elif command == "guess":
                     if numParams < 1 or numParams > 1:
                         await reply("Invalid amount of parameters. **!guess <number greater than 10>**.\n"
@@ -496,9 +422,178 @@ class Bot(object):
                     await self.client.remove_roles(message.author, self.roles[message.server.id]["cerulean"]["object"])
                     await self.client.remove_roles(message.author, self.roles[message.server.id]["crimson"]["object"])
                     await self.client.add_roles(message.author, self.roles[message.server.id]["crimson"]["object"])
-
+                elif command == "points" or command == "pts":
+                        if numParams == 1:
+                            if self.adminpower(message.author):
+                                await deleter(message)
+                                for user in message.mentions:
+                                    await sender(user.mention +
+                                                 " has **" +
+                                                 str(self.points.checkpoints(message.server.id, user.id)) +
+                                                 "** points.")
+                            else:
+                                await sender(message.author.mention + " - Insufficient permissions.")
+                        else:
+                            await sender(message.author.mention +
+                                         " has **" +
+                                         str(self.points.checkpoints(message.server.id, message.author.id)) +
+                                         "** points.")
+                elif command == "give":
+                        await deleter(message)
+                        if self.checkpower(message.author) or self.adminpower(message.author):
+                            if numParams < 2:
+                                await sender(message.author.mention + " - Give command requires parameters "
+                                                                      "\"**Example:** !give <mention> <points>\"")
+                            else:
+                                person = message.mentions[0]
+                                try:
+                                    points = int(params[2])
+                                except ValueError:
+                                    await sender("Invalid points amount. Be sure to **not** use commas.")
+                                else:
+                                    if self.points.givepoints(points, message.server.id, person.id):
+                                        await sendToBetting(message.author.mention + " gave " + str(points) +
+                                                            " points to " + message.mentions[0].mention)
+                                    else:
+                                        await sender("Give Failed")
+                    elif command == "take":
+                        await deleter(message)
+                        if self.adminpower(message.author):
+                            if numParams < 2 or numParams > 2:
+                                await sender(message.author.mention + " - Take command requires parameters. "
+                                                                      "\"**Example:** !take <mention> <points>\"")
+                            else:
+                                try:
+                                    points = int(params[2])
+                                    who = message.mentions[0]
+                                except ValueError:
+                                    await sender("Invalid points amount. Be sure to **not** use commas.")
+                                else:
+                                    available_points = self.points.checkpoints(message.server.id, who.id)
+                                    if points > available_points:
+                                        await reply(who.mention + " only has " +
+                                                     str(available_points) + " points, therefore not enough to take " +
+                                                     str(points) + " points.")
+                                    elif available_points > points:
+                                        if self.points.minusPoints(points, message.server.id, who.id):
+                                            await sender(message.author.mention + " has taken " + str(points) +
+                                                         " points from " + who.mention + ".")
+                                        else:
+                                            await sender(message.author.mention + " Take failed!")
+                        else:
+                            await sender(message.author.mention + " - Insufficient permissions.")
+                    elif command == "giveall":
+                        await deleter(message)
+                        if self.adminpower(message.author):
+                            if numParams < 1 or numParams > 1:
+                                await sender(message.author.mention + " - You must declare the number of points.")
+                            else:
+                                try:
+                                    points = int(params[1])
+                                except ValueError:
+                                    await sender(message.author.mention +
+                                                 " - You must declare a number for points parameter.")
+                                else:
+                                    list_ids = []
+                                    members = message.server.members
+                                    for member in members:
+                                        status = member.status.value
+                                        if status is not "offline":
+                                            list_ids.append(member.id)
+                                    if self.points.massGive(message.server.id, list_ids, points):
+                                        await sender(message.author.mention + " gave " + str(points) +
+                                                     " points to @everyone!!\n\n:moneybag: :moneybag: :moneybag: "
+                                                     ":moneybag: :moneybag: :moneybag: :moneybag: :moneybag: "
+                                                     ":moneybag: :moneybag: :moneybag: :moneybag: ")
+                    elif command == "leaderboard":
+                        leaderboard = self.points.topTen(message.server.id)
+                        count = 1
+                        send = ""
+                        send += "__**Top 10 Points Leaderboard**__\n"
+                        for person in leaderboard:
+                            if count is not 1:
+                                send += "\n"
+                            send += str("**"+str(count)+":** <@"+str(person['id'])+"> - "+str(person['points']))
+                            count += 1
+                        await sender(send)
+                # Player-vs-Dice
+                elif message.channel == self.channels[message.server.id]["player-vs-dice"]:
+                    if command == "rollvs":
+                        # !rollvs <bet> <max> <mention>
+                        if self.adminpower(message.author) and params[1].lower() == "on":
+                            self.rollvs = True
+                            await reply("The !rollvs command has been turned ON!")
+                        elif self.adminpower(message.author) and params[1].lower() == "off":
+                            self.rollvs = False
+                            await reply("The !rollvs command has been turned OFF!")
+                        elif self.rollvs:
+                            if numParams < 3 or numParams > 3:
+                                await reply("Insufficient number of parameters.\n**\"!rollvs <bet amount> <max roll> <mention>\"**")
+                            else:
+                                bet = int(params[1])
+                                max = int(params[2])
+                                if bet <= 0:
+                                    reply("Your bet must be greater than 0")
+                                elif max < 10:
+                                    reply("The max roll must be 10 or greater.")
+                                else:
+                                    who = message.mentions[0]
+                                    if int(self.points.checkpoints(message.server.id, message.author.id)) < bet:
+                                        await reply("Sorry you do not have a sufficient points balance to bet that amount.")
+                                    elif int(self.points.checkpoints(message.server.id, who.id)) < bet:
+                                        await reply(who.mention + " does not have sufficient points to bet that amount versus you.")
+                                    else:
+                                        self.points.minusPoints(bet, message.server.id, message.author.id)
+                                        await sender(who.mention + " - You have been challenged by " + message.author.mention + " in a roll off out of **" + str(max) + "** for **" + str(bet) + "** points.\nReply \"yes\" to accept. You have 30 seconds.")
+                                        answer = await waitfor(30, who)
+                                        try:
+                                            if "yes" in answer.content.lower():
+                                                self.points.minusPoints(bet, message.server.id, who.id)
+                                                await sender(who.mention + " has accepted " + message.author.mention + "'s challenge.")
+                                                await sender(message.author.mention + " - you may roll now with \"!roll\". You have 30 seconds.")
+                                                firstroll = await wait(30)
+                                                try:
+                                                    if "!roll" in firstroll.content.lower():
+                                                        roll1 = randint(1, max)
+                                                        await reply("You have rolled **" + str(roll1) + "**. Good Luck!")
+                                                        await sender(who.mention + " -  you may roll now with \"!roll\". You have 30 seconds.")
+                                                        secondroll = await waitfor(30, who)
+                                                        try:
+                                                            if "!roll" in secondroll.content.lower():
+                                                                roll2 = randint(1, max)
+                                                                await sender(who.mention + " - You have rolled **" + str(roll2) + "**!")
+                                                                if roll1 > roll2:
+                                                                    await sender(message.author.mention + " WINS **" + str(bet*2) + "** points!!!!")
+                                                                    self.points.givepoints(bet*2, message.server.id, message.author.id)
+                                                                elif roll1 < roll2:
+                                                                    await sender(who.mention + " WINS **" + str(bet*2) + "** points!!!!")
+                                                                    self.points.givepoints(bet*2, message.server.id, who.id)
+                                                                elif roll1 == roll2:
+                                                                    await sender("IT IS A TIE! Both " + who.mention + " and " + message.author.mention + " get their points back!")
+                                                                    self.points.givepoints(bet, message.server.id, who.id)
+                                                                    self.points.givepoints(bet, message.server.id, message.author.id)
+                                                            else:
+                                                                await sender(who.mention + " - You took too long. " + message.author.mention + " wins **" + str(bet*2) + "** points!")
+                                                                self.points.givepoints(bet*2, message.server.id, message.author.id)
+                                                        except AttributeError:
+                                                            await sender(who.mention + " - You took too long. " + message.author.mention + " wins **" + str(bet*2) + "** points!")
+                                                            self.points.givepoints(bet*2, message.server.id, message.author.id)
+                                                    else:
+                                                        await reply("You took too long. " + who.mention + " wins **" + str(bet*2) + "** points!")
+                                                        self.points.givepoints(bet*2, message.server.id, who.id)
+                                                except AttributeError:
+                                                    await reply("You took too long. " + who.mention + " wins **" + str(bet*2) + "** points!")
+                                                    self.points.givepoints(bet*2, message.server.id, who.id)
+                                            else:
+                                                await reply("It looks like " + who.mention + " doesn't want to play or is AFK!")
+                                                self.points.givepoints(bet, message.server.id, message.author.id)
+                                        except AttributeError:
+                                                await reply("It looks like " + who.mention + " doesn't want to play or is AFK!")
+                                                self.points.givepoints(bet, message.server.id, message.author.id)
+                    else:
+                        await reply("Sorry that command is currently disabled.")
                 # Betting Commands
-                if message.channel == self.channels[message.server.id]["betting"]:
+                if message.channel == self.channels[message.server.id]["tournament-betting"]:
                     if command == "bet":
                         if self.matches[message.server.id] is None:
                             await sender(message.author.mention + " - No match has been started yet.")
@@ -557,22 +652,6 @@ class Bot(object):
                                                              "Ex: \"!bet blue 100\"")
                                     else:
                                         await sender(message.author.mention + " - You must bet more than 0.")
-                    elif command == "points" or command == "pts":
-                        if numParams == 1:
-                            if self.adminpower(message.author):
-                                await deleter(message)
-                                for user in message.mentions:
-                                    await sender(user.mention +
-                                                 " has **" +
-                                                 str(self.points.checkpoints(message.server.id, user.id)) +
-                                                 "** points.")
-                            else:
-                                await sender(message.author.mention + " - Insufficient permissions.")
-                        else:
-                            await sender(message.author.mention +
-                                         " has **" +
-                                         str(self.points.checkpoints(message.server.id, message.author.id)) +
-                                         "** points.")
                     elif command == "start":
                         await deleter(message)
                         if self.checkpower(message.author):
@@ -645,73 +724,6 @@ class Bot(object):
                                                  "** points.")
                                 self.matches[message.server.id] = None
                                 await sender("Match has ended.")
-                    elif command == "give":
-                        await deleter(message)
-                        if self.checkpower(message.author) or self.adminpower(message.author):
-                            if numParams < 2:
-                                await sender(message.author.mention + " - Give command requires parameters "
-                                                                      "\"**Example:** !give <mention> <points>\"")
-                            else:
-                                person = message.mentions[0]
-                                try:
-                                    points = int(params[2])
-                                except ValueError:
-                                    await sender("Invalid points amount. Be sure to **not** use commas.")
-                                else:
-                                    if self.points.givepoints(points, message.server.id, person.id):
-                                        await sendToBetting(message.author.mention + " gave " + str(points) +
-                                                            " points to " + message.mentions[0].mention)
-                                    else:
-                                        await sender("Give Failed")
-                    elif command == "take":
-                        await deleter(message)
-                        if self.adminpower(message.author):
-                            if numParams < 2 or numParams > 2:
-                                await sender(message.author.mention + " - Take command requires parameters. "
-                                                                      "\"**Example:** !take <mention> <points>\"")
-                            else:
-                                try:
-                                    points = int(params[2])
-                                    who = message.mentions[0]
-                                except ValueError:
-                                    await sender("Invalid points amount. Be sure to **not** use commas.")
-                                else:
-                                    available_points = self.points.checkpoints(message.server.id, who.id)
-                                    if points > available_points:
-                                        await reply(who.mention + " only has " +
-                                                     str(available_points) + " points, therefore not enough to take " +
-                                                     str(points) + " points.")
-                                    elif available_points > points:
-                                        if self.points.minusPoints(points, message.server.id, who.id):
-                                            await sender(message.author.mention + " has taken " + str(points) +
-                                                         " points from " + who.mention + ".")
-                                        else:
-                                            await sender(message.author.mention + " Take failed!")
-                        else:
-                            await sender(message.author.mention + " - Insufficient permissions.")
-                    elif command == "giveall":
-                        await deleter(message)
-                        if self.adminpower(message.author):
-                            if numParams < 1 or numParams > 1:
-                                await sender(message.author.mention + " - You must declare the number of points.")
-                            else:
-                                try:
-                                    points = int(params[1])
-                                except ValueError:
-                                    await sender(message.author.mention +
-                                                 " - You must declare a number for points parameter.")
-                                else:
-                                    list_ids = []
-                                    members = message.server.members
-                                    for member in members:
-                                        status = member.status.value
-                                        if status is not "offline":
-                                            list_ids.append(member.id)
-                                    if self.points.massGive(message.server.id, list_ids, points):
-                                        await sender(message.author.mention + " gave " + str(points) +
-                                                     " points to @everyone!!\n\n:moneybag: :moneybag: :moneybag: "
-                                                     ":moneybag: :moneybag: :moneybag: :moneybag: :moneybag: "
-                                                     ":moneybag: :moneybag: :moneybag: :moneybag: ")
                     elif command == "percent":
                         if not self.matches[message.server.id].bettingOpen:
                             if self.matches[message.server.id] is not None:
@@ -725,17 +737,6 @@ class Bot(object):
                         else:
                             await sender(message.author.mention + " - You must wait until betting is over to check"
                                                                   " percents.")
-                    elif command == "leaderboard":
-                        leaderboard = self.points.topTen(message.server.id)
-                        count = 1
-                        send = ""
-                        send += "__**Top 10 Points Leaderboard**__\n"
-                        for person in leaderboard:
-                            if count is not 1:
-                                send += "\n"
-                            send += str("**"+str(count)+":** <@"+str(person['id'])+"> - "+str(person['points']))
-                            count += 1
-                        await sender(send)
                     elif command == "test":
                         await sender("Test")
                     elif command == "redratio":
