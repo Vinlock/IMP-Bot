@@ -119,6 +119,7 @@ class Bot(object):
             # print(message.author.id, ":", message.content)
             print("--------------------------------------")
             print("Author ID: " + message.author.id)
+            print("Channel ID:" + message.channel.id)
             print("Server ID: " + message.server.id)
             print("Message: " + message.content)
             print("--------------------------------------")
