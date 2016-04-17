@@ -2,14 +2,13 @@ import threading
 import sys
 import discord
 from time import sleep
+from random import randint
 # Import Local Files
-# import settings
 from BettingSystem import PointsManager as Points, ImpMatch as Match, AutoIncrement as Increment
 import Database
 from Tournament import Tournament as tourney
 import ObjectDict
 import settings
-from random import randint
 
 
 class Bot(object):
