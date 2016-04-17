@@ -3,6 +3,7 @@ import sys
 import discord
 from time import sleep
 from random import randint
+import doctest
 # Import Local Files
 from BettingSystem import PointsManager as Points, ImpMatch as Match, AutoIncrement as Increment
 import Database
@@ -513,7 +514,7 @@ class Bot(object):
                     for person in leaderboard:
                         if count is not 1:
                             send += "\n"
-                        member = find(lambda m: m.id == str(person['id']), message.channel.server.members)
+                        member = doctest.DocTestFinder.find(lambda m: m.id == str(person['id']), message.channel.server.members)
                         send += str("__**"+str(count)+":**__ **"+member.name+"** - "+str(person['points']))
                         count += 1
                     await sender(send)
