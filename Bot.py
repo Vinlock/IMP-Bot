@@ -515,35 +515,6 @@ class Bot(object):
                                 except discord.HTTPException:
                                     continue
                                 break
-                        else:
-                            await deleter(message)
-                            if self.checkpower(message.author):
-                                if self.matches[message.server.id] is None:
-                                   await sender(message.author.mention + " - A match has not been started yet.")
-                                else:
-                                    seconds = int(params[0])
-
-                                    def end(seconds):
-                                        seconds = int(seconds)
-                                        sender("@everyone: Betting Closes in " + str(seconds) + ".")
-                                        sleep(seconds/2)
-                                        seconds -= seconds/2
-                                        for second in range(0, seconds):
-                                            sender("@everyone: " + str(seconds))
-                                            seconds -= 1
-                                            sleep(1)
-                                        while True:
-                                            try:
-                                                self.matches[message.server.id].closeBetting()
-                                            except discord.HTTPException:
-                                                continue
-                                            break
-                                        await sender("@everyone - Betting has closed for this match. "
-                                                     "Match is underway!")
-
-                                    self.thread(end, seconds)
-                            else:
-                                await sender(message.author.mention + " - Insufficient Permissions")
                     elif command == "end":
                         await deleter(message)
                         if self.checkpower(message.author):
