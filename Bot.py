@@ -536,7 +536,7 @@ class Bot(object):
                                 await sender("Match has ended.")
                     elif command == "give":
                         await deleter(message)
-                        if self.checkpower(message.author):
+                        if self.checkpower(message.author) or self.adminpower(message.author):
                             if numParams < 2:
                                 await sender(message.author.mention + " - Give command requires parameters "
                                                                       "\"**Example:** !give <mention> <points>\"")
