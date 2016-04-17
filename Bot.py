@@ -3,6 +3,7 @@ import sys
 import discord
 from time import sleep
 from random import randint
+import re
 import doctest
 # Import Local Files
 from BettingSystem import PointsManager as Points, ImpMatch as Match, AutoIncrement as Increment
@@ -178,6 +179,24 @@ class Bot(object):
                                  "__**FUN COMMANDS**__\n\n"
                                  + ("" if self.rollvs else "**DISABLED:** ") + "**!pvd <bet amount> <max roll> <mention>** - Roll versus an opponent if they accept the bet/challenge.\n"
                                  + ("" if self.guess else "**DISABLED:** ") + "**!guess <number 10 or greater>** - The bot will think of a number, if you can guess it you win the jackpot, if you get close you win some points. You bet points equal to the number you choose.\n\n\n")
+                elif command == "color":
+                    if self.checkpower(message.author) or self.adminpower(message.author):
+                        rolename = params[1]
+                        if discord.utils.get(message.server.roles, name=rolename):
+                            role = discord.utils.get(message.server.roles, name=rolename)
+                            hex = params[2]
+                            if re.search(r'^(?:[0-9a-fA-F]{3}){1,2}$', hex):
+                                try:
+                                    int_hex = int(hex, 16)
+                                except ValueError:
+                                    await reply("Invalid Hex Color")
+                                else:
+                                    if self.client.edit_role(role, colour=int_hex):
+                                        await reply("Color of " + rolename + " changed!")
+                            else:
+                                await reply("Invalid Hex Color")
+                    else:
+                        await reply("Insufficient Permissions.")
                 elif command == "guess":
                     if numParams < 1 or numParams > 1:
                         await reply("Invalid amount of parameters. **!guess <number greater than 10>**.\n"
