@@ -256,7 +256,7 @@ class Bot(object):
                                 if int(number) < 10:
                                     await reply("You must choose a number parameter that is 10 or greater.")
                                 else:
-                                    if self.points.checkpoints(message.server.id, message.author.id) > int(number):
+                                    if self.points.checkpoints(message.server.id, message.author.id) >= int(number):
                                         if (self.points.minusPoints(int(number), message.server.id, message.author.id)):
                                             await reply(str(number) + " points bet. Respond within 30 seconds, or you will lose your points.")
                                             n = randint(1, int(number))
