@@ -621,6 +621,7 @@ class Bot(object):
                         leaderboard = self.points.topTen(message.server.id)
                         count = 1
                         send = ""
+                        send += "__**Top 10 Points Leaderboard**__"
                         for person in leaderboard:
                             if count is not 1:
                                 send += "\n"
