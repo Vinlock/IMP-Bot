@@ -214,8 +214,6 @@ class Bot(object):
                                         secondroll = await waitfor(30, who)
                                         if "!roll" in secondroll.content.lower():
                                             roll2 = randint(1, max)
-                                            while roll1 == roll2:
-                                                roll2 = randint(1, max)
                                             await sender(who.mention + " - You have rolled **" + str(roll2) + "**!")
                                             if roll1 > roll2:
                                                 await sender(message.author.mention + " WINS **" + str(bet*2) + "** points!!!!")
@@ -223,6 +221,10 @@ class Bot(object):
                                             elif roll1 < roll2:
                                                 await sender(who.mention + " WINS **" + str(bet*2) + "** points!!!!")
                                                 self.points.givepoints(bet*2, message.server.id, who.id)
+                                            elif roll1 == roll2:
+                                                await sender("IT IS A TIE! Both " + who.mention + " and " + message.author.mention + " get their points back!")
+                                                self.points.givepoints(bet, message.server.id, who.id)
+                                                self.points.givepoints(bet, message.server.id, message.author.id)
                                         else:
                                             await sender(who.mention + " - You took too long. " + message.author.mention + " wins **" + str(bet*2) + "** points!")
                                     else:
