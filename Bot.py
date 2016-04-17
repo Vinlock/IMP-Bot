@@ -195,9 +195,9 @@ class Bot(object):
                             max = int(params[2])
                             who = message.mentions[0]
                             if int(self.points.checkpoints(message.server.id, message.author.id)) < bet:
-                                reply("Sorry you do not have a sufficient points balance to bet that amount.")
+                                await reply("Sorry you do not have a sufficient points balance to bet that amount.")
                             elif int(self.points.checkpoints(message.server.id, who.id)) < bet:
-                                reply(who.mention + " does not have sufficient points to bet that amount versus you.")
+                                await reply(who.mention + " does not have sufficient points to bet that amount versus you.")
                             else:
                                 self.points.minusPoints(bet, message.server.id, message.author.id)
                                 await sender(who.mention + " - You have been challenged by " + message.author.mention + " in a roll off out of **" + str(max) + "** for **" + str(bet) + "** points.\nReply \"yes\" to accept. You have 30 seconds.")
