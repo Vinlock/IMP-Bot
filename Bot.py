@@ -808,6 +808,7 @@ class Bot(object):
         conn = Database.DB()
         servers = self.client.servers
         # servers = copy.deepcopy(self.client.servers)
+        print("...")
         for server in servers:
             print("== Generation of missing members for Server: " + server.name + " has begun...")
             members = server.members
@@ -816,6 +817,7 @@ class Bot(object):
                 member_id_list.append(member.id)
             print("== Created " + server.name + " List. Updating Members...")
             i = 0
+            print("...")
             for memberid in member_id_list:
                 with conn.cursor() as cursor:
                     sql = "INSERT IGNORE INTO `points` SET `userid`={0}, `points`={1}, `server`={2};".format(int(memberid),
