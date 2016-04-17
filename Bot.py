@@ -514,7 +514,7 @@ class Bot(object):
                     for person in leaderboard:
                         if count is not 1:
                             send += "\n"
-                        member = discord.utils.get(message.server.members, name=str(person['id']))
+                        member = discord.utils.get(message.server.members, id=str(person['id']))
                         send += str("__**"+str(count)+":**__ **"+member.name+"** - "+str(person['points']))
                         count += 1
                     await sender(send)
