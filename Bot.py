@@ -183,10 +183,10 @@ class Bot(object):
                                  "**!guess <number 10 or greater>** - The bot will think of a number, if you can guess it you win the jackpot, if you get close you win some points. You bet points equal to the number you choose.\n\n\n")
                 elif command == "rollvs":
                     # !rollvs <bet> <max> <mention>
-                    if self.checkpower(message.author) and params[1].lower() == "on":
+                    if self.adminpower(message.author) and params[1].lower() == "on":
                         self.rollvs = True
                         await reply("The !rollvs command has been turned ON!")
-                    elif self.checkpower(message.author) and params[1].lower() == "off":
+                    elif self.adminpower(message.author) and params[1].lower() == "off":
                         self.rollvs = False
                         await reply("The !rollvs command has been turned OFF!")
                     elif self.rollvs:
@@ -242,10 +242,10 @@ class Bot(object):
                         await reply("Invalid amount of parameters. **!guess <number greater than 10>**.\n"
                                     "**YOU WILL BET THE AMOUNT YOU SET AS YOUR MAX GUESS!!!!**")
                     else:
-                        if self.checkpower(message.author) and params[1] == "on":
+                        if self.adminpower(message.author) and params[1] == "on":
                             self.guess = True
                             await reply("The !guess command has been turned on!")
-                        elif self.checkpower(message.author) and params[1] == "off":
+                        elif self.adminpower(message.author) and params[1] == "off":
                             self.guess = False
                             await reply("The !guess command has been turned OFF!")
                         elif self.guess:
