@@ -204,17 +204,17 @@ class Bot(object):
                                 self.points.minusPoints(bet, message.server.id, message.author.id)
                                 await sender(who.mention + " - You have been challenged by " + message.author.mention + " in a roll off out of **" + str(max) + "** for **" + str(bet) + "** points.\nReply \"yes\" to accept. You have 30 seconds.")
                                 answer = await waitfor(30, who)
-                                if "yes" in answer.content.lower():
+                                if answer.content is not None and "yes" in answer.content.lower():
                                     self.points.minusPoints(bet, message.server.id, who.id)
                                     await sender(who.mention + " has accepted " + message.author.mention + "'s challenge.")
                                     await sender(message.author.mention + " - you may roll now with \"!roll\". You have 30 seconds.")
                                     firstroll = await wait(30)
-                                    if "!roll" in firstroll.content.lower():
+                                    if firstroll.content is not None and "!roll" in firstroll.content.lower():
                                         roll1 = randint(1, max)
                                         await reply("You have rolled **" + str(roll1) + "**. Good Luck!")
                                         await sender(who.mention + " -  you may roll now with \"!roll\". You have 30 seconds.")
                                         secondroll = await waitfor(30, who)
-                                        if "!roll" in secondroll.content.lower():
+                                        if secondroll.content is not None and "!roll" in secondroll.content.lower():
                                             roll2 = randint(1, max)
                                             await sender(who.mention + " - You have rolled **" + str(roll2) + "**!")
                                             if roll1 > roll2:
