@@ -192,17 +192,17 @@ class Bot(object):
                         self.points.minusPoints(bet, message.server.id, message.author.id)
                         await sender(who.mention + " - You have been challenged by " + message.author.mention + " in a roll off out of **" + str(max) + "** for **" + str(bet) + "** points.\nReply \"yes\" to accept. You have 30 seconds.")
                         answer = await waitfor(30, who)
-                        if answer is "yes":
+                        if "yes" in answer:
                             self.points.minusPoints(bet, message.server.id, who.id)
                             await sender(who.mention + " has accepted " + message.author.mention + "'s challenge.")
                             await sender(message.author.mention + " - you may roll now with \"!roll\". You have 30 seconds.")
                             firstroll = await wait(30)
-                            if firstroll is "!roll":
+                            if "!roll" in firstroll:
                                 roll1 = randint(1, max)
                                 await reply("You have rolled **" + str(roll1) + "**. Good Luck!")
                                 await sender(who.mention + " -  you may roll now with \"!roll\". You have 30 seconds.")
                                 secondroll = await waitfor(30, who)
-                                if secondroll is "!roll":
+                                if "!roll" in secondroll:
                                     roll2 = randint(1, max)
                                     while roll1 == roll2:
                                         roll2 = randint(1, max)
