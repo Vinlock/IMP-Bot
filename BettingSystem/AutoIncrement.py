@@ -44,7 +44,7 @@ class Increment(object):
             #     # print("TEST NOT THERE")
             sql = "UPDATE `points` SET `points` = `points` + 1 WHERE `server`='{0}' AND `userid` IN ({1})".format(str(serverid), all_members)
             if len(sql) > 65000:
-                print("WE HAVE HIT OUR MARK BOIS")
+                print("WE HAVE HIT OUR MARK BOIS - " + str(serverid))
                 return False
             try:
                 cursor.execute(sql)
