@@ -453,7 +453,7 @@ class Bot(object):
                                 await sender("Invalid points amount. Be sure to **not** use commas.")
                             else:
                                 if self.points.givepoints(points, message.server.id, person.id):
-                                    await sendToBetting(message.author.mention + " gave " + str(points) +
+                                    await sender(message.author.mention + " gave " + str(points) +
                                                         " points to " + message.mentions[0].mention)
                                 else:
                                     await sender("Give Failed")
