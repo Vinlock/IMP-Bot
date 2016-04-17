@@ -541,6 +541,7 @@ class Bot(object):
                                 await sender(message.author.mention + " - Give command requires parameters "
                                                                       "\"**Example:** !give <mention> <points>\"")
                             else:
+                                person = message.mentions[0]
                                 try:
                                     points = int(params[2])
                                 except ValueError:
@@ -785,5 +786,5 @@ class Bot(object):
                     cursor.execute(sql)
                     conn.commit()
                     # print("\033[94m" + cursor._last_executed + "\033[0m")
-        print("Done updating members.")
+        print("Done updating members for " + server.name + ".")
         conn.close()
