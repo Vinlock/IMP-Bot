@@ -204,38 +204,50 @@ class Bot(object):
                                 self.points.minusPoints(bet, message.server.id, message.author.id)
                                 await sender(who.mention + " - You have been challenged by " + message.author.mention + " in a roll off out of **" + str(max) + "** for **" + str(bet) + "** points.\nReply \"yes\" to accept. You have 30 seconds.")
                                 answer = await waitfor(30, who)
-                                if answer.content is not None and "yes" in answer.content.lower():
-                                    self.points.minusPoints(bet, message.server.id, who.id)
-                                    await sender(who.mention + " has accepted " + message.author.mention + "'s challenge.")
-                                    await sender(message.author.mention + " - you may roll now with \"!roll\". You have 30 seconds.")
-                                    firstroll = await wait(30)
-                                    if firstroll.content is not None and "!roll" in firstroll.content.lower():
-                                        roll1 = randint(1, max)
-                                        await reply("You have rolled **" + str(roll1) + "**. Good Luck!")
-                                        await sender(who.mention + " -  you may roll now with \"!roll\". You have 30 seconds.")
-                                        secondroll = await waitfor(30, who)
-                                        if secondroll.content is not None and "!roll" in secondroll.content.lower():
-                                            roll2 = randint(1, max)
-                                            await sender(who.mention + " - You have rolled **" + str(roll2) + "**!")
-                                            if roll1 > roll2:
-                                                await sender(message.author.mention + " WINS **" + str(bet*2) + "** points!!!!")
-                                                self.points.givepoints(bet*2, message.server.id, message.author.id)
-                                            elif roll1 < roll2:
-                                                await sender(who.mention + " WINS **" + str(bet*2) + "** points!!!!")
+                                try:
+                                    if "yes" in answer.content.lower():
+                                        self.points.minusPoints(bet, message.server.id, who.id)
+                                        await sender(who.mention + " has accepted " + message.author.mention + "'s challenge.")
+                                        await sender(message.author.mention + " - you may roll now with \"!roll\". You have 30 seconds.")
+                                        firstroll = await wait(30)
+                                        try:
+                                            if "!roll" in firstroll.content.lower():
+                                                roll1 = randint(1, max)
+                                                await reply("You have rolled **" + str(roll1) + "**. Good Luck!")
+                                                await sender(who.mention + " -  you may roll now with \"!roll\". You have 30 seconds.")
+                                                secondroll = await waitfor(30, who)
+                                                try:
+                                                    if "!roll" in secondroll.content.lower():
+                                                        roll2 = randint(1, max)
+                                                        await sender(who.mention + " - You have rolled **" + str(roll2) + "**!")
+                                                        if roll1 > roll2:
+                                                            await sender(message.author.mention + " WINS **" + str(bet*2) + "** points!!!!")
+                                                            self.points.givepoints(bet*2, message.server.id, message.author.id)
+                                                        elif roll1 < roll2:
+                                                            await sender(who.mention + " WINS **" + str(bet*2) + "** points!!!!")
+                                                            self.points.givepoints(bet*2, message.server.id, who.id)
+                                                        elif roll1 == roll2:
+                                                            await sender("IT IS A TIE! Both " + who.mention + " and " + message.author.mention + " get their points back!")
+                                                            self.points.givepoints(bet, message.server.id, who.id)
+                                                            self.points.givepoints(bet, message.server.id, message.author.id)
+                                                    else:
+                                                        await sender(who.mention + " - You took too long. " + message.author.mention + " wins **" + str(bet*2) + "** points!")
+                                                        self.points.givepoints(bet*2, message.server.id, message.author.id)
+                                                except AttributeError:
+                                                    await sender(who.mention + " - You took too long. " + message.author.mention + " wins **" + str(bet*2) + "** points!")
+                                                    self.points.givepoints(bet*2, message.server.id, message.author.id)
+                                            else:
+                                                await reply("You took too long. " + who.mention + " wins **" + str(bet*2) + "** points!")
                                                 self.points.givepoints(bet*2, message.server.id, who.id)
-                                            elif roll1 == roll2:
-                                                await sender("IT IS A TIE! Both " + who.mention + " and " + message.author.mention + " get their points back!")
-                                                self.points.givepoints(bet, message.server.id, who.id)
-                                                self.points.givepoints(bet, message.server.id, message.author.id)
-                                        else:
-                                            await sender(who.mention + " - You took too long. " + message.author.mention + " wins **" + str(bet*2) + "** points!")
-                                            self.points.givepoints(bet*2, message.server.id, message.author.id)
+                                        except AttributeError:
+                                            await reply("You took too long. " + who.mention + " wins **" + str(bet*2) + "** points!")
+                                            self.points.givepoints(bet*2, message.server.id, who.id)
                                     else:
-                                        await reply("You took too long. " + who.mention + " wins **" + str(bet*2) + "** points!")
-                                        self.points.givepoints(bet*2, message.server.id, who.id)
-                                else:
-                                    await reply("It looks like " + who.mention + " doesn't want to play or is AFK!")
-                                    self.points.givepoints(bet, message.server.id, message.author.id)
+                                        await reply("It looks like " + who.mention + " doesn't want to play or is AFK!")
+                                        self.points.givepoints(bet, message.server.id, message.author.id)
+                                except AttributeError:
+                                        await reply("It looks like " + who.mention + " doesn't want to play or is AFK!")
+                                        self.points.givepoints(bet, message.server.id, message.author.id)
                     else:
                         await reply("Sorry that command is currently disabled.")
                 elif command == "guess":
