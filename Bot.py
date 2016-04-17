@@ -185,8 +185,10 @@ class Bot(object):
                     # !rollvs <bet> <max> <mention>
                     if self.checkpower(message.author) and params[1].lower() == "on":
                         self.rollvs = True
+                        await reply("The !rollvs command has been turned ON!")
                     elif self.checkpower(message.author) and params[1].lower() == "off":
                         self.rollvs = False
+                        await reply("The !rollvs command has been turned OFF!")
                     elif self.rollvs:
                         if numParams < 3 or numParams > 3:
                             await reply("Insufficient number of parameters.\n**\"!rollvs <bet amount> <max roll> <mention>\"**")
