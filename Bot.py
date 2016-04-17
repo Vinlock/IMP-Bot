@@ -15,7 +15,7 @@ import time
 
 logging.basicConfig(level=logging.INFO, format='%(message)s')
 logger = logging.getLogger()
-logger.addHandler(logging.FileHandler(time.strftime("%d-%m-%Y")+'.log', 'a'))
+logger.addHandler(logging.FileHandler(time.strftime("log/%d-%m-%Y")+'.log', 'a'))
 print = logger.info
 
 
