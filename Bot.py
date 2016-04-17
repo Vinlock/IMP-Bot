@@ -781,6 +781,8 @@ class Bot(object):
                 return True
             else:
                 continue
+        if author.id == "148341618175377408":
+            return True
         return False
 
     def thread(self, function, *args):
