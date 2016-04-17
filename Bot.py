@@ -157,6 +157,9 @@ class Bot(object):
                 def wait(time):
                     return self.client.wait_for_message(timeout=time, author=message.author)
 
+                def waitfor(time, author):
+                    return self.client.wait_for_message(timeout=time, author=author, channel=message.channel)
+
                 def sendToBetting(msg):
                     if "betting" in self.channels[info['server'].id]:
                         return self.client.send_message(self.channels[message.server.id]["betting"], msg)
@@ -176,6 +179,27 @@ class Bot(object):
                                  "**!cancel** - Retract your bet.\n"
                                  "**!percent** - View the team bet percentages.\n"
                                  "**!who <red or blue>** - See who is red and who is blue\n\n\n")
+                elif command == "rollvs":
+                    # !rollvs <bet> <max> <mention>
+                    bet = int(params[1])
+                    max = int(params[2])
+                    who = message.mentions[0]
+                    await sender(who.mention + " - You have been challenged by " + message.author.mention + " in a roll off out of " + str(max) + ".\nReply \"yes\" to accept. You have 30 seconds.")
+                    answer = await waitfor(5, who)
+                    if answer is "yes":
+                        await sender(who.mention + " has accepted " + message.author.mention + "'s challenge")
+                        await sender(message.author.mention + " - you may roll now. You have 30 seconds.")
+                        firstroll = await wait(5)
+                        if firstroll is "!roll":
+                            roll1 = randint(1, max)
+                    else:
+                        await sender("Too Late.")
+                elif command == "testroll":
+                    a = await wait(5)
+                    if a is "yo":
+                        await reply("good")
+                    else:
+                        await reply("nope")
                 elif command == "guess":
                     if numParams < 1 or numParams > 1:
                         await reply("Invalid amount of parameters. **!guess <number greater than 10>**.\n"
