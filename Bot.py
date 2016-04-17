@@ -189,6 +189,7 @@ class Bot(object):
                             else:
                                 if self.points.checkpoints(message.server.id, message.author.id) > int(number):
                                     if (self.points.minusPoints(int(number), message.server.id, message.author.id)):
+                                        await reply(str(number) + " points bet. Respond within 30 seconds, or you will lose your points.")
                                         n = randint(1, int(number))
                                         print("CHEAT SHEET - The number is:", n)
                                         await reply("Guess a number from 1-" + str(number) + ". You have 30 seconds.")
@@ -222,7 +223,7 @@ class Bot(object):
                                                         if points < 1:
                                                             points = 1
                                                         self.points.givepoints(points, message.server.id, message.author.id)
-                                                        await reply("Close! The number was **" + str(n) + "**. You have won **" + str(points) + "** as pity points :P.")
+                                                        await reply("Close! The number was **" + str(n) + "**. You have won back **" + str(points) + "** as pity points :P.")
                                                     elif int(r.content) > n:
                                                         needle = ending - int(r.content)
                                                         percent = needle / rng
@@ -231,7 +232,7 @@ class Bot(object):
                                                         if points < 1:
                                                             points = 1
                                                         self.points.givepoints(points, message.server.id, message.author.id)
-                                                        await reply("Close! The number was **" + str(n) + "**. You have won **" + str(points) + "** as pity points :P.")
+                                                        await reply("Close! The number was **" + str(n) + "**. You have won back **" + str(points) + "** as pity points :P.")
                                                 else:
                                                     await reply("Nope. The number was **" + str(n) + "**. Try !guess again later!")
                                     else:
