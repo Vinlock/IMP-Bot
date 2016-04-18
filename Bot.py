@@ -964,9 +964,9 @@ class Bot(object):
         for x in range(0, 4):
             print(str(set), str(seconds))
             if toggle == True:
-                self.client.send_message(channel, "@everyone - " + str(seconds) + " left until PvD is back online!")
+                self.client.send_message(channel, "@everyone - " + str(seconds / 60) + " minutes " + str(seconds % 60) + " seconds left until PvD is back online!")
             elif toggle == False:
-                self.client.send_message(channel, "@everyone - " + str(seconds) + " left until PvD self destructs!")
+                self.client.send_message(channel, "@everyone - " + str(seconds / 60) + " minutes " + str(seconds % 60) + " seconds left until PvD self destructs!")
             seconds -= set
             sleep(int(set))
         self.client.send_message(channel, "@everyone - PvD is " + ("ONLINE" if toggle == True else "OFFLINE"))
