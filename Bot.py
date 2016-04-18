@@ -182,7 +182,7 @@ class Bot(object):
                                  + ("" if self.guess else "**DISABLED:** ") + "**!guess <number 10 or greater>** - The bot will think of a number, if you can guess it you win the jackpot, if you get close you win some points. You bet points equal to the number you choose.\n\n\n")
                 elif command == "color":
                     if self.checkpower(message.author) or self.adminpower(message.author):
-                        rolename = params[2:]
+                        rolename = " ".join(params[2:])
                         role = discord.utils.get(message.server.roles, name=rolename)
                         hex = params[1]
                         if re.search(r'^(?:[0-9a-fA-F]{3}){1,2}$', hex):
