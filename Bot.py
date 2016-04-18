@@ -181,13 +181,17 @@ class Bot(object):
                                  + ("" if self.rollvs else "**DISABLED:** == ") + "**!pvd <bet amount> <max roll> <mention>** - Roll versus an opponent if they accept the bet/challenge.\n"
                                  + ("" if self.guess else "**DISABLED:** == ") + "**!guess <number 10 or greater>** - The bot will think of a number, if you can guess it you win the jackpot, if you get close you win some points. You bet points equal to the number you choose.\n\n\n")
                 elif command == "color":
+                    def hex_to_rgb(value):
+                        value = value.lstrip('#')
+                        lv = len(value)
+                        return tuple(int(value[i:i + lv // 3], 16) for i in range(0, lv, lv // 3))
                     if self.checkpower(message.author) or self.adminpower(message.author):
                         rolename = " ".join(params[2:])
                         role = discord.utils.get(message.server.roles, name=rolename)
                         hex = params[1]
                         if re.search(r'^(?:[0-9a-fA-F]{3}){1,2}$', hex):
                             try:
-                                int_hex = int(hex, 16)
+                                int_hex = hex_to_rgb(hex)
                             except ValueError:
                                 await reply("Invalid Hex Color")
                             else:
