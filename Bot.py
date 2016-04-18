@@ -196,7 +196,7 @@ class Bot(object):
                                 await reply("Invalid Hex Color")
                             else:
                                 if self.client.edit_role(role=role, colour=discord.Color(int_hex), server=message.server):
-                                    await reply("Color of " + rolename + " changed!")
+                                    await reply("Color of " + role.name + " changed!")
                         else:
                             await reply("Invalid Hex Color")
                     else:
