@@ -160,6 +160,21 @@ class Bot(object):
                 def waitfor(time, author):
                     return self.client.wait_for_message(timeout=time, author=author, channel=message.channel)
 
+                async def checkanswer(person, msg, expect, cancel, client=self.client, message=message):
+                    for x in range(0, 5):
+                        await client.send_message(message.channel, msg)
+                        answer = await client.wait_for_message(timeout=30, author=person, channel=message.channel)
+                        if expect in answer.content.lower():
+                            return True
+                        elif cancel in answer.content.lower():
+                            return False
+                        elif answer.content == None:
+                            return False
+                        else:
+                            await sender(person.mention + " - Please try again. Type **" + expect + "** to continue. Or type \"**" + cancel + "**\"")
+                            continue
+                        return False
+
                 def sendToBetting(msg):
                     if "tournament-betting" in self.channels[info['server'].id]:
                         return self.client.send_message(self.channels[message.server.id]["tournament-betting"], msg)
@@ -548,20 +563,6 @@ class Bot(object):
                             self.rollvs = False
                             await reply("The !pvd command has been turned OFF!")
                         elif self.rollvs:
-                            async def checkanswer(person, msg, expect, cancel, client=self.client, message=message):
-                                for x in range(0, 5):
-                                    await client.send_message(message.channel, msg)
-                                    answer = await client.wait_for_message(timeout=30, author=person, channel=message.channel)
-                                    if expect in answer.content.lower():
-                                        return True
-                                    elif cancel in answer.content.lower():
-                                        return False
-                                    elif answer.content == None:
-                                        return False
-                                    else:
-                                        await sender(person.mention + " - Please try again. Type **" + expect + "** to continue. Or type \"**" + cancel + "**\"")
-                                        continue
-                                    return False
                             if numParams < 3 or numParams > 3:
                                 await reply("Insufficient number of parameters.\n**\"!rollvs <bet amount> <max roll> <mention>\"**")
                             else:
