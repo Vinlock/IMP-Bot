@@ -11,6 +11,7 @@ import Database
 from Tournament import Tournament as tourney
 import ObjectDict
 import settings
+from Test import Tester
 
 
 class Bot(object):
@@ -535,6 +536,8 @@ class Bot(object):
                         send += str("__**"+str(count)+":**__ **"+member.name+"** - "+str(person['points']))
                         count += 1
                     await sender(send)
+                elif command == "ddd":
+                    Tester(message, self.client)
                 # Player-vs-Dice
                 # if message.channel == self.channels[message.server.id]["player-versus-dice"]:
                 if message.channel == discord.utils.get(message.server.channels, name="player-versus-dice"):
