@@ -583,27 +583,11 @@ class Bot(object):
                     if command == "pvd":
                         # !rollvs <bet> <max> <mention>
                         if self.adminpower(message.author) and params[1].lower() == "on":
-                            if numParams == 2 and params[2] is not "":
-                                try:
-                                    minutes = int(params[2])
-                                except ValueError:
-                                    await reply("Invalid time.")
-                                else:
-                                    self.thread(self.timeForPVD, message, minutes, True)
-                            else:
-                                self.rollvs = True
-                                await reply("The !pvd command has been turned ON!")
+                            self.rollvs = True
+                            await reply("The !pvd command has been turned ON!")
                         elif self.adminpower(message.author) and params[1].lower() == "off":
-                            if numParams == 2 and params[2] is not "":
-                                try:
-                                    minutes = int(params[2])
-                                except ValueError:
-                                    await reply("Invalid time.")
-                                else:
-                                    self.thread(self.timeForPVD, message, minutes, False)
-                            else:
-                                self.rollvs = False
-                                await reply("The !pvd command has been turned OFF!")
+                            self.rollvs = False
+                            await reply("The !pvd command has been turned OFF!")
                         elif self.rollvs:
                             if numParams < 3 or numParams > 3:
                                 await reply("Insufficient number of parameters.\n**\"!rollvs <bet amount> <max roll> <mention>\"**")
