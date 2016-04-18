@@ -118,3 +118,20 @@ class PointsManager(object):
                 top.append(person)
         conn.close()
         return top
+
+    def reset(self, serverid):
+        conn = Database.DB()
+        print("== RESETTING SERVER", serverid)
+        with conn.cursor() as cursor:
+            if serverid == 0:
+                sql = "UPDATE `points` SET `points`=50"
+            else:
+                sql = "UPDATE `points` SET `points`=50 WHERE `server`={0}".format(serverid)
+            try:
+                cursor.execute(sql)
+                conn.commit()
+                print("\033[94m" + cursor._last_executed + "\033[0m")
+            except:
+                return False
+        conn.close()
+        return True

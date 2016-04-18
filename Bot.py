@@ -536,6 +536,44 @@ class Bot(object):
                         send += str("__**"+str(count)+":**__ **"+member.name+"** - "+str(person['points']))
                         count += 1
                     await sender(send)
+                elif command == "server":
+                    if self.adminpower(message.author):
+                        await deleter(message)
+                        await self.client.send_message(message.author, "Server: **" + message.server.id + "**")
+                elif command == "channel":
+                    if self.adminpower(message.author):
+                        await deleter(message)
+                        await self.client.send_message(message.author, "Channel: **" + message.channel.id + "**")
+                elif command == "reset":
+                    if self.adminpower(message.author):
+                        if numParams < 1 or params[1].lower() is not "na" or params[1].lower() is not "eu" or params[1].lower() is not "all":
+                            await reply("Invalid parameters")
+                        else:
+                            region = params[1]
+                            if region.lower() == "na" or region.lower() == "eu":
+                                await reply("Are you sure? (yes/no)")
+                                sure = await wait(30)
+                                if sure is not None:
+                                    if "yes" in sure.lower():
+                                        if region.lower() == "eu":
+                                            if self.points.reset(123153051425964036):
+                                                await reply("EU has been reset.")
+                                            else:
+                                                await reply("Error: nothing was reset.")
+                                        elif region.lower() == "na":
+                                            if self.points.reset(114150403280470021):
+                                                await reply("NA has been reset.")
+                                            else:
+                                                await reply("Error: nothing was reset.")
+                                        elif region.lower() == "all":
+                                            if self.points.reset(0):
+                                                await reply("All points have been reset.")
+                                            else:
+                                                await reply("Error: nothing was reset.")
+                                    else:
+                                        await reply("Ok, nothing was reset.")
+                                else:
+                                    await reply("Ok, nothing was reset.")
                 elif command == "ddd":
                     Tester(message, self.client)
                 # Player-vs-Dice
