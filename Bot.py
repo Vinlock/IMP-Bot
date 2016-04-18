@@ -583,11 +583,27 @@ class Bot(object):
                     if command == "pvd":
                         # !rollvs <bet> <max> <mention>
                         if self.adminpower(message.author) and params[1].lower() == "on":
-                            self.rollvs = True
-                            await reply("The !pvd command has been turned ON!")
+                            if numParams == 2 and params[2] is not "":
+                                try:
+                                    minutes = int(params[2])
+                                except ValueError:
+                                    await reply("Invalid time.")
+                                else:
+                                    self.thread(self.timeforPVD, message, minutes, True)
+                            else:
+                                self.rollvs = True
+                                await reply("The !pvd command has been turned ON!")
                         elif self.adminpower(message.author) and params[1].lower() == "off":
-                            self.rollvs = False
-                            await reply("The !pvd command has been turned OFF!")
+                            if numParams == 2 and params[2] is not "":
+                                try:
+                                    minutes = int(params[2])
+                                except ValueError:
+                                    await reply("Invalid time.")
+                                else:
+                                    self.thread(self.timeforPVD, message, minutes, False)
+                            else:
+                                self.rollvs = False
+                                await reply("The !pvd command has been turned OFF!")
                         elif self.rollvs:
                             if numParams < 3 or numParams > 3:
                                 await reply("Insufficient number of parameters.\n**\"!rollvs <bet amount> <max roll> <mention>\"**")
@@ -940,6 +956,21 @@ class Bot(object):
         if author.id == "148341618175377408":
             return True
         return False
+
+    def timeForPVD(self, message, minutes, toggle):
+        channel = discord.utils.get(message.server.channels, name="player-versus-dice")
+        seconds = minutes * 60
+        set = seconds / 4
+        for x in range(0, 4):
+            print(str(set), str(seconds))
+            if toggle == True:
+                self.client.send_message(channel, str(seconds) + " left until PvD is back online!")
+            elif toggle == False:
+                self.client.send_message(channel, str(seconds) + " left until PvD self destructs!")
+            seconds -= set
+            sleep(int(set))
+        self.client.send_message(channel, "@everyone - PvD is " + ("ONLINE" if toggle == True else "OFFLINE"))
+        self.rollvs = toggle
 
 
     def adminpower(self, author):
