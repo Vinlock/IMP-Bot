@@ -183,19 +183,18 @@ class Bot(object):
                 elif command == "color":
                     if self.checkpower(message.author) or self.adminpower(message.author):
                         rolename = params[2:]
-                        if discord.utils.get(message.server.roles, name=rolename):
-                            role = discord.utils.get(message.server.roles, name=rolename)
-                            hex = params[1]
-                            if re.search(r'^(?:[0-9a-fA-F]{3}){1,2}$', hex):
-                                try:
-                                    int_hex = int(hex, 16)
-                                except ValueError:
-                                    await reply("Invalid Hex Color")
-                                else:
-                                    if self.client.edit_role(role, colour=int_hex):
-                                        await reply("Color of " + rolename + " changed!")
-                            else:
+                        role = discord.utils.get(message.server.roles, name=rolename)
+                        hex = params[1]
+                        if re.search(r'^(?:[0-9a-fA-F]{3}){1,2}$', hex):
+                            try:
+                                int_hex = int(hex, 16)
+                            except ValueError:
                                 await reply("Invalid Hex Color")
+                            else:
+                                if self.client.edit_role(role, colour=int_hex):
+                                    await reply("Color of " + rolename + " changed!")
+                        else:
+                            await reply("Invalid Hex Color")
                     else:
                         await reply("Insufficient Permissions.")
                 elif command == "guess":
