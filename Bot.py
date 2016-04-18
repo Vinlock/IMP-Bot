@@ -548,10 +548,10 @@ class Bot(object):
                             self.rollvs = False
                             await reply("The !pvd command has been turned OFF!")
                         elif self.rollvs:
-                            async def checkanswer(who, message, expect, cancel):
+                            async def checkanswer(person, msg, expect, cancel, client=self.client, message=message):
                                 for x in range(0, 5):
-                                    await sender(message)
-                                    answer = await waitfor(30 , who)
+                                    await client.send_message(message.channel, msg)
+                                    answer = await client.wait_for_message(timeout=30, author=person, channel=message.channel)
                                     if expect in answer.content.lower():
                                         return True
                                     elif cancel in answer.content.lower():
@@ -559,7 +559,7 @@ class Bot(object):
                                     elif answer.content == None:
                                         return False
                                     else:
-                                        await sender(who.mention + " - Please try again. Type **" + expect + "** to continue. Or type \"**" + cancel + "**\"")
+                                        await sender(person.mention + " - Please try again. Type **" + expect + "** to continue. Or type \"**" + cancel + "**\"")
                                         continue
                                     return False
                             if numParams < 3 or numParams > 3:
