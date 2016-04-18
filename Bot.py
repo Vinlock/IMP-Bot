@@ -957,16 +957,16 @@ class Bot(object):
             return True
         return False
 
-    def timeForPVD(self, message, minutes, toggle):
+    async def timeForPVD(self, message, minutes, toggle):
         channel = discord.utils.get(message.server.channels, name="player-versus-dice")
         seconds = minutes * 60
         set = seconds / 4
         for x in range(0, 4):
             print(str(set), str(seconds))
             if toggle == True:
-                self.client.send_message(channel, "@everyone - " + str(seconds / 60) + " minutes " + str(seconds % 60) + " seconds left until PvD is back online!")
+                await self.client.send_message(channel, "@everyone - " + str(seconds / 60) + " minutes " + str(seconds % 60) + " seconds left until PvD is back online!")
             elif toggle == False:
-                self.client.send_message(channel, "@everyone - " + str(seconds / 60) + " minutes " + str(seconds % 60) + " seconds left until PvD self destructs!")
+                await self.client.send_message(channel, "@everyone - " + str(seconds / 60) + " minutes " + str(seconds % 60) + " seconds left until PvD self destructs!")
             seconds -= set
             sleep(int(set))
         self.client.send_message(channel, "@everyone - PvD is " + ("ONLINE" if toggle == True else "OFFLINE"))
