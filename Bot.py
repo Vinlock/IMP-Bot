@@ -191,7 +191,7 @@ class Bot(object):
                             except ValueError:
                                 await reply("Invalid Hex Color")
                             else:
-                                if self.client.edit_role(role=role, colour=int_hex):
+                                if self.client.edit_role(role=role, colour=int_hex, server=message.server):
                                     await reply("Color of " + rolename + " changed!")
                         else:
                             await reply("Invalid Hex Color")
