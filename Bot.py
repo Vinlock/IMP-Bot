@@ -548,7 +548,7 @@ class Bot(object):
                             self.rollvs = False
                             await reply("The !pvd command has been turned OFF!")
                         elif self.rollvs:
-                            def checkanswer(who, message, expect, cancel):
+                            async def checkanswer(who, message, expect, cancel):
                                 for x in range(0, 5):
                                     await sender(message)
                                     answer = await waitfor(30 , who)
