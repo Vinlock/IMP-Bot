@@ -185,8 +185,8 @@ class Bot(object):
                     def hex_to_rgb(value):
                         value = value.lstrip('#')
                         lv = len(value)
-                        rgb = tuple(int(value[i:i + lv // 3], 16) for i in range(0, lv, lv // 3))
-                        return struct.pack('BBB',*rgb).encode('hex')
+                        r, g, b = tuple(int(value[i:i + lv // 3], 16) for i in range(0, lv, lv // 3))
+                        return int('%02x%02x%02x' % (r, g, b), 16)
                     if self.checkpower(message.author) or self.adminpower(message.author):
                         rolename = " ".join(params[2:])
                         role = discord.utils.get(message.server.roles, name=rolename)
