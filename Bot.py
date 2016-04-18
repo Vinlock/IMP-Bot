@@ -600,7 +600,7 @@ class Bot(object):
                                 except ValueError:
                                     await reply("Invalid time.")
                                 else:
-                                    self.thread(self.timeforPVD, message, minutes, False)
+                                    self.thread(self.timeForPVD, message, minutes, False)
                             else:
                                 self.rollvs = False
                                 await reply("The !pvd command has been turned OFF!")
