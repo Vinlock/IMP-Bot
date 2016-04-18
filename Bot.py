@@ -178,8 +178,8 @@ class Bot(object):
                                  "**!percent** - View the team bet percentages.\n"
                                  "**!who <red or blue>** - See who is red and who is blue\n\n\n"
                                  "__**FUN COMMANDS**__\n\n"
-                                 + ("" if self.rollvs else "**DISABLED:** ") + "**!pvd <bet amount> <max roll> <mention>** - Roll versus an opponent if they accept the bet/challenge.\n"
-                                 + ("" if self.guess else "**DISABLED:** ") + "**!guess <number 10 or greater>** - The bot will think of a number, if you can guess it you win the jackpot, if you get close you win some points. You bet points equal to the number you choose.\n\n\n")
+                                 + ("" if self.rollvs else "**DISABLED:** == ") + "**!pvd <bet amount> <max roll> <mention>** - Roll versus an opponent if they accept the bet/challenge.\n"
+                                 + ("" if self.guess else "**DISABLED:** == ") + "**!guess <number 10 or greater>** - The bot will think of a number, if you can guess it you win the jackpot, if you get close you win some points. You bet points equal to the number you choose.\n\n\n")
                 elif command == "color":
                     if self.checkpower(message.author) or self.adminpower(message.author):
                         rolename = " ".join(params[2:])
@@ -191,7 +191,7 @@ class Bot(object):
                             except ValueError:
                                 await reply("Invalid Hex Color")
                             else:
-                                if self.client.edit_role(role=role, colour=int_hex, server=message.server):
+                                if self.client.edit_role(role=role, colour=discord.Color(int_hex), server=message.server):
                                     await reply("Color of " + rolename + " changed!")
                         else:
                             await reply("Invalid Hex Color")
