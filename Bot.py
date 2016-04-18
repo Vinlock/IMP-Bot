@@ -597,32 +597,32 @@ class Bot(object):
                                                     if checkanswer(message.author, message.author.mention + " - you may roll now with \"!roll\". You have 30 seconds.", "!roll", "!cancel"):
                                                         roll1 = randint(1, max)
                                                         await reply("You have rolled **" + str(roll1) + "**. Good Luck!")
+                                                        if checkanswer(who, who.mention + " -  you may roll now with \"!roll\". You have 30 seconds.", "!roll", "!cancel"):
+                                                            roll2 = randint(1, max)
+                                                            await reply("You have rolled **" + str(roll2) + "**.")
+                                                            if roll1 > roll2:
+                                                                winner = message.author
+                                                                loser = who
+                                                            elif roll1 < roll2:
+                                                                winner = who
+                                                                loser = message.author
+                                                            elif roll1 == roll2:
+                                                                tie = True
+                                                            if tie:
+                                                                await sender("IT IS A TIE! Both " + who.mention + " and " + message.author.mention + " get their points back!")
+                                                                self.points.givepoints(bet, message.server.id, who.id)
+                                                                self.points.givepoints(bet, message.server.id, message.author.id)
+                                                            else:
+                                                                await sender(winner.mention + " REKT " + loser.mention + " and won **" + str(bet*2) + "** points!!!")
+                                                                self.points.givepoints(bet*2, message.server.id, winner.id)
+                                                        else:
+                                                            await sender("It seems that " + who.mention + " did not roll.\n"
+                                                                             + message.author.mention+ " WINS " + str(bet*2) + " POINTS!!")
+                                                            self.points.givepoints(bet*2, message.server.id, message.author.id)
                                                     else:
                                                         await sender("It seems that " + message.author.mention + " did not roll.\n"
                                                                          + who.mention+ " WINS " + str(bet*2) + " POINTS!!")
                                                         self.points.givepoints(bet*2, message.server.id, who.id)
-                                                    if checkanswer(who, who.mention + " -  you may roll now with \"!roll\". You have 30 seconds.", "!roll", "!cancel"):
-                                                        roll2 = randint(1, max)
-                                                        await reply("You have rolled **" + str(roll2) + "**.")
-                                                    else:
-                                                        await sender("It seems that " + who.mention + " did not roll.\n"
-                                                                         + message.author.mention+ " WINS " + str(bet*2) + " POINTS!!")
-                                                        self.points.givepoints(bet*2, message.server.id, message.author.id)
-                                                    if roll1 > roll2:
-                                                        winner = message.author
-                                                        loser = who
-                                                    elif roll1 < roll2:
-                                                        winner = who
-                                                        loser = message.author
-                                                    elif roll1 == roll2:
-                                                        tie = True
-                                                    if tie:
-                                                        await sender("IT IS A TIE! Both " + who.mention + " and " + message.author.mention + " get their points back!")
-                                                        self.points.givepoints(bet, message.server.id, who.id)
-                                                        self.points.givepoints(bet, message.server.id, message.author.id)
-                                                    else:
-                                                        await sender(winner.mention + " REKT " + loser.mention + " and won **" + str(bet*2) + "** points!!!")
-                                                        self.points.givepoints(bet*2, message.server.id, winner.id)
                         else:
                             await reply("Sorry that command is currently disabled.")
                 # Betting Commands
