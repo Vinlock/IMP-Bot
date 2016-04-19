@@ -690,7 +690,6 @@ class Bot(object):
                                                             self.points.minusPoints(bet, message.server.id, message.author.id)
                                                             msgs.append(await sender(who.mention + " - You have been challenged by " + message.author.mention + " in a roll off out of **" + str(max) + "** for **" + str(bet) + "** points.\nReply \"yes\" to accept. You have 30 seconds."))
                                                             answer = await waitfor(30, who)
-                                                            msgs.append(answer)
                                                             try:
                                                                 if "yes" in answer.content.lower():
                                                                     self.points.minusPoints(bet, message.server.id, who.id)
