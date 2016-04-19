@@ -18,7 +18,7 @@ class PointsManager(object):
             cursor.execute(sql)
             for row in cursor:
                 conn.close()
-                return row['points']
+                return int(row['points'])
 
     def memberHasPoints(self, serverid, memberid):
         conn = Database.DB()
