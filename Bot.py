@@ -255,7 +255,7 @@ class Bot(object):
                                                     if int(number) <= 95:
                                                         rng = int(int(number) * 0.20)
                                                     else:
-                                                        rng = int(int(number) * 0.20)
+                                                        rng = int(int(number) * 0.15)
                                                     if rng < 1:
                                                         rng = 1
                                                     start = n - rng
