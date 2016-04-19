@@ -313,7 +313,7 @@ class Bot(object):
                             await reply("Sorry the command is currently disabled.")
                 elif command == "purge":
                     await deleter(message)
-                    if self.checkpower(message.author):
+                    if self.adminpower(message.author):
                         if numParams < 1:
                             sender("Please specify how many messages to purge.")
                         elif numParams == 1:
