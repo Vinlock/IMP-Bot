@@ -306,7 +306,10 @@ class Bot(object):
                         if numParams < 1:
                             sender("Please specify how many messages to purge.")
                         elif numParams == 1:
-                            async for log in self.client.logs_from(message.channel, limit=int(params[1])):
+                            numDelete = int(params[1])
+                            if numDelete < 0:
+                                numDelete *= -1
+                            async for log in self.client.logs_from(message.channel, limit=numDelete):
                                 await deleter(log)
                         elif numParams == 2:
                             numDelete = int(params[2])
