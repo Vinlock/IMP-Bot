@@ -170,6 +170,7 @@ class Bot(object):
                                                                          "server.")
 
                 async def deleteFromList(list):
+                    # Fixed #9
                     for m in list:
                         await deleter(m)
 
