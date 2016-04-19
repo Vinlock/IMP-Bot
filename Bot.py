@@ -212,6 +212,7 @@ class Bot(object):
                     else:
                         await reply("Insufficient Permissions.")
                 elif command == "guess":
+                    tried_zero = False
                     await deleter(message)
                     msgs = []
                     if numParams < 1 or numParams > 1:
@@ -229,12 +230,14 @@ class Bot(object):
                             if number.startswith("0"):
                                 while number.startswith("0"):
                                     number = number[1:]
-                                msgs.append(await reply("Nice try, your new number is **" + str(number) + "**."))
+                                tried_zero = True
                             try:
                                 int(number)
                             except ValueError:
                                 await reply("You did not enter a valid number parameter. **!guess <number greater than 10>**")
                             else:
+                                if tried_zero:
+                                    msgs.append(await reply("Nice try, your new number is **" + str(number) + "**."))
                                 if int(number) < 10:
                                     await reply("You must choose a number parameter that is 10 or greater.")
                                 else:
