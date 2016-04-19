@@ -645,11 +645,15 @@ class Bot(object):
                                     else:
                                         try:
                                             bet = int(params[1])
+                                            if bet < 0:
+                                                raise ValueError
                                         except ValueError:
                                             await reply("Invalid bet amount.")
                                         else:
                                             try:
                                                 max = int(params[2])
+                                                if max < 0:
+                                                    raise ValueError
                                             except ValueError:
                                                 await reply("Invalid max roll amount.")
                                             else:
