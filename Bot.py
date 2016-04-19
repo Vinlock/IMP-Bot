@@ -166,6 +166,10 @@ class Bot(object):
                         return self.client.send_message(info['channel'], "Betting Channel does not exist on this "
                                                                          "server.")
 
+                def deleteFromList(list):
+                    for m in list:
+                        deleter(m)
+
                 # ! Commands
                 if command == "help" or command == "commands" or command == "command":
                     await sender("__**NORMAL COMMANDS**__\n\n"
@@ -521,6 +525,8 @@ class Bot(object):
                 if message.channel == discord.utils.get(message.server.channels, name="player-versus-dice"):
                     message.content.rstrip()
                     if command == "pvd":
+                        deleter(message)
+                        all_messages = []
                         # !rollvs <bet> <max> <mention>
                         if self.adminpower(message.author) and params[1].lower() == "on":
                             self.rollvs = True
@@ -554,52 +560,64 @@ class Bot(object):
                                                 await reply(who.mention + " does not have sufficient points to bet that amount versus you.")
                                             else:
                                                 self.points.minusPoints(bet, message.server.id, message.author.id)
-                                                await sender(who.mention + " - You have been challenged by " + message.author.mention + " in a roll off out of **" + str(max) + "** for **" + str(bet) + "** points.\nReply \"yes\" to accept. You have 30 seconds.")
+                                                all_messages.append(await sender(who.mention + " - You have been challenged by " + message.author.mention + " in a roll off out of **" + str(max) + "** for **" + str(bet) + "** points.\nReply \"yes\" to accept. You have 30 seconds."))
                                                 answer = await waitfor(30, who)
+                                                all_messages.append(answer)
                                                 try:
                                                     if "yes" in answer.content.lower():
                                                         self.points.minusPoints(bet, message.server.id, who.id)
-                                                        await sender(who.mention + " has accepted " + message.author.mention + "'s challenge.")
-                                                        await sender(message.author.mention + " - you may roll now with \"!roll\". You have 30 seconds.")
+                                                        all_messages.append(await sender(who.mention + " has accepted " + message.author.mention + "'s challenge."))
+                                                        all_messages.append(await sender(message.author.mention + " - you may roll now with \"!roll\". You have 30 seconds."))
                                                         firstroll = await wait(30)
+                                                        all_messages.append(firstroll)
                                                         try:
                                                             if "!roll" in firstroll.content.lower():
                                                                 roll1 = randint(1, max)
-                                                                await reply("You have rolled **" + str(roll1) + "**. Good Luck!")
-                                                                await sender(who.mention + " -  you may roll now with \"!roll\". You have 30 seconds.")
+                                                                all_messages.append(await reply("You have rolled **" + str(roll1) + "**. Good Luck!"))
+                                                                all_messages.append(await sender(who.mention + " -  you may roll now with \"!roll\". You have 30 seconds."))
                                                                 secondroll = await waitfor(30, who)
+                                                                all_messages.append(secondroll)
                                                                 try:
                                                                     if "!roll" in secondroll.content.lower():
                                                                         roll2 = randint(1, max)
-                                                                        await sender(who.mention + " - You have rolled **" + str(roll2) + "**!")
+                                                                        all_messages.append(await sender(who.mention + " - You have rolled **" + str(roll2) + "**!"))
                                                                         if roll1 > roll2:
                                                                             await sender(message.author.mention + " WINS **" + str(bet*2) + "** points!!!!")
                                                                             self.points.givepoints(bet*2, message.server.id, message.author.id)
+                                                                            deleteFromList(all_messages)
                                                                         elif roll1 < roll2:
                                                                             await sender(who.mention + " WINS **" + str(bet*2) + "** points!!!!")
                                                                             self.points.givepoints(bet*2, message.server.id, who.id)
+                                                                            deleteFromList(all_messages)
                                                                         elif roll1 == roll2:
                                                                             await sender("IT IS A TIE! Both " + who.mention + " and " + message.author.mention + " get their points back!")
                                                                             self.points.givepoints(bet, message.server.id, who.id)
                                                                             self.points.givepoints(bet, message.server.id, message.author.id)
+                                                                            deleteFromList(all_messages)
                                                                     else:
                                                                         await sender(who.mention + " - You took too long. " + message.author.mention + " wins **" + str(bet*2) + "** points!")
                                                                         self.points.givepoints(bet*2, message.server.id, message.author.id)
+                                                                        deleteFromList(all_messages)
                                                                 except AttributeError:
                                                                     await sender(who.mention + " - You took too long. " + message.author.mention + " wins **" + str(bet*2) + "** points!")
                                                                     self.points.givepoints(bet*2, message.server.id, message.author.id)
+                                                                    deleteFromList(all_messages)
                                                             else:
                                                                 await reply("You took too long. " + who.mention + " wins **" + str(bet*2) + "** points!")
                                                                 self.points.givepoints(bet*2, message.server.id, who.id)
+                                                                deleteFromList(all_messages)
                                                         except AttributeError:
                                                             await reply("You took too long. " + who.mention + " wins **" + str(bet*2) + "** points!")
                                                             self.points.givepoints(bet*2, message.server.id, who.id)
+                                                            deleteFromList(all_messages)
                                                     else:
                                                         await reply("It looks like " + who.mention + " doesn't want to play or is AFK!")
                                                         self.points.givepoints(bet, message.server.id, message.author.id)
+                                                        deleteFromList(all_messages)
                                                 except AttributeError:
                                                         await reply("It looks like " + who.mention + " doesn't want to play or is AFK!")
                                                         self.points.givepoints(bet, message.server.id, message.author.id)
+                                                        deleteFromList(all_messages)
                         else:
                             await reply("Sorry that command is currently disabled.")
                 # Betting Commands
