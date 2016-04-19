@@ -274,7 +274,7 @@ class Bot(object):
                                                                 points *= 100
                                                             points = int(points)
                                                             self.points.givepoints(points, message.server.id, message.author.id)
-                                                            await reply("CORRECT! The number was " + str(n) +"! You have won **" + str(points) + ("** (Gained **" if int(points) > int(number) else "** (Lost **") + str(int(number) - int(points)) + "**)")
+                                                            await reply("CORRECT! The number was " + str(n) +"! You have won **" + str(points) + ("** (Gained **" if int(points) > int(number) else "** (Lost **") + str(abs(int(number) - int(points))) + "**)")
                                                             await deleteFromList(msgs)
                                                         elif int(start) <= int(r.content) <= int(ending):
                                                             if int(r.content) < n:
