@@ -30,9 +30,9 @@ class Increment(object):
         allmembers = self.members
         for server, members in allmembers.items():
             if self.incrementList(server, members):
-                print("== Incremented Member's Points", server.id, server.name)
+                print("== Incremented Member's Points", server)
             else:
-                print("== Failed to increment.", server.id, server.name)
+                print("== Failed to increment.", server)
 
     def incrementList(self, serverid, listIDs):
         conn = Database.DB()
