@@ -649,6 +649,7 @@ class Bot(object):
                                                 raise ValueError
                                         except ValueError:
                                             await reply("Invalid bet amount.")
+                                            removeThem()
                                         else:
                                             try:
                                                 max = int(params[2])
@@ -656,6 +657,7 @@ class Bot(object):
                                                     raise ValueError
                                             except ValueError:
                                                 await reply("Invalid max roll amount.")
+                                                removeThem()
                                             else:
                                                 if bet <= 0:
                                                     reply("Your bet must be greater than 0")
