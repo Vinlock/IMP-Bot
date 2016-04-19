@@ -661,6 +661,7 @@ class Bot(object):
                                                     who = message.mentions[0]
                                                     if message.author == who:
                                                         await reply("You **can't** bet against yourself. Sorry!")
+                                                        removeThem()
                                                     else:
                                                         if int(self.points.checkpoints(message.server.id, message.author.id)) < bet:
                                                             await reply("Sorry you do not have a sufficient points balance to bet that amount.")
