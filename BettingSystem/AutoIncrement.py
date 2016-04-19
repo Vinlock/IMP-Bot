@@ -49,7 +49,7 @@ class Increment(object):
             try:
                 cursor.execute(sql)
                 conn.commit()
-                print("\033[94m" + cursor._last_executed + "\033[0m")
+                # print("\033[94m" + cursor._last_executed + "\033[0m")
                 print("GOOD")
             except:
                 print("Failed to increment list.")
