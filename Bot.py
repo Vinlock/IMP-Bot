@@ -37,7 +37,7 @@ class Bot(object):
 
         self.guess = True
 
-        self.rollvs = True
+        self.rollvs = False
 
         @self.client.event
         async def on_ready():
