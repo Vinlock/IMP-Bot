@@ -310,6 +310,8 @@ class Bot(object):
                                 await deleter(log)
                         elif numParams == 2:
                             numDelete = int(params[2])
+                            if numDelete < 0:
+                                numDelete *= -1
                             async for log in self.client.logs_from(message.channel, limit=numDelete*100):
                                 if log.author == message.mentions[0]:
                                     if numDelete > 0:
