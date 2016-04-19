@@ -273,9 +273,9 @@ class Bot(object):
                                                             needle = int(r.content) - start
                                                             percent = needle / rng
                                                             points = (int(number) * len(number)) * percent
-                                                            points = int(points)
                                                             if points < 1:
                                                                 points *= 100
+                                                            points = int(points)
                                                             self.points.givepoints(points, message.server.id, message.author.id)
                                                             await reply("Close! The number was **" + str(n) + "**. You have won **" + str(points) + "** points :P.")
                                                             await deleteFromList(msgs)
@@ -283,9 +283,9 @@ class Bot(object):
                                                             needle = ending - int(r.content)
                                                             percent = needle / rng
                                                             points = (int(number) * len(number)) * percent
-                                                            points = int(points)
                                                             if points < 1:
                                                                 points *= 100
+                                                            points = int(points)
                                                             self.points.givepoints(points, message.server.id, message.author.id)
                                                             await reply("Close! The number was **" + str(n) + "**. You have won **" + str(points) + "** points :P.")
                                                             await deleteFromList(msgs)
