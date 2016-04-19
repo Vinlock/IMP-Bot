@@ -275,7 +275,7 @@ class Bot(object):
                                                             points = (int(number) * len(number)) * percent
                                                             points = int(points)
                                                             if points < 1:
-                                                                points = 1
+                                                                points *= 100
                                                             self.points.givepoints(points, message.server.id, message.author.id)
                                                             await reply("Close! The number was **" + str(n) + "**. You have won **" + str(points) + "** points :P.")
                                                             await deleteFromList(msgs)
@@ -285,7 +285,7 @@ class Bot(object):
                                                             points = (int(number) * len(number)) * percent
                                                             points = int(points)
                                                             if points < 1:
-                                                                points = 1
+                                                                points *= 100
                                                             self.points.givepoints(points, message.server.id, message.author.id)
                                                             await reply("Close! The number was **" + str(n) + "**. You have won **" + str(points) + "** points :P.")
                                                             await deleteFromList(msgs)
