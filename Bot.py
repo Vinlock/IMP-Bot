@@ -238,7 +238,7 @@ class Bot(object):
                                             print("== CHEAT SHEET - The number is:", n)
                                             msgs.append(await reply("Guess a number from 1-" + str(number) + ". You have 30 seconds."))
                                             r = await wait(30)
-                                            msgs.append(r)
+                                            # msgs.append(r)
                                             if int(r.content) > int(number) or int(r.content) < 1:
                                                 await reply("You chose a number out of range. Please try !guess again!")
                                                 await deleteFromList(msgs)
