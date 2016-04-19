@@ -226,6 +226,10 @@ class Bot(object):
                             await reply("The !guess command has been turned OFF!")
                         elif self.guess:
                             number = params[1]
+                            if number.startswith("0"):
+                                while number.startswith("0"):
+                                    number = number[1:]
+                                msg.append(await reply("Nice try, your new number is **" + str(number) + "**."))
                             try:
                                 int(number)
                             except ValueError:
