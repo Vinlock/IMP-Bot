@@ -640,6 +640,7 @@ class Bot(object):
                                         self.pvd_active[message.server.id].remove(message.mentions[0].id)
                                     if numParams < 3 or numParams > 3:
                                         await reply("Insufficient number of parameters.\n**\"!pvd <bet amount> <max roll> <mention>\"**")
+                                        removeThem()
                                     else:
                                         try:
                                             bet = int(params[1])
