@@ -48,10 +48,11 @@ class Increment(object):
                 return False
             try:
                 cursor.execute(sql)
-                print("\033[94m" + cursor._last_executed + "\033[0m")
                 conn.commit()
-                # print("\033[94m" + cursor._last_executed + "\033[0m")
+                print("\033[94m" + cursor._last_executed + "\033[0m")
+                print("GOOD")
             except:
+                print("Failed to increment list.")
                 return False
         conn.close()
         return True
