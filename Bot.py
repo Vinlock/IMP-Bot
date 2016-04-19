@@ -39,7 +39,7 @@ class Bot(object):
 
         self.rollvs = False
 
-        self.pvd_active = []
+        self.pvd_active = dict()
 
         @self.client.event
         async def on_ready():
