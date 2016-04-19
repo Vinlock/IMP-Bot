@@ -246,56 +246,60 @@ class Bot(object):
                                             msgs.append(await reply("Guess a number from 1-" + str(number) + ". You have 30 seconds."))
                                             r = await wait(30)
                                             # msgs.append(r)
-                                            if int(r.content) > int(number) or int(r.content) < 1:
-                                                await reply("You chose a number out of range. Please try !guess again!")
-                                                await deleteFromList(msgs)
-                                            else:
-                                                try:
-                                                    int(r.content)
-                                                except ValueError:
-                                                    await reply("You have not entered an integer. Please try !guess <number greater than 10> again!")
+                                            try:
+                                                if int(r.content) > int(number) or int(r.content) < 1:
+                                                    await reply("You chose a number out of range. Please try !guess again!")
                                                     await deleteFromList(msgs)
                                                 else:
-                                                    if int(number) <= 95:
-                                                        rng = int(int(number) * 0.20)
-                                                    else:
-                                                        rng = int(int(number) * 0.15)
-                                                    if rng < 1:
-                                                        rng = 1
-                                                    start = n - rng
-                                                    ending = n + rng
-                                                    if int(r.content) == n:
-                                                        points = int(number) * len(number)
-                                                        if points < 1:
-                                                            points *= 100
-                                                        points = int(points)
-                                                        self.points.givepoints(points, message.server.id, message.author.id)
-                                                        await reply("CORRECT! The number was " + str(n) +"! You have won **" + str(points) + ("**(Gained **" if int(points) > int(number) else "**(Lost **") + str(int(number) - int(points)) + "**)")
+                                                    try:
+                                                        int(r.content)
+                                                    except ValueError:
+                                                        await reply("You have not entered an integer. Please try !guess <number greater than 10> again!")
                                                         await deleteFromList(msgs)
-                                                    elif int(start) <= int(r.content) <= int(ending):
-                                                        if int(r.content) < n:
-                                                            needle = int(r.content) - start
-                                                            percent = needle / rng
-                                                            points = (int(number) * len(number)) * percent
+                                                    else:
+                                                        if int(number) <= 95:
+                                                            rng = int(int(number) * 0.20)
+                                                        else:
+                                                            rng = int(int(number) * 0.15)
+                                                        if rng < 1:
+                                                            rng = 1
+                                                        start = n - rng
+                                                        ending = n + rng
+                                                        if int(r.content) == n:
+                                                            points = int(number) * len(number)
                                                             if points < 1:
                                                                 points *= 100
                                                             points = int(points)
                                                             self.points.givepoints(points, message.server.id, message.author.id)
-                                                            await reply("Close! The number was **" + str(n) + "**. You have won **" + str(points) + ("**(Gained **" if int(points) > int(number) else "**(Lost **") + str(abs(int(number) - int(points))) + "**) points back :P.")
+                                                            await reply("CORRECT! The number was " + str(n) +"! You have won **" + str(points) + ("**(Gained **" if int(points) > int(number) else "**(Lost **") + str(int(number) - int(points)) + "**)")
                                                             await deleteFromList(msgs)
-                                                        elif int(r.content) > n:
-                                                            needle = ending - int(r.content)
-                                                            percent = needle / rng
-                                                            points = (int(number) * len(number)) * percent
-                                                            if points < 1:
-                                                                points *= 100
-                                                            points = int(points)
-                                                            self.points.givepoints(points, message.server.id, message.author.id)
-                                                            await reply("Close! The number was **" + str(n) + "**. You have won **" + str(points) + ("**(Gained **" if int(points) > int(number) else "**(Lost **") + str(abs(int(number) - int(points))) + "**) points back :P.")
+                                                        elif int(start) <= int(r.content) <= int(ending):
+                                                            if int(r.content) < n:
+                                                                needle = int(r.content) - start
+                                                                percent = needle / rng
+                                                                points = (int(number) * len(number)) * percent
+                                                                if points < 1:
+                                                                    points *= 100
+                                                                points = int(points)
+                                                                self.points.givepoints(points, message.server.id, message.author.id)
+                                                                await reply("Close! The number was **" + str(n) + "**. You have won **" + str(points) + ("**(Gained **" if int(points) > int(number) else "**(Lost **") + str(abs(int(number) - int(points))) + "**) points back :P.")
+                                                                await deleteFromList(msgs)
+                                                            elif int(r.content) > n:
+                                                                needle = ending - int(r.content)
+                                                                percent = needle / rng
+                                                                points = (int(number) * len(number)) * percent
+                                                                if points < 1:
+                                                                    points *= 100
+                                                                points = int(points)
+                                                                self.points.givepoints(points, message.server.id, message.author.id)
+                                                                await reply("Close! The number was **" + str(n) + "**. You have won **" + str(points) + ("**(Gained **" if int(points) > int(number) else "**(Lost **") + str(abs(int(number) - int(points))) + "**) points back :P.")
+                                                                await deleteFromList(msgs)
+                                                        else:
+                                                            await reply("Nope. The number was **" + str(n) + "**. Try !guess again later!")
                                                             await deleteFromList(msgs)
-                                                    else:
-                                                        await reply("Nope. The number was **" + str(n) + "**. Try !guess again later!")
-                                                        await deleteFromList(msgs)
+                                            except ValueError:
+                                                await reply("You did not enter a number. Please try **!guess** again later.")
+                                                await deleteFromList(msgs)
                                         else:
                                             await reply("Sorry the bet failed. Ask Vinlock to check out why.")
                                             await deleteFromList(msgs)
