@@ -169,9 +169,9 @@ class Bot(object):
                         return self.client.send_message(info['channel'], "Betting Channel does not exist on this "
                                                                          "server.")
 
-                def deleteFromList(list):
+                async def deleteFromList(list):
                     for m in list:
-                        deleter(m)
+                        await deleter(m)
 
                 # ! Commands
                 if command == "help" or command == "commands" or command == "command":
