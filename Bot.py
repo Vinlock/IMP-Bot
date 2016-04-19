@@ -710,7 +710,7 @@ class Bot(object):
                                                                                     roll2 = randint(1, max)
                                                                                     msgs.append(await sender(who.mention + " - You have rolled **" + str(roll2) + "**!"))
                                                                                     if roll1 > roll2:
-                                                                                        await sender(message.author.mention + " REKT " + who.mention + "and WINS **" + str(bet*2) + "** points!!!!")
+                                                                                        await sender(message.author.mention + " REKT " + who.mention + " and WINS **" + str(bet*2) + "** points!!!!")
                                                                                         self.points.givepoints(bet*2, message.server.id, message.author.id)
                                                                                         await deleteFromList(msgs)
                                                                                         removeThem()
