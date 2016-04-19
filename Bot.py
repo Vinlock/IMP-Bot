@@ -614,7 +614,7 @@ class Bot(object):
                                 await reply("The !pvd command has been turned OFF!")
                             elif self.rollvs:
                                 if numParams < 3 or numParams > 3:
-                                    await reply("Insufficient number of parameters.\n**\"!rollvs <bet amount> <max roll> <mention>\"**")
+                                    await reply("Insufficient number of parameters.\n**\"!pvd <bet amount> <max roll> <mention>\"**")
                                 else:
                                     try:
                                         bet = int(params[1])
@@ -701,7 +701,7 @@ class Bot(object):
                             else:
                                 await reply("Sorry that command is currently disabled.")
                         except IndexError:
-                            await reply("Insufficient number of parameters.\n**\"!rollvs <bet amount> <max roll> <mention>\"**")
+                            await reply("Insufficient number of parameters.\n**\"!pvd <bet amount> <max roll> <mention>\"**")
                 # Betting Commands
                 # if message.channel == self.channels[message.server.id]["tournament-betting"]:
                 if message.channel == discord.utils.get(message.server.channels, name="tournament-betting"):
