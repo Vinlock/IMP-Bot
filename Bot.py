@@ -209,6 +209,8 @@ class Bot(object):
                     else:
                         await reply("Insufficient Permissions.")
                 elif command == "guess":
+                    await deleter(message)
+                    msgs = []
                     if numParams < 1 or numParams > 1:
                         await reply("Invalid amount of parameters. **!guess <number greater than 10>**.\n"
                                     "**YOU WILL BET THE AMOUNT YOU SET AS YOUR MAX GUESS!!!!**")
@@ -231,18 +233,21 @@ class Bot(object):
                                 else:
                                     if self.points.checkpoints(message.server.id, message.author.id) >= int(number):
                                         if (self.points.minusPoints(int(number), message.server.id, message.author.id)):
-                                            await reply(str(number) + " points bet. Respond within 30 seconds, or you will lose your points.")
+                                            msgs.append(await reply(str(number) + " points bet. Respond within 30 seconds, or you will lose your points."))
                                             n = randint(1, int(number))
                                             print("== CHEAT SHEET - The number is:", n)
-                                            await reply("Guess a number from 1-" + str(number) + ". You have 30 seconds.")
+                                            msgs.append(await reply("Guess a number from 1-" + str(number) + ". You have 30 seconds."))
                                             r = await wait(30)
+                                            msgs.append(r)
                                             if int(r.content) > int(number) or int(r.content) < 1:
                                                 await reply("You chose a number out of range. Please try !guess again!")
+                                                await deleteFromList(msgs)
                                             else:
                                                 try:
                                                     int(r.content)
                                                 except ValueError:
                                                     await reply("You have not entered an integer. Please try !guess <number greater than 10> again!")
+                                                    await deleteFromList(msgs)
                                                 else:
                                                     if int(number) <= 95:
                                                         rng = int(int(number) * 0.20)
@@ -258,7 +263,8 @@ class Bot(object):
                                                         if points < 1:
                                                             points = 1
                                                         self.points.givepoints(points, message.server.id, message.author.id)
-                                                        await reply("You have won " + str(points))
+                                                        await reply("CORRECT! The number was " + str(n) +"! You have won " + str(points))
+                                                        await deleteFromList(msgs)
                                                     elif int(start) <= int(r.content) <= int(ending):
                                                         if int(r.content) < n:
                                                             needle = int(r.content) - start
@@ -269,6 +275,7 @@ class Bot(object):
                                                                 points = 1
                                                             self.points.givepoints(points, message.server.id, message.author.id)
                                                             await reply("Close! The number was **" + str(n) + "**. You have won **" + str(points) + "** points :P.")
+                                                            await deleteFromList(msgs)
                                                         elif int(r.content) > n:
                                                             needle = ending - int(r.content)
                                                             percent = needle / rng
@@ -278,12 +285,16 @@ class Bot(object):
                                                                 points = 1
                                                             self.points.givepoints(points, message.server.id, message.author.id)
                                                             await reply("Close! The number was **" + str(n) + "**. You have won **" + str(points) + "** points :P.")
+                                                            await deleteFromList(msgs)
                                                     else:
                                                         await reply("Nope. The number was **" + str(n) + "**. Try !guess again later!")
+                                                        await deleteFromList(msgs)
                                         else:
                                             await reply("Sorry the bet failed. Ask Vinlock to check out why.")
+                                            await deleteFromList(msgs)
                                     else:
                                         await reply("Insufficient Points. It will cost " + str(number) + " points to play.")
+                                        await deleteFromList(msgs)
                         else:
                             await reply("Sorry the command is currently disabled.")
                 elif command == "purge":
@@ -591,7 +602,7 @@ class Bot(object):
                 if message.channel == discord.utils.get(message.server.channels, name="player-versus-dice"):
                     message.content.rstrip()
                     if command == "pvd":
-                        deleter(message)
+                        await deleter(message)
                         msgs = []
                         # !rollvs <bet> <max> <mention>
                         if self.adminpower(message.author) and params[1].lower() == "on":
