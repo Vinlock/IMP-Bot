@@ -481,7 +481,7 @@ class Bot(object):
                                      "** points.")
                 elif command == "give":
                     await deleter(message)
-                    if self.checkpower(message.author) or self.adminpower(message.author):
+                    if self.adminpower(message.author):
                         if numParams < 2:
                             await sender(message.author.mention + " - Give command requires parameters "
                                                                   "\"**Example:** !give <mention> <points>\"")
@@ -492,11 +492,14 @@ class Bot(object):
                             except ValueError:
                                 await sender("Invalid points amount. Be sure to **not** use commas.")
                             else:
-                                if self.points.givepoints(points, message.server.id, person.id):
-                                    await sender(message.author.mention + " gave " + str(points) +
-                                                        " points to " + message.mentions[0].mention)
+                                if points < 0:
+                                    await reply("Amount must be greater than 0!")
                                 else:
-                                    await sender("Give Failed")
+                                    if self.points.givepoints(points, message.server.id, person.id):
+                                        await sender(message.author.mention + " gave " + str(points) +
+                                                            " points to " + message.mentions[0].mention)
+                                    else:
+                                        await sender("Give Failed")
                     else:
                         await reply("Insufficient permissions.")
                 elif command == "take":
@@ -512,17 +515,20 @@ class Bot(object):
                             except ValueError:
                                 await sender("Invalid points amount. Be sure to **not** use commas.")
                             else:
-                                available_points = self.points.checkpoints(message.server.id, who.id)
-                                if points > available_points:
-                                    await reply(who.mention + " only has " +
-                                                 str(available_points) + " points, therefore not enough to take " +
-                                                 str(points) + " points.")
-                                elif available_points > points:
-                                    if self.points.minusPoints(points, message.server.id, who.id):
-                                        await sender(message.author.mention + " has taken " + str(points) +
-                                                     " points from " + who.mention + ".")
-                                    else:
-                                        await sender(message.author.mention + " Take failed!")
+                                if points < 0:
+                                    await reply("Amount must be greater than 0!")
+                                else:
+                                    available_points = self.points.checkpoints(message.server.id, who.id)
+                                    if points > available_points:
+                                        await reply(who.mention + " only has " +
+                                                     str(available_points) + " points, therefore not enough to take " +
+                                                     str(points) + " points.")
+                                    elif available_points > points:
+                                        if self.points.minusPoints(points, message.server.id, who.id):
+                                            await sender(message.author.mention + " has taken " + str(points) +
+                                                         " points from " + who.mention + ".")
+                                        else:
+                                            await sender(message.author.mention + " Take failed!")
                     else:
                         await reply("Insufficient permissions.")
                 elif command == "giveall":
