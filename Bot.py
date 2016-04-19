@@ -3,6 +3,8 @@ import sys
 import discord
 from time import sleep
 from random import randint
+import re
+import struct
 import doctest
 # Import Local Files
 from BettingSystem import PointsManager as Points, ImpMatch as Match, AutoIncrement as Increment
@@ -10,6 +12,7 @@ import Database
 from Tournament import Tournament as tourney
 import ObjectDict
 import settings
+from Test import Tester
 
 
 class Bot(object):
@@ -166,10 +169,6 @@ class Bot(object):
                         return self.client.send_message(info['channel'], "Betting Channel does not exist on this "
                                                                          "server.")
 
-                def deleteFromList(list):
-                    for m in list:
-                        deleter(m)
-
                 # ! Commands
                 if command == "help" or command == "commands" or command == "command":
                     await sender("__**NORMAL COMMANDS**__\n\n"
@@ -180,8 +179,30 @@ class Bot(object):
                                  "**!percent** - View the team bet percentages.\n"
                                  "**!who <red or blue>** - See who is red and who is blue\n\n\n"
                                  "__**FUN COMMANDS**__\n\n"
-                                 + ("" if self.rollvs else "**DISABLED:** ") + "**!pvd <bet amount> <max roll> <mention>** - Roll versus an opponent if they accept the bet/challenge.\n"
-                                 + ("" if self.guess else "**DISABLED:** ") + "**!guess <number 10 or greater>** - The bot will think of a number, if you can guess it you win the jackpot, if you get close you win some points. You bet points equal to the number you choose.\n\n\n")
+                                 + ("" if self.rollvs else "**DISABLED:** == ") + "**!pvd <bet amount> <max roll> <mention>** - Roll versus an opponent if they accept the bet/challenge.\n"
+                                 + ("" if self.guess else "**DISABLED:** == ") + "**!guess <number 10 or greater>** - The bot will think of a number, if you can guess it you win the jackpot, if you get close you win some points. You bet points equal to the number you choose.\n\n\n")
+                elif command == "color":
+                    def hex_to_rgb(value):
+                        value = value.lstrip('#')
+                        lv = len(value)
+                        r, g, b = tuple(int(value[i:i + lv // 3], 16) for i in range(0, lv, lv // 3))
+                        return int('%02x%02x%02x' % (r, g, b), 16)
+                    if self.checkpower(message.author) or self.adminpower(message.author):
+                        rolename = " ".join(params[2:])
+                        role = discord.utils.get(message.server.roles, name=rolename)
+                        hex = params[1]
+                        if re.search(r'^(?:[0-9a-fA-F]{3}){1,2}$', hex):
+                            try:
+                                int_hex = hex_to_rgb(hex)
+                            except ValueError:
+                                await reply("Invalid Hex Color")
+                            else:
+                                if self.client.edit_role(role=role, colour=discord.Colour(int_hex), server=message.server):
+                                    await reply("Color of " + role.name + " changed!")
+                        else:
+                            await reply("Invalid Hex Color")
+                    else:
+                        await reply("Insufficient Permissions.")
                 elif command == "guess":
                     if numParams < 1 or numParams > 1:
                         await reply("Invalid amount of parameters. **!guess <number greater than 10>**.\n"
@@ -520,13 +541,51 @@ class Bot(object):
                         send += str("__**"+str(count)+":**__ **"+member.name+"** - "+str(person['points']))
                         count += 1
                     await sender(send)
+                elif command == "server":
+                    if self.adminpower(message.author):
+                        await deleter(message)
+                        await self.client.send_message(message.author, "Server: **" + message.server.id + "**")
+                elif command == "channel":
+                    if self.adminpower(message.author):
+                        await deleter(message)
+                        await self.client.send_message(message.author, "Channel: **" + message.channel.id + "**")
+                elif command == "reset":
+                    if self.adminpower(message.author):
+                        if numParams < 1 or params[1].lower() is not "na" or params[1].lower() is not "eu" or params[1].lower() is not "all":
+                            await reply("Invalid parameters")
+                        else:
+                            region = params[1]
+                            if region.lower() == "na" or region.lower() == "eu":
+                                await reply("Are you sure? (yes/no)")
+                                sure = await wait(30)
+                                if sure is not None:
+                                    if "yes" in sure.lower():
+                                        if region.lower() == "eu":
+                                            if self.points.reset(123153051425964036):
+                                                await reply("EU has been reset.")
+                                            else:
+                                                await reply("Error: nothing was reset.")
+                                        elif region.lower() == "na":
+                                            if self.points.reset(114150403280470021):
+                                                await reply("NA has been reset.")
+                                            else:
+                                                await reply("Error: nothing was reset.")
+                                        elif region.lower() == "all":
+                                            if self.points.reset(0):
+                                                await reply("All points have been reset.")
+                                            else:
+                                                await reply("Error: nothing was reset.")
+                                    else:
+                                        await reply("Ok, nothing was reset.")
+                                else:
+                                    await reply("Ok, nothing was reset.")
+                elif command == "ddd":
+                    Tester(message, self.client)
                 # Player-vs-Dice
                 # if message.channel == self.channels[message.server.id]["player-versus-dice"]:
                 if message.channel == discord.utils.get(message.server.channels, name="player-versus-dice"):
                     message.content.rstrip()
                     if command == "pvd":
-                        deleter(message)
-                        all_messages = []
                         # !rollvs <bet> <max> <mention>
                         if self.adminpower(message.author) and params[1].lower() == "on":
                             self.rollvs = True
@@ -560,64 +619,54 @@ class Bot(object):
                                                 await reply(who.mention + " does not have sufficient points to bet that amount versus you.")
                                             else:
                                                 self.points.minusPoints(bet, message.server.id, message.author.id)
-                                                all_messages.append(await sender(who.mention + " - You have been challenged by " + message.author.mention + " in a roll off out of **" + str(max) + "** for **" + str(bet) + "** points.\nReply \"yes\" to accept. You have 30 seconds."))
+                                                await sender(who.mention + " - You have been challenged by " + message.author.mention + " in a roll off out of **" + str(max) + "** for **" + str(bet) + "** points.\nReply \"yes\" to accept. You have 30 seconds.")
                                                 answer = await waitfor(30, who)
-                                                all_messages.append(answer)
                                                 try:
                                                     if "yes" in answer.content.lower():
                                                         self.points.minusPoints(bet, message.server.id, who.id)
-                                                        all_messages.append(await sender(who.mention + " has accepted " + message.author.mention + "'s challenge."))
-                                                        all_messages.append(await sender(message.author.mention + " - you may roll now with \"!roll\". You have 30 seconds."))
+                                                        await sender(who.mention + " has accepted " + message.author.mention + "'s challenge.")
+                                                        await sender(message.author.mention + " - you may roll now with \"!roll\". You have 30 seconds.")
                                                         firstroll = await wait(30)
-                                                        all_messages.append(firstroll)
                                                         try:
                                                             if "!roll" in firstroll.content.lower():
                                                                 roll1 = randint(1, max)
-                                                                all_messages.append(await reply("You have rolled **" + str(roll1) + "**. Good Luck!"))
-                                                                all_messages.append(await sender(who.mention + " -  you may roll now with \"!roll\". You have 30 seconds."))
+                                                                await reply("You have rolled **" + str(roll1) + "**. Good Luck!")
+                                                                await sender(who.mention + " -  you may roll now with \"!roll\". You have 30 seconds.")
                                                                 secondroll = await waitfor(30, who)
-                                                                all_messages.append(secondroll)
                                                                 try:
                                                                     if "!roll" in secondroll.content.lower():
                                                                         roll2 = randint(1, max)
-                                                                        all_messages.append(await sender(who.mention + " - You have rolled **" + str(roll2) + "**!"))
+                                                                        await sender(who.mention + " - You have rolled **" + str(roll2) + "**!")
                                                                         if roll1 > roll2:
                                                                             await sender(message.author.mention + " WINS **" + str(bet*2) + "** points!!!!")
                                                                             self.points.givepoints(bet*2, message.server.id, message.author.id)
-                                                                            deleteFromList(all_messages)
                                                                         elif roll1 < roll2:
                                                                             await sender(who.mention + " WINS **" + str(bet*2) + "** points!!!!")
                                                                             self.points.givepoints(bet*2, message.server.id, who.id)
-                                                                            deleteFromList(all_messages)
                                                                         elif roll1 == roll2:
                                                                             await sender("IT IS A TIE! Both " + who.mention + " and " + message.author.mention + " get their points back!")
                                                                             self.points.givepoints(bet, message.server.id, who.id)
                                                                             self.points.givepoints(bet, message.server.id, message.author.id)
-                                                                            deleteFromList(all_messages)
                                                                     else:
-                                                                        await sender(who.mention + " - You took too long. " + message.author.mention + " wins **" + str(bet*2) + "** points!")
-                                                                        self.points.givepoints(bet*2, message.server.id, message.author.id)
-                                                                        deleteFromList(all_messages)
+                                                                        await sender(who.mention + " - You didn't type **!roll**. Bet is cancelled.")
+                                                                        self.points.givepoints(bet, message.server.id, who.id)
+                                                                        self.points.givepoints(bet, message.server.id, message.author.id)
                                                                 except AttributeError:
                                                                     await sender(who.mention + " - You took too long. " + message.author.mention + " wins **" + str(bet*2) + "** points!")
                                                                     self.points.givepoints(bet*2, message.server.id, message.author.id)
-                                                                    deleteFromList(all_messages)
                                                             else:
-                                                                await reply("You took too long. " + who.mention + " wins **" + str(bet*2) + "** points!")
-                                                                self.points.givepoints(bet*2, message.server.id, who.id)
-                                                                deleteFromList(all_messages)
+                                                                await reply("You didn't type **!roll**. Bet is cancelled.")
+                                                                self.points.givepoints(bet, message.server.id, who.id)
+                                                                self.points.givepoints(bet, message.server.id, message.author.id)
                                                         except AttributeError:
                                                             await reply("You took too long. " + who.mention + " wins **" + str(bet*2) + "** points!")
                                                             self.points.givepoints(bet*2, message.server.id, who.id)
-                                                            deleteFromList(all_messages)
                                                     else:
                                                         await reply("It looks like " + who.mention + " doesn't want to play or is AFK!")
                                                         self.points.givepoints(bet, message.server.id, message.author.id)
-                                                        deleteFromList(all_messages)
                                                 except AttributeError:
                                                         await reply("It looks like " + who.mention + " doesn't want to play or is AFK!")
                                                         self.points.givepoints(bet, message.server.id, message.author.id)
-                                                        deleteFromList(all_messages)
                         else:
                             await reply("Sorry that command is currently disabled.")
                 # Betting Commands
@@ -896,6 +945,21 @@ class Bot(object):
         if author.id == "148341618175377408":
             return True
         return False
+
+    async def timeForPVD(self, message, minutes, toggle):
+        channel = discord.utils.get(message.server.channels, name="player-versus-dice")
+        seconds = minutes * 60
+        set = seconds / 4
+        for x in range(0, 4):
+            print(str(set), str(seconds))
+            if toggle == True:
+                await self.client.send_message(channel, "@everyone - " + str(seconds / 60) + " minutes " + str(seconds % 60) + " seconds left until PvD is back online!")
+            elif toggle == False:
+                await self.client.send_message(channel, "@everyone - " + str(seconds / 60) + " minutes " + str(seconds % 60) + " seconds left until PvD self destructs!")
+            seconds -= set
+            sleep(int(set))
+        self.client.send_message(channel, "@everyone - PvD is " + ("ONLINE" if toggle == True else "OFFLINE"))
+        self.rollvs = toggle
 
 
     def adminpower(self, author):
