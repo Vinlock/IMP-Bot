@@ -610,7 +610,8 @@ class Bot(object):
                                 else:
                                     await reply("Ok, nothing was reset.")
                 elif command == "ddd":
-                    Tester(message, self.client)
+                    if self.adminpower(message.author):
+                        await reply(str(self.pvd_active))
                 # Player-vs-Dice
                 # if message.channel == self.channels[message.server.id]["player-versus-dice"]:
                 if message.channel == discord.utils.get(message.server.channels, name="player-versus-dice"):
@@ -740,6 +741,7 @@ class Bot(object):
                                 await reply("Sorry that command is currently disabled.")
                         except IndexError:
                             await reply("Insufficient number of parameters.\n**\"!pvd <bet amount> <max roll> <mention>\"**")
+
                 # Betting Commands
                 # if message.channel == self.channels[message.server.id]["tournament-betting"]:
                 if message.channel == discord.utils.get(message.server.channels, name="tournament-betting"):
