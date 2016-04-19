@@ -647,15 +647,15 @@ class Bot(object):
                                                                         roll2 = randint(1, max)
                                                                         msgs.append(await sender(who.mention + " - You have rolled **" + str(roll2) + "**!"))
                                                                         if roll1 > roll2:
-                                                                            await sender(message.author.mention + " WINS **" + str(bet*2) + "** points!!!!")
+                                                                            await sender(message.author.mention + " REKT " + who.mention + "and WINS **" + str(bet*2) + "** points!!!!")
                                                                             self.points.givepoints(bet*2, message.server.id, message.author.id)
                                                                             await deleteFromList(msgs)
                                                                         elif roll1 < roll2:
-                                                                            await sender(who.mention + " WINS **" + str(bet*2) + "** points!!!!")
+                                                                            await sender(who.mention + " REKT " + message.author.mention + " and WINS **" + str(bet*2) + "** points!!!!")
                                                                             self.points.givepoints(bet*2, message.server.id, who.id)
                                                                             await deleteFromList(msgs)
                                                                         elif roll1 == roll2:
-                                                                            await sender("IT IS A TIE! Both " + who.mention + " and " + message.author.mention + " get their points back!")
+                                                                            await sender("IT IS A TIE! Both " + who.mention + " and " + message.author.mention + " get their " + str(bet) + "points back!")
                                                                             self.points.givepoints(bet, message.server.id, who.id)
                                                                             self.points.givepoints(bet, message.server.id, message.author.id)
                                                                             await deleteFromList(msgs)
