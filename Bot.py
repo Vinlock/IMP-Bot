@@ -616,6 +616,7 @@ class Bot(object):
                                 self.rollvs = False
                                 await reply("The !pvd command has been turned OFF!")
                             elif self.rollvs:
+                                # Fixes #4
                                 if message.author.id in self.pvd_active[message.server.id]:
                                     await reply("Sorry, it seems that you are currently apart of a PvD already.")
                                 elif message.mentions[0].id in self.pvd_active[message.server.id]:
