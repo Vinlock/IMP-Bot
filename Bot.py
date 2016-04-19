@@ -649,42 +649,42 @@ class Bot(object):
                                                                         if roll1 > roll2:
                                                                             await sender(message.author.mention + " WINS **" + str(bet*2) + "** points!!!!")
                                                                             self.points.givepoints(bet*2, message.server.id, message.author.id)
-                                                                            deleteFromList(msgs)
+                                                                            await deleteFromList(msgs)
                                                                         elif roll1 < roll2:
                                                                             await sender(who.mention + " WINS **" + str(bet*2) + "** points!!!!")
                                                                             self.points.givepoints(bet*2, message.server.id, who.id)
-                                                                            deleteFromList(msgs)
+                                                                            await deleteFromList(msgs)
                                                                         elif roll1 == roll2:
                                                                             await sender("IT IS A TIE! Both " + who.mention + " and " + message.author.mention + " get their points back!")
                                                                             self.points.givepoints(bet, message.server.id, who.id)
                                                                             self.points.givepoints(bet, message.server.id, message.author.id)
-                                                                            deleteFromList(msgs)
+                                                                            await deleteFromList(msgs)
                                                                     else:
                                                                         await sender(who.mention + " - You didn't type **!roll**. Bet is cancelled.")
                                                                         self.points.givepoints(bet, message.server.id, who.id)
                                                                         self.points.givepoints(bet, message.server.id, message.author.id)
-                                                                        deleteFromList(msgs)
+                                                                        await deleteFromList(msgs)
                                                                 except AttributeError:
                                                                     await sender(who.mention + " - You took too long. " + message.author.mention + " wins **" + str(bet*2) + "** points!")
                                                                     self.points.givepoints(bet*2, message.server.id, message.author.id)
-                                                                    deleteFromList(msgs)
+                                                                    await deleteFromList(msgs)
                                                             else:
                                                                 await reply("You didn't type **!roll**. Bet is cancelled.")
                                                                 self.points.givepoints(bet, message.server.id, who.id)
                                                                 self.points.givepoints(bet, message.server.id, message.author.id)
-                                                                deleteFromList(msgs)
+                                                                await deleteFromList(msgs)
                                                         except AttributeError:
                                                             await reply("You took too long. " + who.mention + " wins **" + str(bet*2) + "** points!")
                                                             self.points.givepoints(bet*2, message.server.id, who.id)
-                                                            deleteFromList(msgs)
+                                                            await deleteFromList(msgs)
                                                     else:
                                                         await reply("It looks like " + who.mention + " doesn't want to play or is AFK!")
                                                         self.points.givepoints(bet, message.server.id, message.author.id)
-                                                        deleteFromList(msgs)
+                                                        await deleteFromList(msgs)
                                                 except AttributeError:
-                                                        await reply("It looks like " + who.mention + " doesn't want to play or is AFK!")
-                                                        self.points.givepoints(bet, message.server.id, message.author.id)
-                                                        deleteFromList(msgs)
+                                                    await reply("It looks like " + who.mention + " doesn't want to play or is AFK!")
+                                                    self.points.givepoints(bet, message.server.id, message.author.id)
+                                                    await deleteFromList(msgs)
                         else:
                             await reply("Sorry that command is currently disabled.")
                 # Betting Commands
