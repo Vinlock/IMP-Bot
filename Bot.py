@@ -277,7 +277,7 @@ class Bot(object):
                                                                 points *= 100
                                                             points = int(points)
                                                             self.points.givepoints(points, message.server.id, message.author.id)
-                                                            await reply("Close! The number was **" + str(n) + "**. You have won **" + str(points) + "** points :P.")
+                                                            await reply("Close! The number was **" + str(n) + "**. You have won **" + str(points) + "** points back :P.")
                                                             await deleteFromList(msgs)
                                                         elif int(r.content) > n:
                                                             needle = ending - int(r.content)
@@ -287,7 +287,7 @@ class Bot(object):
                                                                 points *= 100
                                                             points = int(points)
                                                             self.points.givepoints(points, message.server.id, message.author.id)
-                                                            await reply("Close! The number was **" + str(n) + "**. You have won **" + str(points) + "** points :P.")
+                                                            await reply("Close! The number was **" + str(n) + "**. You have won **" + str(points) + "** points back :P.")
                                                             await deleteFromList(msgs)
                                                     else:
                                                         await reply("Nope. The number was **" + str(n) + "**. Try !guess again later!")
