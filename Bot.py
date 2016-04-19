@@ -262,9 +262,9 @@ class Bot(object):
                                                     ending = n + rng
                                                     if int(r.content) == n:
                                                         points = int(number) * len(number)
-                                                        points = int(points)
                                                         if points < 1:
-                                                            points = 1
+                                                            points *= 100
+                                                        points = int(points)
                                                         self.points.givepoints(points, message.server.id, message.author.id)
                                                         await reply("CORRECT! The number was " + str(n) +"! You have won " + str(points))
                                                         await deleteFromList(msgs)
