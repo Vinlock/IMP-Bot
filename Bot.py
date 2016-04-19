@@ -229,7 +229,7 @@ class Bot(object):
                             if number.startswith("0"):
                                 while number.startswith("0"):
                                     number = number[1:]
-                                msg.append(await reply("Nice try, your new number is **" + str(number) + "**."))
+                                msgs.append(await reply("Nice try, your new number is **" + str(number) + "**."))
                             try:
                                 int(number)
                             except ValueError:
