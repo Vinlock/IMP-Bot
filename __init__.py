@@ -5,7 +5,7 @@ import logging
 import datetime
 
 logPath = "log"
-fileName = datetime.date.today()
+fileName = today.strftime('%Y-%m-%d')
 
 import sys
 
