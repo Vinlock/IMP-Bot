@@ -8,7 +8,7 @@ logPath = "log"
 today = datetime.date.today()
 fileName = today.strftime('%Y-%m-%d-%H')
 
-sys.stdout = open(fileName+".txt", "a")
+sys.stdout = open(fileName+".txt", "w")
 
 
 def thread(function):
