@@ -64,7 +64,7 @@ class Bot(object):
                     for role in member.roles:
                         self.roles[member.server.id][role.name.lower()]['members'].append(member)
 
-            self.thread(self.updateMembers)
+            # self.thread(self.updateMembers)
 
             log("== Finished creating dictionaries for Roles, Channels, and Possible Match Servers.")
 
