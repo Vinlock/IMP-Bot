@@ -628,6 +628,9 @@ class Bot(object):
                 if message.channel == discord.utils.get(message.server.channels, name="player-versus-dice"):
                     message.content.rstrip()
                     if command == "pvd":
+                        def removeThem():
+                            self.pvd_active[message.server.id].remove(message.author.id)
+                            self.pvd_active[message.server.id].remove(message.mentions[0].id)
                         await deleter(message)
                         msgs = []
                         try:
@@ -647,9 +650,6 @@ class Bot(object):
                                 else:
                                     self.pvd_active[message.server.id].append(message.author.id)
                                     self.pvd_active[message.server.id].append(message.mentions[0].id)
-                                    def removeThem():
-                                        self.pvd_active[message.server.id].remove(message.author.id)
-                                        self.pvd_active[message.server.id].remove(message.mentions[0].id)
                                     if numParams < 3 or numParams > 3:
                                         await reply("Insufficient number of parameters.\n**\"!pvd <bet amount> <max roll> <mention>\"**")
                                         removeThem()
@@ -762,7 +762,7 @@ class Bot(object):
                                 await reply("Sorry that command is currently disabled.")
                         except IndexError:
                             await reply("Insufficient number of parameters.\n**\"!pvd <bet amount> <max roll> <mention>\"**")
-
+                    removeThem()
                 # Betting Commands
                 # if message.channel == self.channels[message.server.id]["tournament-betting"]:
                 if message.channel == discord.utils.get(message.server.channels, name="tournament-betting"):
