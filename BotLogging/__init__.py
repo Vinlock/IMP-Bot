@@ -2,7 +2,7 @@ import datetime
 
 class Log:
     @staticmethod
-    def log(self, *strings):
+    def log(*strings):
         today = datetime.date.today()
         fileName = today.strftime('%Y-%m-%d-%H')
         split_string = " ".join(strings)
