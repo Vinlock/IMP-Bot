@@ -1,4 +1,5 @@
 from Tournament import CheckIn
+from BotLogging import log as logger
 
 class Tournament(object):
     def __init__(self, serverid, starter):
@@ -25,7 +26,7 @@ class Tournament(object):
         self.checkin.append(CheckIn.CheckIn(member, list))
 
     def isCheckedIn(self, member):
-        for check in checkin:
+        for check in self.checkin:
             if check.member == member:
                 return check.list
             else:

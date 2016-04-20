@@ -1,11 +1,11 @@
 import Database, threading
-from BotLogging import log
+from BotLogging import log as logger
 
 class PointsManager(object):
     def __init__(self, client=None):
         self.client = client
 
-        print("== Points Manager initiated.")
+        logger("== Points Manager initiated.")
 
     def thread(self, function):
         t1 = threading.Thread(target=function)
@@ -43,18 +43,18 @@ class PointsManager(object):
                 sql = "UPDATE `points` SET `points`=points+{0} WHERE server={1} AND userid={2}".format(str(points), str(serverid), str(memberid))
                 cursor.execute(sql)
                 conn.commit()
-                print(cursor._last_executed)
+                logger(cursor._last_executed)
             conn.close()
-            print("== " + memberid, "given", points, "points.")
+            logger("== " + memberid, "given", points, "points.")
             return True
         elif not self.memberHasPoints(serverid, memberid):
             with conn.cursor() as cursor:
                 sql = "INSERT INTO `points` (`userid`, `points`, `server`) VALUES ({0}, {1}, {2})".format(str(memberid), str(points), str(serverid))
                 cursor.execute(sql)
                 conn.commit()
-                print("\033[94m" + cursor._last_executed + "\033[0m")
+                logger("\033[94m" + cursor._last_executed + "\033[0m")
             conn.close()
-            print("== " + memberid, "given", points, "points.")
+            logger("== " + memberid, "given", points, "points.")
             return True
         return False
 
@@ -69,9 +69,9 @@ class PointsManager(object):
                     sql = "UPDATE `points` SET `points`=points-{0} WHERE server={1} AND userid={2}".format(str(points), str(serverid), str(memberid))
                     cursor.execute(sql)
                     conn.commit()
-                    print("\033[94m" + cursor._last_executed + "\033[0m")
+                    logger("\033[94m" + cursor._last_executed + "\033[0m")
                 conn.close()
-                print("== " + memberid, "lost", points, "points.")
+                logger("== " + memberid, "lost", points, "points.")
                 return True
         else:
             return False
@@ -87,7 +87,7 @@ class PointsManager(object):
 
     def massGive(self, serverid, listIDs, points):
         conn = Database.DB()
-        print("MASS GIVE")
+        logger("MASS GIVE")
         with conn.cursor() as cursor:
             all_members = ','.join(["'"+str(member)+"'" for member in listIDs])
             sql = "UPDATE `points` SET `points` = `points` + {0} WHERE `server`='{1}' AND `userid` IN ({2})".format(points, str(serverid), all_members)
@@ -96,7 +96,7 @@ class PointsManager(object):
             try:
                 cursor.execute(sql)
                 conn.commit()
-                print("\033[94m" + cursor._last_executed + "\033[0m")
+                logger("\033[94m" + cursor._last_executed + "\033[0m")
             except:
                 return False
         conn.close()
@@ -104,7 +104,7 @@ class PointsManager(object):
 
     def topTen(self, serverid):
         conn = Database.DB()
-        print("== TOP 10 QUERIED")
+        logger("== TOP 10 QUERIED")
         top = []
         with conn.cursor() as cursor:
             sql = "SELECT * FROM `points` WHERE `server`={0} ORDER BY `points` DESC LIMIT 10".format(serverid)
@@ -122,7 +122,7 @@ class PointsManager(object):
 
     def reset(self, serverid):
         conn = Database.DB()
-        print("== RESETTING SERVER", serverid)
+        logger("== RESETTING SERVER", serverid)
         with conn.cursor() as cursor:
             if serverid == 0:
                 sql = "UPDATE `points` SET `points`=50"
@@ -131,7 +131,7 @@ class PointsManager(object):
             try:
                 cursor.execute(sql)
                 conn.commit()
-                print("\033[94m" + cursor._last_executed + "\033[0m")
+                logger("\033[94m" + cursor._last_executed + "\033[0m")
             except:
                 return False
         conn.close()
