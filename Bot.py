@@ -647,16 +647,20 @@ class Bot(object):
                                             bet = int(params[1])
                                         except ValueError:
                                             await reply("Invalid bet amount.")
+                                            removeThem()
                                         else:
                                             try:
                                                 max = int(params[2])
                                             except ValueError:
                                                 await reply("Invalid max roll amount.")
+                                                removeThem()
                                             else:
                                                 if bet <= 0:
                                                     reply("Your bet must be greater than 0")
+                                                    removeThem()
                                                 elif max < 10:
                                                     reply("The max roll must be 10 or greater.")
+                                                    removeThem()
                                                 else:
                                                     who = message.mentions[0]
                                                     if message.author == who:
@@ -665,8 +669,10 @@ class Bot(object):
                                                     else:
                                                         if int(self.points.checkpoints(message.server.id, message.author.id)) < bet:
                                                             await reply("Sorry you do not have a sufficient points balance to bet that amount.")
+                                                            removeThem()
                                                         elif int(self.points.checkpoints(message.server.id, who.id)) < bet:
                                                             await reply(who.mention + " does not have sufficient points to bet that amount versus you.")
+                                                            removeThem()
                                                         else:
                                                             self.points.minusPoints(bet, message.server.id, message.author.id)
                                                             msgs.append(await sender(who.mention + " - You have been challenged by " + message.author.mention + " in a roll off out of **" + str(max) + "** for **" + str(bet) + "** points.\nReply \"yes\" to accept. You have 30 seconds."))
