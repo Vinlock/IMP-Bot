@@ -11,6 +11,7 @@ import sys
 
 class Logger(object):
     def __init__(self):
+        print("== Logging Started")
         self.terminal = sys.stdout
         self.log = open("log/"+fileName+".log", "a")
 
