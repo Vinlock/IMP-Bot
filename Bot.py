@@ -758,11 +758,11 @@ class Bot(object):
                                                                 self.points.givepoints(bet, message.server.id, message.author.id)
                                                                 await deleteFromList(msgs)
                                                                 removeThem()
+                                    removeThem()
                             else:
                                 await reply("Sorry that command is currently disabled.")
                         except IndexError:
                             await reply("Insufficient number of parameters.\n**\"!pvd <bet amount> <max roll> <mention>\"**")
-                        removeThem()
                 # Betting Commands
                 # if message.channel == self.channels[message.server.id]["tournament-betting"]:
                 if message.channel == discord.utils.get(message.server.channels, name="tournament-betting"):
