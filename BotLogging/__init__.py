@@ -2,7 +2,10 @@ import datetime
 
 
 def log(*strings):
-    split_string = " ".join(strings)
+    s = []
+    for string in strings:
+        s.append(str(string))
+    split_string = " ".join(s)
     print(split_string)
     today = datetime.date.today()
     fileName = today.strftime("%Y-%m-%d-%H")
