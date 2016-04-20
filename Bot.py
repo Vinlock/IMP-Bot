@@ -12,14 +12,14 @@ import Database
 from Tournament import Tournament as tourney
 import ObjectDict
 import settings
-from Test import Tester
+from BotLogging import Log
 
 
 class Bot(object):
     def __init__(self):
-        print("== Bot is starting.")
+        Log.log("== Bot is starting.")
         self.client = discord.Client()
-        print("== Discord Client Initiated")
+        Log.log("== Discord Client Initiated")
 
         # Dictionary of Channel Objects
         self.channels = dict()
@@ -43,9 +43,9 @@ class Bot(object):
 
         @self.client.event
         async def on_ready():
-            print("== Logged in as", self.client.user.name)
-            print("== Client User ID", self.client.user.id)
-            print("== -----------------------------------")
+            Log.log("== Logged in as", self.client.user.name)
+            Log.log("== Client User ID", self.client.user.id)
+            Log.log("== -----------------------------------")
             for server in self.client.servers:
                 self.matches[server.id] = None
                 self.tournaments[server.id] = None
@@ -53,10 +53,10 @@ class Bot(object):
                 self.roles[server.id] = dict()
                 self.staff[server.id] = dict()
                 self.pvd_active[server.id] = []
-                print(server.name, ":")
-                print("== Roles:")
+                Log.log(server.name, ":")
+                Log.log("== Roles:")
                 for role in server.roles:
-                    print(role.id, role.name.lower())
+                    Log.log(role.id, role.name.lower())
                     self.roles[server.id][role.name.lower()] = dict()
                     self.roles[server.id][role.name.lower()]['object'] = role
                     self.roles[server.id][role.name.lower()]['members'] = []
@@ -66,7 +66,7 @@ class Bot(object):
 
             self.thread(self.updateMembers)
 
-            print("== Finished creating dictionaries for Roles, Channels, and Possible Match Servers.")
+            Log.log("== Finished creating dictionaries for Roles, Channels, and Possible Match Servers.")
 
             self.points = Points.PointsManager(self.client)
 
@@ -83,20 +83,20 @@ class Bot(object):
 
         @self.client.event
         async def on_server_join(server):
-            print("Joined", server.name)
+            Log.log("Joined", server.name)
             self.matches[server.id] = None
             self.tournaments[server.id] = None
             self.channels[server.id] = dict()
             self.roles[server.id] = dict()
-            print(server.name, ":")
-            print("Roles:")
+            Log.log(server.name, ":")
+            Log.log("Roles:")
             for role in server.roles:
-                print(role.id, role.name.lower())
+                Log.log(role.id, role.name.lower())
                 self.roles[server.id][role.name.lower()] = role
-            print("Channels:")
+            Log.log("Channels:")
             for channel in server.channels:
                 self.channels[server.id][channel.name] = channel
-                print(channel.id, channel.name)
+                Log.log(channel.id, channel.name)
 
         @self.client.event
         async def on_member_join(member):
@@ -115,19 +115,19 @@ class Bot(object):
         #                                                "If you need to speak to an admin please PM one of the following:\n"
         #                                                + list_admins)
         #     else:
-        #         print("Failed to add new member points.")
+        #         Log.log("Failed to add new member points.")
         #     # for channel in member.server.channels:
         #     #     await self.client.send_message(channel, "Welcome " + member.mention + "!!")
 
         @self.client.event
         async def on_message(message):
-            # print(message.author.id, ":", message.content)
-            print("--------------------------------------")
-            print("Author ID: " + message.author.id)
-            print("Channel ID: " + message.channel.id)
-            print("Server ID: " + message.server.id)
-            print("Message: " + message.content)
-            print("--------------------------------------")
+            # Log.log(message.author.id, ":", message.content)
+            Log.log("--------------------------------------")
+            Log.log("Author ID: " + message.author.id)
+            Log.log("Channel ID: " + message.channel.id)
+            Log.log("Server ID: " + message.server.id)
+            Log.log("Message: " + message.content)
+            Log.log("--------------------------------------")
             info = {
                 "channel": message.channel,
                 "author": message.author,
@@ -139,7 +139,7 @@ class Bot(object):
             if "fuck" in message.content and "bot" in message.content:
                 await self.client.send_message(message.channel, message.author.mention + " - hey... :(")
             if message.content is "!":
-                print("== Nothing happened.")
+                Log.log("== Nothing happened.")
             elif message.content.startswith("!"):
                 msg_parts = message.content[1:]
                 params = msg_parts.split(" ")
@@ -245,7 +245,7 @@ class Bot(object):
                                         if (self.points.minusPoints(int(number), message.server.id, message.author.id)):
                                             msgs.append(await reply(str(number) + " points bet. Respond within 30 seconds, or you will lose your points."))
                                             n = randint(1, int(number))
-                                            print("== CHEAT SHEET - The number is:", n)
+                                            Log.log("== CHEAT SHEET - The number is:", n)
                                             msgs.append(await reply("Guess a number from 1-" + str(number) + ". You have 30 seconds."))
                                             r = await wait(30)
                                             # msgs.append(r)
@@ -350,7 +350,7 @@ class Bot(object):
                                    "**!points <mention user>** - Check a users "
                                    "points total.")
                     else:
-                        print("== Nope")
+                        Log.log("== Nope")
                 elif command == "exit":
                     await deleter(message)
                     if self.adminpower(message.author):
@@ -429,7 +429,7 @@ class Bot(object):
                         finally:
                             await sender("Joined.")
                 elif command == "masspm":
-                    print("== Mass PM initiated")
+                    Log.log("== Mass PM initiated")
                     await deleter(message)
                     fails = []
                     if self.adminpower(message.author):
@@ -437,14 +437,14 @@ class Bot(object):
                         try:
                             for member in message.server.members:
                                 if await pm(member, m):
-                                    print("PM sent to " + member.mention + " successfully.")
+                                    Log.log("PM sent to " + member.mention + " successfully.")
                         except discord.InvalidArgument:
                             await reply("Invalid Parameters")
                         except discord.HTTPException:
                             await reply("Message Failed")
                         finally:
                             await reply("Message Sent.\n" + m)
-                    print("== Mass PM completed.")
+                    Log.log("== Mass PM completed.")
                 elif command == "pm":
                     await deleter(message)
                     if self.adminpower(message.author):
@@ -458,7 +458,7 @@ class Bot(object):
                             await reply("Message Failed")
                         finally:
                             await pm(message.author, "Message Sent to " + who.name + ".\n" + m)
-                        print("== " + message.author.mention + " pmed " + who.mention)
+                        Log.log("== " + message.author.mention + " pmed " + who.mention)
                 elif command == "na":
                     await deleter(message)
                     await self.client.remove_roles(message.author, self.roles[message.server.id]["na"]["object"])
@@ -1045,7 +1045,7 @@ class Bot(object):
         seconds = minutes * 60
         set = seconds / 4
         for x in range(0, 4):
-            print(str(set), str(seconds))
+            Log.log(str(set), str(seconds))
             if toggle == True:
                 await self.client.send_message(channel, "@everyone - " + str(seconds / 60) + " minutes " + str(seconds % 60) + " seconds left until PvD is back online!")
             elif toggle == False:
@@ -1090,16 +1090,16 @@ class Bot(object):
         conn = Database.DB()
         servers = self.client.servers
         # servers = copy.deepcopy(self.client.servers)
-        print("...")
+        Log.log("...")
         for server in servers:
-            print("== Generation of missing members for Server: " + server.name + " has begun...")
+            Log.log("== Generation of missing members for Server: " + server.name + " has begun...")
             members = server.members
             member_id_list = []
             for member in members:
                 member_id_list.append(member.id)
-            print("== Created " + server.name + " List. Updating Members...")
+            Log.log("== Created " + server.name + " List. Updating Members...")
             i = 0
-            print("...")
+            Log.log("...")
             for memberid in member_id_list:
                 with conn.cursor() as cursor:
                     sql = "INSERT IGNORE INTO `points` SET `userid`={0}, `points`={1}, `server`={2};".format(int(memberid),
@@ -1107,8 +1107,8 @@ class Bot(object):
                                                                                                              int(server.id))
                     cursor.execute(sql)
                     conn.commit()
-                    # print("\033[94m" + cursor._last_executed + "\033[0m")
+                    # Log.log("\033[94m" + cursor._last_executed + "\033[0m")
                 i += 1
-            print("== Successfully finished updating " + str(i) + " members for " + server.name + ".")
-        print("== Done updating ALL members.")
+            Log.log("== Successfully finished updating " + str(i) + " members for " + server.name + ".")
+        Log.log("== Done updating ALL members.")
         conn.close()
