@@ -2,13 +2,7 @@
 import Bot
 import threading
 import datetime
-import sys
-
-logPath = "log"
-today = datetime.date.today()
-fileName = today.strftime('%Y-%m-%d-%H')
-
-sys.stdout = open(fileName+".txt", "w")
+from BotLogging import log
 
 
 def thread(function):

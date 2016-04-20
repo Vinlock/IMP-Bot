@@ -1,4 +1,5 @@
 import Database, threading
+from BotLogging import log
 
 class PointsManager(object):
     def __init__(self, client=None):

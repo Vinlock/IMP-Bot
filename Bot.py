@@ -101,27 +101,9 @@ class Bot(object):
         @self.client.event
         async def on_member_join(member):
             self.points.insertNewMember(member.id, member.server.id)
-        # @self.client.event
-        # async def on_member_join(member):
-        #     if self.points.insertNewMember(member.id, member.server.id):
-        #         list_admins = ""
-        #         for admin in self.roles[member.server.id]["Imperial Admin"]['members']:
-        #             list_admins += admin.name + ", "
-        #         list_admins = list_admins[:-2]
-        #         await self.client.send_message(member, "__**Welcome to the Imperial Server!**__\n\n"
-        #                                          "You have started out with 50 points for betting in tournament matches.\n\n"
-        #                                          "Check your points with **!points**.\n\n"
-        #                                          "Type **!help** for more information on commands!\n\n"
-        #                                                "If you need to speak to an admin please PM one of the following:\n"
-        #                                                + list_admins)
-        #     else:
-        #         Log.log("Failed to add new member points.")
-        #     # for channel in member.server.channels:
-        #     #     await self.client.send_message(channel, "Welcome " + member.mention + "!!")
 
         @self.client.event
         async def on_message(message):
-            # Log.log(message.author.id, ":", message.content)
             log("--------------------------------------")
             log("Author ID: " + message.author.id)
             log("Channel ID: " + message.channel.id)
