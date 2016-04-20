@@ -43,7 +43,7 @@ class PointsManager(object):
                 sql = "UPDATE `points` SET `points`=points+{0} WHERE server={1} AND userid={2}".format(str(points), str(serverid), str(memberid))
                 cursor.execute(sql)
                 conn.commit()
-                logger(cursor._last_executed)
+                logger("\033[94m" + cursor._last_executed + "\033[0m")
             conn.close()
             logger("== " + memberid, "given", points, "points.")
             return True
@@ -82,6 +82,7 @@ class PointsManager(object):
             sql = "INSERT IGNORE INTO `points` SET `userid`={0}, `points`={1}, `server`={2};".format(userid, 50, serverid)
             cursor.execute(sql)
             conn.commit()
+            logger("\033[94m" + cursor._last_executed + "\033[0m")
             return True
         return False
 

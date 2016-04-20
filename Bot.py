@@ -574,7 +574,7 @@ class Bot(object):
                         await self.client.send_message(message.author, "Channel: **" + message.channel.id + "**")
                 elif command == "reset":
                     if self.adminpower(message.author):
-                        if numParams < 1 or params[1].lower() is not "na" or params[1].lower() is not "eu" or params[1].lower() is not "all":
+                        if numParams < 1 or params[1].lower() not in ["na", "eu", "all"]:
                             await reply("Invalid parameters")
                         else:
                             region = params[1]
