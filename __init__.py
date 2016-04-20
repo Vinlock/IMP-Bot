@@ -7,16 +7,24 @@ import datetime
 logPath = "log"
 fileName = today = datetime.date.today()
 
-logFormatter = logging.Formatter("%(asctime)s [%(threadName)-12.12s] [%(levelname)-5.5s]  %(message)s")
-rootLogger = logging.getLogger()
+import sys
 
-fileHandler = logging.FileHandler("{0}/{1}.log".format(logPath, fileName))
-fileHandler.setFormatter(logFormatter)
-rootLogger.addHandler(fileHandler)
+class Logger(object):
+    def __init__(self):
+        self.terminal = sys.stdout
+        self.log = open("log/"+fileName+".log", "a")
 
-consoleHandler = logging.StreamHandler()
-consoleHandler.setFormatter(logFormatter)
-rootLogger.addHandler(consoleHandler)
+    def write(self, message):
+        self.terminal.write(message)
+        self.log.write(message)
+
+    def flush(self):
+        #this flush method is needed for python 3 compatibility.
+        #this handles the flush command by doing nothing.
+        #you might want to specify some extra behavior here.
+        pass
+
+sys.stdout = Logger()
 
 
 def thread(function):
