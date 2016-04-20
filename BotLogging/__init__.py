@@ -8,4 +8,4 @@ class Log:
         split_string = " ".join(strings)
         with open("log/"+fileName+".log", "a") as myfile:
             myfile.write(split_string)
-        print(strings)
+        print(split_string)
