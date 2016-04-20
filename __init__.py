@@ -1,11 +1,11 @@
 # import ControlBot
 import Bot
 import threading
-import logging
 import datetime
 
 logPath = "log"
-fileName = today.strftime('%Y-%m-%d')
+today = datetime.date.today()
+fileName = today.strftime('%Y-%m-%d-%H:00:00')
 
 import sys
 
