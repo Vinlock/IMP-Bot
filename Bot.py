@@ -582,7 +582,7 @@ class Bot(object):
                                 await reply("Are you sure? (yes/no)")
                                 sure = await wait(30)
                                 if sure is not None:
-                                    if "yes" in sure.lower():
+                                    if "yes" in sure.content.lower():
                                         if region.lower() == "eu":
                                             if self.points.reset(123153051425964036):
                                                 await reply("EU has been reset.")
