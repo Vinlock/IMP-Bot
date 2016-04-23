@@ -622,6 +622,7 @@ class Bot(object):
                                 await reply("The !pvd command has been turned ON!")
                             elif self.adminpower(message.author) and params[1].lower() == "off":
                                 self.rollvs = False
+                                self.pvd_active[message.server.id] = []
                                 await reply("The !pvd command has been turned OFF!")
                             elif self.rollvs:
                                 # Fixes #4
