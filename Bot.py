@@ -749,28 +749,28 @@ class Bot(object):
                         if self.matches[message.server.id] is None:
                             await sender(message.author.mention + " - No match has been started yet.")
                         elif self.matches[message.server.id] is not None:
-                            if numParams < 2:
-                                await sender(message.author.mention + " - You did not enter enough parameters. "
-                                                                      "**Example:** \"!bet red 100\"")
-                            elif numParams > 2:
-                                await sender(message.author.mention + " - You have used too many parameter for this "
-                                                                      "command. Ex: \"!bet red 100\"")
-                            elif numParams == 2:
-                                try:
-                                    amount = int(params[2])
-                                except ValueError:
-                                    await sender(message.author.mention + " - You did not enter a valid bet amount. "
-                                                                          "Ex: \"!bet blue 100\"")
-                                else:
-                                    if amount > 0:
-                                        team = str(params[1].lower())
-                                        if any(char.isdigit() for char in team):
-                                            await sender(message.author.mention + " - You did not enter a valid team name. "
-                                                                                  "Ex: \"!bet blue 100\"")
-                                        elif team == "blue" or team == "red":
-                                            if not self.matches[message.server.id].bettingOpen:
-                                                await sender(message.author.mention + " - Betting has been closed")
-                                            elif self.matches[message.server.id].bettingOpen:
+                            if not self.matches[message.server.id].bettingOpen:
+                                await sender(message.author.mention + " - Betting has been closed")
+                            elif self.matches[message.server.id].bettingOpen:
+                                if numParams < 2:
+                                    await sender(message.author.mention + " - You did not enter enough parameters. "
+                                                                          "**Example:** \"!bet red 100\"")
+                                elif numParams > 2:
+                                    await sender(message.author.mention + " - You have used too many parameter for this "
+                                                                          "command. Ex: \"!bet red 100\"")
+                                elif numParams == 2:
+                                    try:
+                                        amount = int(params[2])
+                                    except ValueError:
+                                        await sender(message.author.mention + " - You did not enter a valid bet amount. "
+                                                                              "Ex: \"!bet blue 100\"")
+                                    else:
+                                        if amount > 0:
+                                            team = str(params[1].lower())
+                                            if any(char.isdigit() for char in team):
+                                                await sender(message.author.mention + " - You did not enter a valid team name. "
+                                                                                      "Ex: \"!bet blue 100\"")
+                                            elif team == "blue" or team == "red":
                                                 if not self.matches[message.server.id].betted(message.author.id):
                                                     if self.matches[message.server.id].addVote(message.author,
                                                                                                team,
@@ -801,8 +801,8 @@ class Bot(object):
                                                 await sender(message.author.mention +
                                                              " - You did not enter a valid team name. "
                                                              "Ex: \"!bet blue 100\"")
-                                    else:
-                                        await sender(message.author.mention + " - You must bet more than 0.")
+                                        else:
+                                            await sender(message.author.mention + " - You must bet more than 0.")
                     elif command == "start":
                         await deleter(message)
                         if self.checkpower(message.author):
