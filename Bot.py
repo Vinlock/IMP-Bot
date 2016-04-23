@@ -820,8 +820,8 @@ class Bot(object):
                                     await sendToBetting("@everyone\n\n**Bets are open for this round! Place your Bets "
                                                         "with "
                                                         "\"!bet red <amount>\" or \"!bet blue <amount>\"!!**\n"
-                                                        "--------------------------------")
-                                    await sendToBetting(":large_blue_circle: **" +
+                                                        "--------------------------------\n"
+                                                        ":large_blue_circle: **" +
                                                         self.matches[message.server.id].getName("blue") + "** vs. **" +
                                                         self.matches[message.server.id].getName("red") + "** "
                                                                                                          ":red_circle:")
