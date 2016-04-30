@@ -315,25 +315,26 @@ class Bot(object):
                         elif numParams > 2:
                             sender("Invalid Command Parameters")
                 elif command == "checkin":
-                    print("check")
                     newRole = discord.utils.get(message.server.roles, name="Tournament Participant")
-                    print(newRole.name)
-                    if (self.checkpower(message.author) or self.adminpower(message.author)) and numParams is 1:
-                        if params[1].lower in ["on", "off", "clear"]:
-                            option = params[1]
-                            if option is "on":
-                                self.checkin = True
-                                sender("@everyone - Check-ins have been turned on. Do !checkin to check in for the Tournament!")
-                            elif option is "off":
-                                self.checkin = False
-                                sender("@everyone - Check-ins have been turned off.")
-                            elif option is "clear":
-                                for person in self.checkedin:
-                                    await self.client.remove_roles(person, newRole)
-                                self.checkin = False
-                                reply("Check-ins have been reset and turned off.")
+                    if self.checkpower(message.author) or self.adminpower(message.author):
+                        if numParams == 1:
+                            if params[1].lower in ["on", "off", "clear"]:
+                                option = params[1]
+                                if option is "on":
+                                    self.checkin = True
+                                    sender("@everyone - Check-ins have been turned on. Do !checkin to check in for the Tournament!")
+                                elif option is "off":
+                                    self.checkin = False
+                                    sender("@everyone - Check-ins have been turned off.")
+                                elif option is "clear":
+                                    for person in self.checkedin:
+                                        await self.client.remove_roles(person, newRole)
+                                    self.checkin = False
+                                    reply("Check-ins have been reset and turned off.")
+                            else:
+                                reply("Invalid option chosen.")
                         else:
-                            reply("Invalid option chosen.")
+                            reply("Invalid parameters")
                     elif self.checkin:
                         if message.author not in self.checkedin:
                             await self.client.add_roles(message.author, newRole)
