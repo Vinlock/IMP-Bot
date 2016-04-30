@@ -321,13 +321,13 @@ class Bot(object):
                             option = params[1].lower()
                             valid_options = ["on", "off", "clear"]
                             if option in valid_options:
-                                if option is "on":
+                                if option == "on":
                                     self.checkin = True
                                     await sender("@everyone - Check-ins have been turned on. Do !checkin to check in for the Tournament!")
-                                elif option is "off":
+                                elif option == "off":
                                     self.checkin = False
                                     await sender("@everyone - Check-ins have been turned off.")
-                                elif option is "clear":
+                                elif option == "clear":
                                     for person in self.checkedin:
                                         await self.client.remove_roles(person, newRole)
                                     self.checkin = False
