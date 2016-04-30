@@ -318,6 +318,7 @@ class Bot(object):
                     newRole = discord.utils.get(message.server.roles, name="Tournament Participant")
                     if numParams == 1:
                         if self.checkpower(message.author) or self.adminpower(message.author):
+                            print(params[1].lower)
                             if params[1].lower in ["on", "off", "clear"]:
                                 option = params[1]
                                 if option is "on":
