@@ -41,6 +41,10 @@ class Bot(object):
 
         self.pvd_active = dict()
 
+        self.checkin = False
+
+        self.checkedin = []
+
         @self.client.event
         async def on_ready():
             logger("== Logged in as", self.client.user.name)
@@ -311,6 +315,33 @@ class Bot(object):
                                         numDelete -= 1
                         elif numParams > 2:
                             sender("Invalid Command Parameters")
+                elif command == "checkin":
+                    newRole = discord.utils.get(message.server.roles, name="Tournament Participant")
+                    if (self.checkpower(message.author) or self.adminpower(message.author)) and numParams is 1:
+                        if params[1].lower in ["on", "off", "clear"]:
+                            option = params[1]
+                            if option is "on":
+                                self.checkin = True
+                                sender("@everyone - Check-ins have been turned on. Do !checkin to check in for the Tournament!")
+                            elif option is "off":
+                                self.checkin = False
+                                sender("@everyone - Check-ins have been turned off.")
+                            elif option is "clear":
+                                for person in self.checkedin:
+                                    await self.client.remove_roles(person, newRole)
+                                self.checkin = False
+                                reply("Check-ins have been reset and turned off.")
+                        else:
+                            reply("Invalid option chosen.")
+                    elif self.checkin:
+                        if message.author not in self.checkedin:
+                            await self.client.add_roles(message.author, newRole)
+                            self.checkedin.append(message.author)
+                            reply("You have checked in")
+                        else:
+                            reply("You have already checked in.")
+                    else:
+                        await reply("Check-ins are disabled at the moment")
                 elif command == "version":
                     await sender("Imperial Bot v0.9.1b - Created By: Vinlock")
                 elif command == "admin":
@@ -366,26 +397,6 @@ class Bot(object):
                                                                   " **Example:** !tournament <start or end>")
                     else:
                         await sender("")
-                elif command == "checkedin":
-                    if self.checkpower(message.author):
-                        if self.tournaments[message.server.id] is not None:
-                            i = 0
-                            j = 0
-                            checked = ""
-                            wait = ""
-                            for user in self.tournaments[message.server.id].checkin:
-                                if user.list == "checkin":
-                                    checked = checked + user.member.name + ", "
-                                    i += 1
-                                elif user.list == "waitlist":
-                                    wait = wait + user.member.name + ", "
-                                    j += 1
-                            checked = checked[:-2]
-                            wait = wait[:-2]
-                            await sender(str(i) + " users have checked in.\n" + checked)
-                            await sender(str(j) + " users have checked in on the waitlist.\n" + wait)
-                        else:
-                            await sender(message.author.mention + " - No tournament has been started yet.")
                 elif command == "game":
                     if self.adminpower(message.author):
                         game = rest
@@ -974,38 +985,6 @@ class Bot(object):
                         if numParams > 1:
                             await sender(message.author.mention + " - Invalid amount of parameters. **Example:** "
                                                                   "\"!retract\"\nNo spaces too!")
-                # if message.channel == self.channels[message.server.id]["waiting-room"]:
-                if message.channel == discord.utils.get(message.server.channels, name="waiting-room"):
-                    if command == "checkin":
-                        if self.tournaments[message.server.id] is not None:
-                            if self.tournaments[message.server.id].addCheckIn(message.author, "checkin"):
-                                await sender(message.author.mention + " has checked in.")
-                            else:
-                                await sender(message.author.mention + " - Failed to check in.")
-                        else:
-                            await sender(message.author.mention + " - No tournament has been started yet."
-                                                                  " Please check in once a tournament has"
-                                                                  " been started.")
-                    elif command == "waitlist" or command == "checkin":
-                        if command == "waitlist":
-                            thelist = "Waitlist"
-                        elif command == "checkin":
-                            thelist = "Check In List"
-                        else:
-                            thelist = None
-                        if self.tournaments[message.server.id] is not None:
-                            if self.tournaments[message.server.id].isCheckedIn(message.author) == None:
-                                if self.tournaments[message.server.id].addWaitingList(message.author, command):
-                                    await sender(message.author.mention + " has checked in on the " + thelist + ".")
-                                else:
-                                    await sender(message.author.mention + " - Failed to check in on " + thelist + ".")
-                            else:
-                                await sender(message.author.mention + " - You have already checked in! If you have"
-                                                                      " wrongly checked in, please alert an admin.")
-                        else:
-                            await sender(message.author.mention + " - No tournament has been started yet."
-                                                                  " Please check in once a tournament has"
-                                                                  " been started.")
         self.client.run(settings.DISCORD_TOKEN)
 
     def checkpower(self, author):
