@@ -316,32 +316,34 @@ class Bot(object):
                             sender("Invalid Command Parameters")
                 elif command == "checkin":
                     newRole = discord.utils.get(message.server.roles, name="Tournament Participant")
-                    if self.checkpower(message.author) or self.adminpower(message.author):
-                        if numParams == 1:
+                    if numParams == 1:
+                        if self.checkpower(message.author) or self.adminpower(message.author):
                             if params[1].lower in ["on", "off", "clear"]:
                                 option = params[1]
                                 if option is "on":
                                     self.checkin = True
-                                    sender("@everyone - Check-ins have been turned on. Do !checkin to check in for the Tournament!")
+                                    await sender("@everyone - Check-ins have been turned on. Do !checkin to check in for the Tournament!")
                                 elif option is "off":
                                     self.checkin = False
-                                    sender("@everyone - Check-ins have been turned off.")
+                                    await sender("@everyone - Check-ins have been turned off.")
                                 elif option is "clear":
                                     for person in self.checkedin:
                                         await self.client.remove_roles(person, newRole)
                                     self.checkin = False
-                                    reply("Check-ins have been reset and turned off.")
+                                    await reply("Check-ins have been reset and turned off.")
                             else:
-                                reply("Invalid option chosen.")
+                                await reply("Invalid option chosen.")
                         else:
-                            reply("Invalid parameters")
+                            reply("Invalid Permissions")
+                    elif numParams > 1:
+                        await reply("Invalid parameters")
                     elif self.checkin:
                         if message.author not in self.checkedin:
                             await self.client.add_roles(message.author, newRole)
                             self.checkedin.append(message.author)
-                            reply("You have checked in")
+                            await reply("You have checked in")
                         else:
-                            reply("You have already checked in.")
+                            await reply("You have already checked in.")
                     else:
                         await reply("Check-ins are disabled at the moment")
                 elif command == "version":
