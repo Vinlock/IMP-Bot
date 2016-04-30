@@ -1,11 +1,10 @@
 import Database, threading
-from BotLogging import log as logger
 
 class PointsManager(object):
     def __init__(self, client=None):
         self.client = client
 
-        logger("== Points Manager initiated.")
+        print("== Points Manager initiated.")
 
     def thread(self, function):
         t1 = threading.Thread(target=function)
@@ -43,18 +42,18 @@ class PointsManager(object):
                 sql = "UPDATE `points` SET `points`=points+{0} WHERE server={1} AND userid={2}".format(str(points), str(serverid), str(memberid))
                 cursor.execute(sql)
                 conn.commit()
-                logger("\033[94m" + cursor._last_executed + "\033[0m")
+                print("\033[94m" + cursor._last_executed + "\033[0m")
             conn.close()
-            logger("== " + memberid, "given", points, "points.")
+            print("== " + memberid, "given", points, "points.")
             return True
         elif not self.memberHasPoints(serverid, memberid):
             with conn.cursor() as cursor:
                 sql = "INSERT INTO `points` (`userid`, `points`, `server`) VALUES ({0}, {1}, {2})".format(str(memberid), str(points), str(serverid))
                 cursor.execute(sql)
                 conn.commit()
-                logger("\033[94m" + cursor._last_executed + "\033[0m")
+                print("\033[94m" + cursor._last_executed + "\033[0m")
             conn.close()
-            logger("== " + memberid, "given", points, "points.")
+            print("== " + memberid, "given", points, "points.")
             return True
         return False
 
@@ -69,9 +68,9 @@ class PointsManager(object):
                     sql = "UPDATE `points` SET `points`=points-{0} WHERE server={1} AND userid={2}".format(str(points), str(serverid), str(memberid))
                     cursor.execute(sql)
                     conn.commit()
-                    logger("\033[94m" + cursor._last_executed + "\033[0m")
+                    print("\033[94m" + cursor._last_executed + "\033[0m")
                 conn.close()
-                logger("== " + memberid, "lost", points, "points.")
+                print("== " + memberid, "lost", points, "points.")
                 return True
         else:
             return False
@@ -82,13 +81,13 @@ class PointsManager(object):
             sql = "INSERT IGNORE INTO `points` SET `userid`={0}, `points`={1}, `server`={2};".format(userid, 50, serverid)
             cursor.execute(sql)
             conn.commit()
-            logger("\033[94m" + cursor._last_executed + "\033[0m")
+            print("\033[94m" + cursor._last_executed + "\033[0m")
             return True
         return False
 
     def massGive(self, serverid, listIDs, points):
         conn = Database.DB()
-        logger("MASS GIVE")
+        print("MASS GIVE")
         with conn.cursor() as cursor:
             all_members = ','.join(["'"+str(member)+"'" for member in listIDs])
             sql = "UPDATE `points` SET `points` = `points` + {0} WHERE `server`='{1}' AND `userid` IN ({2})".format(points, str(serverid), all_members)
@@ -97,7 +96,7 @@ class PointsManager(object):
             try:
                 cursor.execute(sql)
                 conn.commit()
-                logger("\033[94m" + cursor._last_executed + "\033[0m")
+                print("\033[94m" + cursor._last_executed + "\033[0m")
             except:
                 return False
         conn.close()
@@ -105,7 +104,7 @@ class PointsManager(object):
 
     def topTen(self, serverid):
         conn = Database.DB()
-        logger("== TOP 10 QUERIED")
+        print("== TOP 10 QUERIED")
         top = []
         with conn.cursor() as cursor:
             sql = "SELECT * FROM `points` WHERE `server`={0} ORDER BY `points` DESC LIMIT 10".format(serverid)
@@ -123,7 +122,7 @@ class PointsManager(object):
 
     def reset(self, serverid):
         conn = Database.DB()
-        logger("== RESETTING SERVER", serverid)
+        print("== RESETTING SERVER", serverid)
         with conn.cursor() as cursor:
             if serverid == 0:
                 sql = "UPDATE `points` SET `points`=50"
@@ -132,7 +131,7 @@ class PointsManager(object):
             try:
                 cursor.execute(sql)
                 conn.commit()
-                logger("\033[94m" + cursor._last_executed + "\033[0m")
+                print("\033[94m" + cursor._last_executed + "\033[0m")
             except:
                 return False
         conn.close()

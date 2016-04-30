@@ -1,5 +1,4 @@
 from BettingSystem import PointsManager, Bet
-from BotLogging import log as logger
 
 
 class Match(object):
@@ -20,7 +19,7 @@ class Match(object):
 
         self.points = PointsManager.PointsManager()
 
-        logger("== Match has been initiated.")
+        print("== Match has been initiated.")
 
     def openBetting(self):
         self.bettingOpen = True
@@ -96,20 +95,20 @@ class Match(object):
             if team == "red":
                 if self.points.minusPoints(int(bet), self.serverid, user.id):
                     self.redVotes.append(Bet.Bet(user, bet, team))
-                    logger(user.id, "bet on", team, "with", bet, "points.")
+                    print(user.id, "bet on", team, "with", bet, "points.")
                     self.diffRatio()
                     return True
                 else:
-                    logger("== Failed to place bet.")
+                    print("== Failed to place bet.")
                     return False
             elif team == "blue":
                 if self.points.minusPoints(int(bet), self.serverid, user.id):
                     self.blueVotes.append(Bet.Bet(user, bet, team))
-                    logger(user.id, "bet on", team, "with", bet, "points.")
+                    print(user.id, "bet on", team, "with", bet, "points.")
                     self.diffRatio()
                     return True
                 else:
-                    logger("== Failed to place bet.")
+                    print("== Failed to place bet.")
                     return False
         else:
             return False
@@ -136,14 +135,14 @@ class Match(object):
                 win = int(round(bet.amount * self.redRatio))
                 self.points.givepoints(win, bet.user.server.id, bet.user.id)
                 bet.winnings = win
-                logger("== Cash Out:", bet.user.id, bet.amount, "points.")
+                print("== Cash Out:", bet.user.id, bet.amount, "points.")
             return self.redVotes
         elif winner == "blue":
             for bet in self.blueVotes:
                 win = int(round(int(bet.amount) * self.blueRatio))
                 self.points.givepoints(win, bet.user.server.id, bet.user.id)
                 bet.winnings = win
-                logger("== Cash Out:", bet.user.id, bet.amount, "points.")
+                print("== Cash Out:", bet.user.id, bet.amount, "points.")
             return self.blueVotes
 
     def betted(self, userid):
