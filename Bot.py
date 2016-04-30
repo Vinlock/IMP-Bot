@@ -317,6 +317,7 @@ class Bot(object):
                             sender("Invalid Command Parameters")
                 elif command == "checkin":
                     newRole = discord.utils.get(message.server.roles, name="Tournament Participant")
+                    print(newRole.name)
                     if (self.checkpower(message.author) or self.adminpower(message.author)) and numParams is 1:
                         if params[1].lower in ["on", "off", "clear"]:
                             option = params[1]
