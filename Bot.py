@@ -314,6 +314,12 @@ class Bot(object):
                                         numDelete -= 1
                         elif numParams > 2:
                             sender("Invalid Command Parameters")
+                elif command == "ow":
+                    newRole = discord.utils.get(message.server.roles, name="OVERWATCH HYPE TRAIN")
+                    await self.client.add_roles(message.author, newRole)
+                elif command == "bns":
+                    newRole = discord.utils.get(message.server.roles, name="bns")
+                    await self.client.add_roles(message.author, newRole)
                 elif command == "checkin":
                     newRole = discord.utils.get(message.server.roles, name="Tournament Participant")
                     if numParams == 1:
