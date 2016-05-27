@@ -1,5 +1,4 @@
 from Tournament import CheckIn
-from BotLogging import log as logger
 
 class Tournament(object):
     def __init__(self, serverid, starter):
